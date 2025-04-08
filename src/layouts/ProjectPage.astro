@@ -77,7 +77,7 @@ const { properties } = Astro.props;
 							{Array.isArray(properties.pCountry)
 							  ? properties.pCountry.map((country, index) => (
 								  <>
-									<a href={`/projects/${country}`}>{country}</a>
+									<a href={`/projects/${country.toLowerCase().replace(/\s+/g, '-')}`}>{country}</a>
 									{index < properties.pCountry.length - 1 ? ', ' : ''}
 								  </>
 								))
