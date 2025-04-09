@@ -3,7 +3,7 @@ title: "10 Day Morocco Itinerary: Meknes, Rabat, Chefchaouen and Fes"
 date: 2022-09-02
 categories: 
   - "travel-guides"
-coverImage: "images/morocco-fes-cafe.jpg"
+coverImage: https://res.cloudinary.com/dnxl7wsnx/image/upload/v1744196741/morocco-fes-cafe.jpg
 ---
 
 In this ten day Morocco itinerary, we’ll be visiting Meknes, Moulay Idriss, Sale, Rabat, Chefchaouen (via Tangiers) and Fes. Ten days is the perfect length of time for visiting Morocco, especially for first time visitors who want to get a taste of the country’s many highlights.

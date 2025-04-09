@@ -41,6 +41,7 @@ const projects = defineCollection({
 		  pCost: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 		  pURL: transformedPropertySchema.url,
 		  pVerify: transformedPropertySchema.select,
+		  pImageURL: transformedPropertySchema.url,
 		}),
 	  }),
   });

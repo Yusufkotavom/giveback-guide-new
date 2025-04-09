@@ -3,7 +3,7 @@ title: 6 Great Alternatives to Airbnb for Holiday Homes and Rentals
 date: 2021-06-18
 categories:
   - tips-advice
-coverImage: images/alternatives-to-airbnb-feature.jpg
+coverImage: https://res.cloudinary.com/dnxl7wsnx/image/upload/v1744196226/alternatives-to-airbnb-feature_dqftja.jpg
 ---
 
 In this post, we aim to show you that there are alternatives to Airbnb. You just need to know where to look.
