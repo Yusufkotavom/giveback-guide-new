@@ -19,8 +19,8 @@ const blog = defineCollection({
 
 const projects = defineCollection({
 	loader: notionLoader({
-	  auth: import.meta.env.NOTION_TOKEN,
-	  database_id: import.meta.env.NOTION_DATABASE_ID,
+	  auth: import.meta.env.ASTRO_NOTION_TOKEN,
+	  database_id: import.meta.env.ASTRO_NOTION_DATABASE_ID,
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
 	  // Default value is 'assets/images/notion'
 	  // imageSavePath: 'assets/images/notion',
