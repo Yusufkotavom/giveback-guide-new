@@ -1,108 +1,205 @@
 ---
-import { getCollection } from 'astro:content';
-import MainLayout from '../../layouts/MainLayout.astro';
-import type { GetStaticPathsOptions } from 'astro';
+import { getCollection } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const entries = await getCollection('blog');
-    return paginate(entries, {
-        pageSize: 9, // the number of entries per page
-    });
+  const entries = await getCollection("blog");
+  return paginate(entries, {
+    pageSize: 9, // the number of entries per page
+  });
 }
 
 const { page } = Astro.props;
 ---
 
 <MainLayout>
-	<section class="bg-white dark:bg-gray-900">
-		<div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-			<div class="max-w-screen-md mb-8 lg:mb-16">
-				<h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Blog Posts</h1>
-				<p class="text-gray-500 sm:text-xl dark:text-gray-400">All of our travel guides and articles.</p>
-			</div>
-			<div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
-						{
-						  page.data.map((post) => (
-							<article class="max-w-xs">
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Blog Posts
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          All of our travel guides and articles.
+        </p>
+      </div>
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0"
+      >
+        {
+          page.data.map((post) => (
+            <article class="max-w-xs">
               <a href={`/blog/${post.id}/`}>
-                  <img src={post.data.coverImage} class="mb-5 rounded-lg" alt="Image 1">
+                <img
+                  src={post.data.coverImage}
+                  class="mb-5 rounded-lg"
+                  alt="Image 1"
+                />
               </a>
               <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
               </h2>
-              <p class="mb-4 text-gray-500 dark:text-gray-400">Description goes here</p>
-          </article>			
-						  ))
-						}
-			</div>
-		</div>
-	</section>
-	<section class="bg-white dark:bg-gray-900">
-		<div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-			<nav class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
-           aria-label="Table navigation">
-          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span
-            class="font-semibold text-gray-900 dark:text-white">{page.start + 1}-{page.end + 1}</span> of <span
-            class="font-semibold text-gray-900 dark:text-white">{page.total}</span></span>
+              <p class="mb-4 text-gray-500 dark:text-gray-400">
+                Description goes here
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <nav
+        class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
+        aria-label="Table navigation"
+      >
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400"
+          >Showing <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.start + 1}-{page.end + 1}</span
+          > of <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.total}</span
+          ></span
+        >
         <ul class="inline-flex items-stretch -space-x-px">
-			{page.url.first ? 
-          <li>
-            <a href={page.url.first}
-               class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <span class="sr-only">First</span>
-              <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 16-4-4 4-4m-6 8-4-4 4-4"/>
-</svg>
-
-            </a>
-          </li>
-		   : null}
-		   {page.url.prev ? 
-          <li>
-            <a href={page.url.prev}
-               class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-				<span class="sr-only">Previous</span>
-				<svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14 8-4 4 4 4"/>
-</svg>
-
-				</a>
-          </li>
-		   : null}
-		   {page.url.next ? 
-			<li>
-			  <a href={page.url.next}
-				 class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-				  <span class="sr-only">Next</span>
-				  <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"/>
-</svg>
-
-  
-				  </a>
-			</li>
-			 : null}
-			 {page.url.last ? 
-          <li>
-            <a href={page.url.last}
-               class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <span class="sr-only">Last</span>
-              <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
-			  </svg>
-			  
-            </a>
-          </li>
-		   : null}
+          {
+            page.url.first ? (
+              <li>
+                <a
+                  href={page.url.first}
+                  class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">First</span>
+                  <svg
+                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m17 16-4-4 4-4m-6 8-4-4 4-4"
+                    />
+                  </svg>
+                </a>
+              </li>
+            ) : null
+          }
+          {
+            page.url.prev ? (
+              <li>
+                <a
+                  href={page.url.prev}
+                  class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Previous</span>
+                  <svg
+                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m14 8-4 4 4 4"
+                    />
+                  </svg>
+                </a>
+              </li>
+            ) : null
+          }
+          {
+            page.url.next ? (
+              <li>
+                <a
+                  href={page.url.next}
+                  class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Next</span>
+                  <svg
+                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m10 16 4-4-4-4"
+                    />
+                  </svg>
+                </a>
+              </li>
+            ) : null
+          }
+          {
+            page.url.last ? (
+              <li>
+                <a
+                  href={page.url.last}
+                  class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Last</span>
+                  <svg
+                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m7 16 4-4-4-4m6 8 4-4-4-4"
+                    />
+                  </svg>
+                </a>
+              </li>
+            ) : null
+          }
         </ul>
       </nav>
-		</div>
-	</section>
-
-				
+    </div>
+  </section>
 </MainLayout>
- 
-<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-	<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 16-4-4 4-4m-6 8-4-4 4-4"/>
-  </svg>
-  
+
+<svg
+  class="w-6 h-6 text-gray-800 dark:text-white"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  fill="none"
+  viewBox="0 0 24 24"
+>
+  <path
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    d="m17 16-4-4 4-4m-6 8-4-4 4-4"></path>
+</svg>
