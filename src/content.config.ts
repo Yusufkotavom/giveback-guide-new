@@ -2,6 +2,14 @@ import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
 import { notionLoader, richTextToPlainText } from '@chlorinec-pkgs/notion-astro-loader';
 import { notionPageSchema, propertySchema, transformedPropertySchema } from '@chlorinec-pkgs/notion-astro-loader/schemas';
+import { getSecret } from 'astro:env/server';
+
+const notionToken = getSecret('NOTION_TOKEN');
+const notionDatabaseId = getSecret('NOTION_DATABASE_ID');
+
+if (!notionToken || !notionDatabaseId) {
+  throw new Error('Missing required environment variables for Notion integration');
+}
 
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
@@ -19,8 +27,8 @@ const blog = defineCollection({
 
 const projects = defineCollection({
 	loader: notionLoader({
-	  auth: import.meta.env.ASTRO_NOTION_TOKEN,
-	  database_id: import.meta.env.ASTRO_NOTION_DATABASE_ID,
+		auth: notionToken,
+		database_id: notionDatabaseId,
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
 	  // Default value is 'assets/images/notion'
 	  // imageSavePath: 'assets/images/notion',
@@ -42,6 +50,7 @@ const projects = defineCollection({
 		  pURL: transformedPropertySchema.url,
 		  pVerify: transformedPropertySchema.select,
 		  pImageURL: transformedPropertySchema.url,
+		  pPublished: transformedPropertySchema.date,
 		}),
 	  }),
   });
