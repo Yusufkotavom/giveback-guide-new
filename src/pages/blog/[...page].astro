@@ -13,7 +13,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 const { page } = Astro.props;
 ---
 
-<MainLayout>
+<MainLayout title={`All Blog Posts - Page ${page.currentPage} of ${page.lastPage}`}>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -27,11 +27,11 @@ const { page } = Astro.props;
         </p>
       </div>
       <div
-        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0"
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
       >
         {
           page.data.map((post) => (
-            <article class="max-w-xs">
+            <article>
               <a href={`/blog/${post.id}/`}>
                 <img
                   src={post.data.coverImage}
@@ -186,20 +186,3 @@ const { page } = Astro.props;
     </div>
   </section>
 </MainLayout>
-
-<svg
-  class="w-6 h-6 text-gray-800 dark:text-white"
-  aria-hidden="true"
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  fill="none"
-  viewBox="0 0 24 24"
->
-  <path
-    stroke="currentColor"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    stroke-width="2"
-    d="m17 16-4-4 4-4m-6 8-4-4 4-4"></path>
-</svg>

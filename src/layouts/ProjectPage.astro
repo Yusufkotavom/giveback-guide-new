@@ -5,10 +5,11 @@ import MainLayout from "./MainLayout.astro";
 type Props = CollectionEntry<"projects">["data"];
 
 const { properties } = Astro.props;
+const title = properties.pTitle || "Default Title";
 ---
 
-<MainLayout>
-  <section class="bg-white dark:bg-gray-900">
+<MainLayout title={title}>
+  <section data-pagefind-body class="bg-white dark:bg-gray-900">
     <div
       class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
     >
@@ -39,7 +40,7 @@ const { properties } = Astro.props;
           )
         }
         <h1
-          class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+		class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
           {properties.pTitle}
         </h1>
