@@ -6,8 +6,6 @@ import pagefind from "astro-pagefind";
 
 import tailwindcss from '@tailwindcss/vite';
 
-import cloudflare from '@astrojs/cloudflare';
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giveback.guide',
@@ -16,6 +14,4 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-
-  adapter: cloudflare(),
 });

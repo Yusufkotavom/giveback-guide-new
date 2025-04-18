@@ -2,10 +2,9 @@ import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
 import { notionLoader, richTextToPlainText } from '@chlorinec-pkgs/notion-astro-loader';
 import { notionPageSchema, propertySchema, transformedPropertySchema } from '@chlorinec-pkgs/notion-astro-loader/schemas';
-import { getSecret } from 'astro:env/server';
 
-const notionToken = getSecret('NOTION_TOKEN');
-const notionDatabaseId = getSecret('NOTION_DATABASE_ID');
+const notionToken = import.meta.env.NOTION_TOKEN;
+const notionDatabaseId = import.meta.env.NOTION_DATABASE_ID;
 
 if (!notionToken || !notionDatabaseId) {
   throw new Error('Missing required environment variables for Notion integration');

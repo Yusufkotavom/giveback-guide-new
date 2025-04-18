@@ -5,10 +5,32 @@ import type { GetStaticPathsOptions } from "astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import PCategoryDropdown from "../../components/PCategoryDropdown.astro";
 
+// Helper function to parse dates in dd/mm/yyyy format
+function parseDate(dateStr: string): Date {
+  const [day, month, year] = dateStr.split('/');
+  return new Date(`${year}-${month}-${day}`);
+}
+
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const entries = await getCollection("projects");
-  return paginate(entries, {
-    pageSize: 9, // the number of entries per page
+
+  // Sort projects by pPublished date (descending order)
+  const sortedEntries = entries.sort((a, b) => {
+    const dateA = a.data.properties.pPublished?.start 
+      ? (typeof a.data.properties.pPublished.start === 'string' 
+          ? parseDate(a.data.properties.pPublished.start) 
+          : a.data.properties.pPublished.start) 
+      : new Date(0);
+    const dateB = b.data.properties.pPublished?.start 
+      ? (typeof b.data.properties.pPublished.start === 'string' 
+          ? parseDate(b.data.properties.pPublished.start) 
+          : b.data.properties.pPublished.start) 
+      : new Date(0);
+    return dateB.getTime() - dateA.getTime(); // Most recent first
+  });
+
+  return paginate(sortedEntries, {
+    pageSize: 9, // Number of entries per page
   });
 }
 
@@ -24,7 +46,7 @@ const { page } = Astro.props;
         <h1
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
-          All Projects
+          Projects
         </h1>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
           All projects in a big long list.
@@ -51,7 +73,7 @@ const { page } = Astro.props;
             >{page.start + 1}-{page.end + 1}</span
           > of <span class="font-semibold text-gray-900 dark:text-white"
             >{page.total}</span
-          ></span
+          > projects</span
         >
         <ul class="inline-flex items-stretch -space-x-px">
           {
