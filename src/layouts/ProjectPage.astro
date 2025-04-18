@@ -9,11 +9,11 @@ const title = properties.pTitle || "Default Title";
 ---
 
 <MainLayout title={title}>
-  <section class="bg-white dark:bg-gray-900">
+  <section data-pagefind-filter="type:Projects" class="bg-white dark:bg-gray-900">
     <div
       class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
     >
-      <img data-pagefind-meta="image" class="w-full rounded-lg" src={properties.pImageURL} alt="" />
+      <img data-pagefind-meta="image[src]" class="w-full rounded-lg" src={properties.pImageURL} alt="" />
       <div class="mt-4 md:mt-0">
         {
           properties.pVerify && (
