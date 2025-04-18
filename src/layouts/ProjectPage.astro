@@ -9,11 +9,11 @@ const title = properties.pTitle || "Default Title";
 ---
 
 <MainLayout title={title}>
-  <section data-pagefind-body class="bg-white dark:bg-gray-900">
+  <section class="bg-white dark:bg-gray-900">
     <div
       class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
     >
-      <img class="w-full rounded-lg" src={properties.pImageURL} alt="" />
+      <img data-pagefind-meta="image" class="w-full rounded-lg" src={properties.pImageURL} alt="" />
       <div class="mt-4 md:mt-0">
         {
           properties.pVerify && (
@@ -103,7 +103,7 @@ const title = properties.pTitle || "Default Title";
       </div>
     </div>
   </section>
-  <main
+  <main data-pagefind-body
     class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased"
   >
     <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
