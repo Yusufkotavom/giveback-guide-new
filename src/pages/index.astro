@@ -1,14 +1,16 @@
 ---
+import { getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
 import HomeHero from "../components/HomeHero.astro";
 import Search from "astro-pagefind/components/Search";
+import LatestProjects from "../components/LatestProjects.astro";
 ---
 
 <MainLayout title="Giveback">
   <HomeHero />
   <main>
     <section class="bg-white dark:bg-gray-900">
-      <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <div class="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div
           class="p-6 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
         >
@@ -63,5 +65,6 @@ import Search from "astro-pagefind/components/Search";
         </div>
       </div>
     </section>
+	<LatestProjects limit={6} />
   </main>
 </MainLayout>
