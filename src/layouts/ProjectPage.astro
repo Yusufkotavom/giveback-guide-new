@@ -18,7 +18,7 @@ const title = properties.pTitle || "Default Title";
       class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
     >
       <img
-        data-pagefind-meta="image"
+        data-pagefind-meta="image[src], image_alt[alt]"
         class="w-full rounded-lg"
         src={properties.pImageURL}
         alt=""
@@ -146,7 +146,7 @@ const title = properties.pTitle || "Default Title";
                     ? properties.pCountry.map((country, index) => (
                         <>
                           <a
-                            href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
+                            data-pagefind-default-meta="country" href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
                           >
                             {country}
                           </a>
