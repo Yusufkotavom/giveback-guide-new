@@ -46,20 +46,22 @@ const limitedEntries = sortedEntries.slice(0, limit);
 ---
 
 <section class="bg-white dark:bg-gray-900">
-  <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-    <div class="max-w-screen-md mb-8 lg:mb-16">
-      <h2
-        class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h2
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Latest Projects
+        </h2>
+      </div>
+      <div
+        class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
       >
-        Latest Projects
-      </h2>
+        {limitedEntries.map((project) => (
+          <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </div>
     </div>
-    <div
-      class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
-    >
-      {limitedEntries.map((project) => (
-        <ProjectCard project={project} />
-      ))}
-    </div>
-  </div>
-</section>
+  </section>
