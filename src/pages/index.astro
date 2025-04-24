@@ -1,8 +1,6 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
 import HomeHero from "../components/HomeHero.astro";
-import Search from "astro-pagefind/components/Search";
 import LatestProjects from "../components/LatestProjects.astro";
 ---
 
@@ -54,11 +52,6 @@ import LatestProjects from "../components/LatestProjects.astro";
             </svg>
           </a>
         </div>
-        <Search
-          id="search"
-          className="pagefind-ui"
-          uiOptions={{ showImages: true }}
-        />
         <div
           class="max-w-screen-lg text-gray-500 sm:text-lg dark:text-gray-400"
         >
