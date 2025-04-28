@@ -7,6 +7,7 @@ import LatestProjects from "../components/LatestProjects.astro";
 <MainLayout title="Giveback">
   <HomeHero />
   <main>
+	<LatestProjects limit={6} />
     <section class="bg-white dark:bg-gray-900">
       <div class="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div
@@ -58,6 +59,5 @@ import LatestProjects from "../components/LatestProjects.astro";
         </div>
       </div>
     </section>
-	<LatestProjects limit={6} />
   </main>
 </MainLayout>
