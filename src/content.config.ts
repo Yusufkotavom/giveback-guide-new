@@ -50,6 +50,8 @@ const projects = defineCollection({
 		  pVerify: transformedPropertySchema.select,
 		  pImageURL: transformedPropertySchema.url,
 		  pPublished: transformedPropertySchema.date,
+		  pReview: transformedPropertySchema.rich_text,
+		  pGetInvolved: transformedPropertySchema.rich_text,
 		}),
 	  }),
   });
