@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import PCategoryDropdown from "../../components/PCategoryDropdown.astro";
+import PTopNav from "../../components/PTopNav.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
@@ -52,9 +53,16 @@ const { page } = Astro.props;
           All projects in a big long list.
         </p>
       </div>
-      <div class="mb-8 lg:mb-16">
-        <PCategoryDropdown />
-      </div>
+      <div class="flex flex-col items-start justify-between p-2 space-y-3 flex-row space-y-0 mb-4">
+        <div ><span class="text-sm font-normal text-gray-500 dark:text-gray-400"
+          >Showing <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.start + 1}-{page.end + 1}</span
+          > of <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.total}</span
+          > projects</span
+        ></div>
+        <div ><PCategoryDropdown /></div>
+    </div>
       <div
         class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
       >
@@ -64,136 +72,29 @@ const { page } = Astro.props;
   </section>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <nav
-        class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
-        aria-label="Table navigation"
-      >
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400"
-          >Showing <span class="font-semibold text-gray-900 dark:text-white"
-            >{page.start + 1}-{page.end + 1}</span
-          > of <span class="font-semibold text-gray-900 dark:text-white"
-            >{page.total}</span
-          > projects</span
-        >
-        <ul class="inline-flex items-stretch -space-x-px">
-          {
-            page.url.first ? (
-              <li>
-                <a
-                  href={page.url.first}
-                  class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">First</span>
-                  <svg
-                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m17 16-4-4 4-4m-6 8-4-4 4-4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            ) : null
-          }
-          {
+      <div class="flex justify-center items-center">
+        <!-- Previous Button -->
+        {
             page.url.prev ? (
-              <li>
-                <a
-                  href={page.url.prev}
-                  class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Previous</span>
-                  <svg
-                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m14 8-4 4 4 4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            ) : null
-          }
-          {
+        <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+          </svg>
+          Previous
+        </a>
+        ) : null
+      }
+        {
             page.url.next ? (
-              <li>
-                <a
-                  href={page.url.next}
-                  class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Next</span>
-                  <svg
-                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m10 16 4-4-4-4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            ) : null
-          }
-          {
-            page.url.last ? (
-              <li>
-                <a
-                  href={page.url.last}
-                  class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Last</span>
-                  <svg
-                    class="w-[20px] h-[20px] text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m7 16 4-4-4-4m6 8 4-4-4-4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            ) : null
-          }
-        </ul>
-      </nav>
+        <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          Next
+          <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+          </svg>
+        </a>
+        ) : null
+      }
+      </div>
     </div>
   </section>
 </MainLayout>
