@@ -1,0 +1,58 @@
+---
+export const prerender = false;
+
+import MainLayout from "../layouts/MainLayout.astro";
+
+// Get the search query from the URL
+const query = Astro.url.searchParams.get("q") || "";
+
+// Initialize results array
+let results = [];
+
+if (query) {
+  try {
+    // Use the Pagefind API provided by astro-pagefind
+    const pagefind = await import("/_pagefind/pagefind.js");
+
+    // Perform the search
+    const searchResults = await pagefind.search(query);
+
+    // Extract the titles from the search results
+    results = await Promise.all(
+      searchResults.results.map(async (result) => {
+        const data = await result.data();
+        return {
+          title: data.meta?.title || "Untitled",
+        };
+      })
+    );
+  } catch (error) {
+    console.error("Search error:", error);
+  }
+}
+---
+
+<MainLayout title="Search Results">
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <h1 class="mb-4 text-4xl font-extrabold text-gray-900 dark:text-white">
+        Search Results
+      </h1>
+      <p class="mb-8 text-gray-500 dark:text-gray-400">
+        Showing results for: <strong>{query}</strong>
+      </p>
+
+      {results.length > 0 ? (
+        <ul class="list-disc pl-5 space-y-2">
+          {results.map((result) => (
+            <li>{result.title}</li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-gray-500 dark:text-gray-400">
+          No results found for <strong>{query}</strong>.
+        </p>
+      )}
+    </div>
+  </section>
+</MainLayout>
