@@ -1,0 +1,140 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import ProjectCard from "../../../../components/ProjectCard.astro";
+import PCountryDropdown from "../../../../components/PCountryDropdown.astro";
+import PLocaleDropdown from "../../../../components/PLocaleDropdown.astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Fetch all projects
+  const projects = await getCollection("projects");
+
+  // Extract unique countries and locales from all projects
+  const countryLocaleMap = new Map();
+
+  projects.forEach((project) => {
+    const countries = Array.isArray(project.data.properties.pCountry)
+      ? project.data.properties.pCountry
+      : [project.data.properties.pCountry];
+
+    const locales = Array.isArray(project.data.properties.pLocale)
+      ? project.data.properties.pLocale
+      : [project.data.properties.pLocale];
+
+    countries.forEach((country) => {
+      const countrySlug = country.toLowerCase().replace(/\s+/g, "-");
+      if (!countryLocaleMap.has(countrySlug)) {
+        countryLocaleMap.set(countrySlug, new Set());
+      }
+      locales.forEach((locale) => {
+        const localeSlug = locale.toLowerCase().replace(/\s+/g, "-");
+        countryLocaleMap.get(countrySlug).add(localeSlug);
+      });
+    });
+  });
+
+  // Generate paginated paths for each country and locale
+  const paths = [];
+
+  for (const [country, locales] of countryLocaleMap.entries()) {
+    for (const locale of locales) {
+      const localeProjects = projects.filter((project) => {
+        const projectCountries = Array.isArray(project.data.properties.pCountry)
+          ? project.data.properties.pCountry.map((c) =>
+              c.toLowerCase().replace(/\s+/g, "-")
+            )
+          : [project.data.properties.pCountry.toLowerCase().replace(/\s+/g, "-")];
+
+        const projectLocales = Array.isArray(project.data.properties.pLocale)
+          ? project.data.properties.pLocale.map((l) =>
+              l.toLowerCase().replace(/\s+/g, "-")
+            )
+          : [project.data.properties.pLocale.toLowerCase().replace(/\s+/g, "-")];
+
+        return (
+          projectCountries.includes(country) &&
+          projectLocales.includes(locale)
+        );
+      });
+
+      const localePaginatedPaths = paginate(localeProjects, {
+        pageSize: 9, // Number of projects per page
+        params: { country, locale },
+        props: { country, locale }, // Pass country and locale as props
+      });
+
+      paths.push(...localePaginatedPaths);
+    }
+  }
+
+  return paths;
+}
+
+const { country, locale } = Astro.params; // Get the current country and locale from the URL
+const { page } = Astro.props; // Get the paginated data
+
+// Convert the country and locale slugs back to readable formats
+const readableCountry = country
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
+const readableLocale = locale
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+---
+
+<MainLayout title={`Projects in ${readableLocale}, ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Projects in {readableLocale}, {readableCountry}
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          A list of projects located in {readableLocale}, {readableCountry}.
+        </p>
+      </div>
+      <div class="flex flex-col items-start justify-between p-2 space-y-3 flex-row space-y-0 mb-4">
+        <div><span class="text-sm font-normal text-gray-500 dark:text-gray-400"
+          >Showing <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.start + 1}-{page.end + 1}</span
+          > of <span class="font-semibold text-gray-900 dark:text-white"
+            >{page.total}</span
+          > projects</span
+        ></div>
+        <div><PLocaleDropdown /><PCountryDropdown /></div>
+      </div>
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+      >
+        {page.data.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="flex justify-center items-center">
+        <!-- Previous Button -->
+        {page.url.prev ? (
+          <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Previous
+          </a>
+        ) : null}
+        {page.url.next ? (
+          <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Next
+          </a>
+        ) : null}
+      </div>
+    </div>
+  </section>
+</MainLayout>

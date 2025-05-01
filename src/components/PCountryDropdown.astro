@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+
+// Get the current country from the URL
+const currentCountry = Astro.url.pathname.split("/")[2]; // Extract the country slug from the URL
+
+const projects = await getCollection("projects");
+
+// Count the number of projects for each country
+const countryCounts = projects.reduce((acc: Record<string, number>, project) => {
+  const countries = Array.isArray(project.data.properties.pCountry)
+    ? project.data.properties.pCountry
+    : [project.data.properties.pCountry];
+
+  countries.forEach((country) => {
+    if (country) {
+      acc[country] = (acc[country] || 0) + 1;
+    }
+  });
+
+  return acc;
+}, {});
+
+// Extract unique countries and sort alphabetically
+const uniqueCountries = Object.keys(countryCounts).sort();
+---
+<form class="w-xs max-w-xs mx-auto">
+  <select
+    id="countries"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    onchange="if (this.value) window.location.href = this.value"
+  >
+    <option disabled selected={!currentCountry}>Choose a country</option>
+    {uniqueCountries.map((country) => {
+      const countrySlug = country.toLowerCase().replace(/\s+/g, "-");
+      return (
+        <option
+          value={`/projects/${countrySlug}`}
+          selected={currentCountry === countrySlug}
+        >
+          {country} ({countryCounts[country]})
+        </option>
+      );
+    })}
+  </select>
+</form>

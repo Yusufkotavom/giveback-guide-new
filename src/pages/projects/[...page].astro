@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProjectCard from "../../components/ProjectCard.astro";
-import PCategoryDropdown from "../../components/PCategoryDropdown.astro";
+import PCountryDropdown from "../../components/PCountryDropdown.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
@@ -60,7 +60,7 @@ const { page } = Astro.props;
             >{page.total}</span
           > projects</span
         ></div>
-        <div ><PCategoryDropdown /></div>
+        <div ><PCountryDropdown /></div>
     </div>
       <div
         class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
