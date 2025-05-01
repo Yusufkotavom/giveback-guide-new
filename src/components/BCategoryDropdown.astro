@@ -1,17 +1,17 @@
 ---
 import { getCollection } from "astro:content";
 
-const blogs = await getCollection("blog");
+const posts = await getCollection("posts");
 
 // Count the number of projects for each country
-const categoryCounts = blogs.reduce((acc: Record<string, number>, blog) => {
-  const categories = Array.isArray(blog.data.category)
-    ? blog.data.category
-    : [blog.data.category];
+const tagCounts = posts.reduce((acc: Record<string, number>, post) => {
+  const tags = Array.isArray(post.data.properties.bTags)
+    ? post.data.properties.bTags
+    : [post.data.properties.bTags];
 
-  categories.forEach((category) => {
-    if (category) {
-      acc[category] = (acc[category] || 0) + 1;
+  tags.forEach((tag) => {
+    if (tag) {
+      acc[tag] = (acc[tag] || 0) + 1;
     }
   });
 
@@ -19,7 +19,7 @@ const categoryCounts = blogs.reduce((acc: Record<string, number>, blog) => {
 }, {});
 
 // Extract unique countries and sort alphabetically
-const uniqueCategories = Object.keys(categoryCounts).sort();
+const uniqueTags = Object.keys(tagCounts).sort();
 ---
 <button
   id="dropdownDefaultButton"
@@ -51,13 +51,13 @@ const uniqueCategories = Object.keys(categoryCounts).sort();
     class="h-60 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
     aria-labelledby="dropdownDefaultButton"
   >
-  {uniqueCategories.map((category) => (
+  {uniqueTags.map((tag) => (
     <li>
       <a
           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-          href={`/blog/${category.toLowerCase().replace(/\s+/g, "-")}`}
+          href={`/posts/${tag.toLowerCase().replace(/\s+/g, "-")}`}
         >
-          {category} ({categoryCounts[category]})
+          {tag} ({tagCounts[tag]})
         </a>
     </li>
   ))}

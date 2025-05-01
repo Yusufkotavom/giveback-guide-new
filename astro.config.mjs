@@ -14,6 +14,11 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), pagefind()],
 
   vite: {
+    server: {
+      fs: {
+        allow: ['.'], // Ensure the `_pagefind` directory is accessible
+      },
+    },
     plugins: [tailwindcss()],
   },
 

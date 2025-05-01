@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from "astro:content";
+import MainLayout from "./MainLayout.astro";
+import AdBox from "../components/AdBox.astro";
+
+type Props = CollectionEntry<"posts">["data"];
+
+const { properties } = Astro.props;
+const title = properties.bTitle || "Default Title";
+---
+
+<MainLayout title={title}>
+  <section
+    data-pagefind-filter="type:Projects"
+    class="bg-white dark:bg-gray-900"
+  >
+    <div
+      class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
+    >
+      <img
+        data-pagefind-meta="image[src], image_alt[alt]"
+        class="w-full rounded-lg"
+        src={properties.bCoverImage}
+        alt=""
+      />
+      <div class="mt-4 md:mt-0">
+        <h1
+          class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          {properties.bTitle}
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
+    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+      <div class="mx-auto w-full max-w-2xl">
+        <AdBox />
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
+    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+      <div class="mx-auto w-full max-w-2xl">
+      <main
+        data-pagefind-body
+        class="pt-8 pb-16 lg:pt-12 lg:pb-12 bg-white dark:bg-gray-900 antialiased"
+      >
+        <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+          <article
+            class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+          >
+            <slot />
+          </article>
+        </div>
+      </main>
+    </article>
+      </div>
+    </section>
+  </section></MainLayout
+>

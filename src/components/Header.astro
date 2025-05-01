@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Avatar from "../assets/give-back-avatar.svg";
+import Search from "astro-pagefind/components/Search";
 ---
 
 <header>
@@ -127,6 +128,7 @@ import Avatar from "../assets/give-back-avatar.svg";
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
+              <Search id="search" className="pagefind-ui" uiOptions={{ showImages: true, showSubResults: true, autofocus: true }} />
             </div>
         </div>
     </div>
