@@ -60,7 +60,7 @@ const query = Astro.url.searchParams.get("q") || ""; // Get the search query fro
         // Dynamically import the Pagefind API
         const pagefindPath = import.meta.env.DEV
           ? "/pagefind/pagefind.js" // Development path
-          : "/_pagefind/pagefind.js"; // Production path
+          : "/pagefind/pagefind.js"; // Production path
   
         console.log("Attempting to load Pagefind from:", pagefindPath);
         const pagefind = await import(pagefindPath);
