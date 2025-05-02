@@ -1,0 +1,26 @@
+---
+import PLocaleDropdown from './PLocaleDropdown.astro';
+import PCountryDropdown from './PCountryDropdown.astro';
+
+const { page } = Astro.props;
+---
+<div class="flex flex-wrap gap-4">
+  <!-- Div 2 and Div 3 (Dropdowns) -->
+  <div id="2" class="w-full md:w-1/4 p-2">
+    <PLocaleDropdown />
+  </div>
+  <div id="3" class="w-full md:w-1/4 p-2">
+    <PCountryDropdown />
+  </div>
+
+  <!-- Div 1 (Showing projects) -->
+  <div id="1" class="w-full md:w-1/2 p-2">
+    <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+      Showing <span class="font-semibold text-gray-900 dark:text-white">
+        {page.start + 1}-{page.end + 1}
+      </span> of <span class="font-semibold text-gray-900 dark:text-white">
+        {page.total}
+      </span> projects
+    </span>
+  </div>
+</div>

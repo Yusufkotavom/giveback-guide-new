@@ -24,13 +24,13 @@ const countryCounts = projects.reduce((acc: Record<string, number>, project) => 
 // Extract unique countries and sort alphabetically
 const uniqueCountries = Object.keys(countryCounts).sort();
 ---
-<form class="w-xs max-w-xs mx-auto">
+<form class="w-100%">
   <select
     id="countries"
     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     onchange="if (this.value) window.location.href = this.value"
   >
-    <option disabled selected={!currentCountry}>Choose a country</option>
+    <option disabled selected={!currentCountry}>Countries</option>
     {uniqueCountries.map((country) => {
       const countrySlug = country.toLowerCase().replace(/\s+/g, "-");
       return (
