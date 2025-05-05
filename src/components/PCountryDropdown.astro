@@ -2,7 +2,25 @@
 import { getCollection } from "astro:content";
 
 // Get the current country from the URL
-const currentCountry = Astro.url.pathname.split("/")[2]; // Extract the country slug from the URL
+const currentCountryPromise = (async () => {
+  const pathSegments = Astro.url.pathname.split("/");
+  const potentialCountry = pathSegments[2]; // Extract the country slug from the URL
+
+  // Validate if the extracted segment matches a known country slug
+  const projects = await getCollection("projects");
+  const validCountries = projects.reduce((acc: Set<string>, project) => {
+    const countries = Array.isArray(project.data.properties.pCountry)
+      ? project.data.properties.pCountry.map((c) =>
+          c.toLowerCase().replace(/\s+/g, "-")
+        )
+      : [String(project.data.properties.pCountry).toLowerCase().replace(/\s+/g, "-")];
+    countries.forEach((country) => acc.add(country));
+    return acc;
+  }, new Set<string>());
+
+  return validCountries.has(potentialCountry) ? potentialCountry : null;
+})();
+const currentCountry = await currentCountryPromise;
 
 const projects = await getCollection("projects");
 

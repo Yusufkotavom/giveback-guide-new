@@ -150,12 +150,16 @@ import Search from "astro-pagefind/components/Search";
 >
   <div class="relative p-4 w-full max-w-2xl max-h-[75vh]">
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 flex flex-col max-h-[90vh]">
+    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 flex flex-col max-h-[85vh]">
       <!-- Modal header -->
       <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
+        <svg class="w-5 h-5 mr-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
+        </svg>        
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          Search
+          Search Giveback
         </h3>
+  
         <button
           data-modal-hide="search-modal"
           type="button"
@@ -185,7 +189,7 @@ import Search from "astro-pagefind/components/Search";
           className="pagefind-ui"
           uiOptions={{
             translations: {
-              placeholder: "Search the Giveback database",
+              placeholder: "Search the database",
               zero_results: "No results were found for [SEARCH_TERM]. Please try again or use our free Concierge service to have personalised suggestions sent to your inbox."
             },
             showImages: true,
