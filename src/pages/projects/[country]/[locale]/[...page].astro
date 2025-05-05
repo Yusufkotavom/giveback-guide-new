@@ -86,7 +86,7 @@ const readableLocale = locale
   .join(" ");
 ---
 
-<MainLayout title={`Projects in ${readableLocale}, ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
+<MainLayout data-pagefind-meta="title[title]" title={`Projects in ${readableLocale}, ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -114,12 +114,12 @@ const readableLocale = locale
       
         <!-- Div 2 (Locale Dropdown) -->
         <div id="2" class="w-full md:w-1/4 p-2 order-1 md:order-2">
-          <PLocaleDropdown />
+          <PCountryDropdown />
         </div>
       
         <!-- Div 3 (Country Dropdown) -->
         <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
-          <PCountryDropdown />
+          <PLocaleDropdown />
         </div>
       </div>
 

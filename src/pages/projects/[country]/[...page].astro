@@ -53,11 +53,11 @@ const readableCountry = country
   .join(" ");
 ---
 
-<MainLayout title={`Projects in ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
+<MainLayout data-pagefind-meta="title[title]" title={`Projects in ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h1
+        <h1  
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
           Projects in {readableCountry}
@@ -81,13 +81,13 @@ const readableCountry = country
       
         <!-- Div 2 (Locale Dropdown) -->
         <div id="2" class="w-full md:w-1/4 p-2 order-1 md:order-2">
-          <PLocaleDropdown />
-        </div>
-      
-        <!-- Div 3 (Country Dropdown) -->
-        <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
-          <PCountryDropdown />
-        </div>
+            <PCountryDropdown />
+          </div>
+        
+          <!-- Div 3 (Country Dropdown) -->
+          <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
+            <PLocaleDropdown />
+          </div>
       </div>
 
       <div
