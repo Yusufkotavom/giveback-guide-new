@@ -1,55 +1,70 @@
 ---
-import { getCollection } from "astro:content";
-import MainLayout from "../../layouts/MainLayout.astro";
-import type { GetStaticPathsOptions } from "astro";
-import PostCard from "../../components/PostCard.astro";
-import BCategoryDropdown from "../../components/BCategoryDropdown.astro";
 
-// Helper function to parse dates in dd/mm/yyyy format
-function parseDate(dateStr: string): Date {
-  const [day, month, year] = dateStr.split('/');
-  return new Date(`${year}-${month}-${day}`);
-}
+import { getCollection } from "astro:content";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import PostCard from "../../../components/PostCard.astro";
+import BTagsDropdown from "../../../components/BTagsDropdown.astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const entries = await getCollection("posts");
+  // Fetch all posts
+  const posts = await getCollection("posts");
 
-  // Sort projects by pPublished date (descending order)
-  const sortedEntries = entries.sort((a, b) => {
-    const dateA = a.data.properties.bPublished?.start 
-      ? (typeof a.data.properties.bPublished.start === 'string' 
-          ? parseDate(a.data.properties.bPublished.start) 
-          : a.data.properties.bPublished.start) 
-      : new Date(0);
-    const dateB = b.data.properties.bPublished?.start 
-      ? (typeof b.data.properties.bPublished.start === 'string' 
-          ? parseDate(b.data.properties.bPublished.start) 
-          : b.data.properties.bPublished.start) 
-      : new Date(0);
-    return dateB.getTime() - dateA.getTime(); // Most recent first
-  });
+  // Extract unique tags from all posts
+  const tags = new Set(
+    posts.flatMap((post) =>
+      Array.isArray(post.data.properties.bTags)
+        ? post.data.properties.bTags
+        : [post.data.properties.bTags as string]
+    )
+  );
 
-  return paginate(sortedEntries, {
-    pageSize: 9, // Number of entries per page
-  });
+  // Generate paginated paths for each tag
+  const paths = [];
+  for (const tag of tags) {
+    const filteredPosts = posts.filter((post) =>
+      Array.isArray(post.data.properties.bTags)
+        ? post.data.properties.bTags.some(
+            (c) => c.toLowerCase().replace(/\s+/g, "-") === tag.toLowerCase().replace(/\s+/g, "-")
+          )
+        : typeof post.data.properties.bTags === "string" &&
+          (post.data.properties.bTags as string).toLowerCase().replace(/\s+/g, "-") ===
+          tag.toLowerCase().replace(/\s+/g, "-")
+    );
+
+    const paginatedPaths = paginate(filteredPosts, {
+      pageSize: 9, // Number of projects per page
+      params: { tag: tag.toLowerCase().replace(/\s+/g, "-") },
+      props: { tag }, // Pass the country as a prop
+    });
+
+    paths.push(...paginatedPaths);
+  }
+
+  return paths;
 }
 
-const { page } = Astro.props;
+const { tag } = Astro.params; // Get the current country from the URL
+const { page } = Astro.props; // Get the paginated data
+
+// Convert the country slug back to a readable format
+const readableTag = tag
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
 ---
 
-<MainLayout
-  title={`All Posts - Page ${page.currentPage} of ${page.lastPage}`}
->
+<MainLayout title={`Posts in ${readableTag} - Page ${page.currentPage} of ${page.lastPage}`}>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
         <h1
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
-          Posts
+          {readableTag}
         </h1>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          All posts in a big long list.
+          A list of projects located in {readableTag}.
         </p>
       </div>
       <div class="flex flex-col items-start justify-between p-2 space-y-3 flex-row space-y-0 mb-4">
@@ -60,15 +75,19 @@ const { page } = Astro.props;
             >{page.total}</span
           > posts</span
         ></div>
-        <div ><BCategoryDropdown /></div>
+        <div id="3" class="w-1/2 md:w-1/4 p-2 order-2 md:order-3"><BTagsDropdown /></div>
     </div>
       <div
         class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
       >
-        {page.data.map((post) => <PostCard post={post} />)}
+        {page.data.map((post) => (
+          <PostCard post={post} />
+        ))}
       </div>
     </div>
   </section>
+
+  <!-- Pagination -->
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="flex justify-center items-center">

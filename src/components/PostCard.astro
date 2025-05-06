@@ -17,7 +17,7 @@ const { post } = Astro.props;
 
 <article class="bg-white rounded-lg">
     <div class="relative">
-        <a href={`/posts/${post.data.properties.bSlug}/`}>
+        <a href={`/blog/${post.data.properties.bSlug}/`}>
           <img
             class="w-full rounded-lg h-64 object-cover"
             src={post.data.properties.bCoverImage}
@@ -32,7 +32,7 @@ const { post } = Astro.props;
             class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 ml-2 mt-4 mb-2"
           >
             <a
-              href={`/posts/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/blog/${tag.toLowerCase().replace(/\s+/g, "-")}`}
             >
               {tag}
             </a>
@@ -41,7 +41,7 @@ const { post } = Astro.props;
       : post.data.properties.bTags}
   </p>
   <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
-    <a href={`/project/${post.data.properties.bSlug}/`}>
+    <a href={`/blog/${post.data.properties.bSlug}/`}>
       {post.data.properties.bTitle}
     </a>
   </h2>
