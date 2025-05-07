@@ -2,7 +2,7 @@
 // filepath: /Users/matthewmorelli/Documents/Dev/giveback-guide/src/components/LatestProjects.astro
 
 import { getCollection } from "astro:content";
-import ProjectCard from "./ProjectCard.astro";
+import PostCard from "../PostCard.astro";
 
 // Props: limit specifies the number of projects to display
 interface Props {
@@ -18,7 +18,7 @@ function parseDate(dateStr: string): Date {
 }
 
 // Fetch projects from the content collection
-const entries = await getCollection("projects");
+const entries = await getCollection("posts");
 
 // Sort projects by pPublished date (descending order)
 const sortedEntries = entries.map((entry) => ({
@@ -27,16 +27,15 @@ const sortedEntries = entries.map((entry) => ({
     ...entry.data,
     properties: {
       ...entry.data.properties,
-      pImageURL: entry.data.properties.pImageURL || "", // Ensure pImageURL is a string
-      pVerify: entry.data.properties.pVerify || "", // Ensure pVerify is a string
+      bCoverImage: entry.data.properties.bCoverImage || "", // Ensure pImageURL is a string
     },
   },
 })).sort((a, b) => {
-  const dateA = a.data.properties.pPublished
-    ? a.data.properties.pPublished.start
+  const dateA = a.data.properties.bPublished
+    ? a.data.properties.bPublished.start
     : new Date(0); // Fallback to epoch if date is missing
-  const dateB = b.data.properties.pPublished
-    ? b.data.properties.pPublished.start
+  const dateB = b.data.properties.bPublished
+    ? b.data.properties.bPublished.start
     : new Date(0); // Fallback to epoch if date is missing
   return dateB.getTime() - dateA.getTime(); // Most recent first
 });
@@ -51,15 +50,17 @@ const limitedEntries = sortedEntries.slice(0, limit);
         <h2
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
-          Latest Projects
+          Latest Blog Posts
         </h2>
+        <p class="mb-8 font-light text-gray-500 sm:text-xl dark:text-gray-400">The latest travel guides and advice from our blog</p>
+
       </div>
       <div
         class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
       >
-        {limitedEntries.map((project) => (
+        {limitedEntries.map((post) => (
           <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
-            <ProjectCard project={project} />
+            <PostCard post={post} />
           </div>
         ))}
       </div>
