@@ -9,363 +9,384 @@ const { properties } = Astro.props;
 const title = properties.pTitle || "Default Title";
 ---
 
-<MainLayout data-pagefind-meta="title" title={title}>
-  <section
-    class="bg-white dark:bg-gray-900"
-  >
-    <div
-      class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
-    >
-      <img
-        data-pagefind-meta="image[src], image_alt[alt]"
-        class="w-full rounded-lg"
-        src={properties.pImageURL}
-        alt={properties.pOrganiser}
-      />
-      <div class="mt-4 md:mt-0">
-        {
-          properties.pVerify && (
-            <div class="inline-flex items-center gap-1">
+<MainLayout title={title}>
+  <div data-pagefind-body>
+    <section class="bg-white dark:bg-gray-900">
+      <div
+        class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
+      >
+        <img
+          data-pagefind-meta="image[src], image_alt[alt]"
+          class="w-full rounded-lg"
+          src={properties.pImageURL}
+          alt={properties.pOrganiser}
+        />
+        <div class="mt-4 md:mt-0">
+          {
+            properties.pVerify && (
+              <div class="inline-flex items-center gap-1">
+                <svg
+                  class="h-5 w-5 text-primary-700 dark:text-primary-500"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">
+                  {properties.pVerify}
+                </p>
+              </div>
+            )
+          }
+          <h1
+            class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+          >
+            {properties.pTitle}
+          </h1>
+
+          <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="h-5 w-5 text-primary-700 dark:text-primary-500"
+                class="w-6 h-6 text-primary-700"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                ></path>
+              </svg>
+              <span
+                >Name of project: <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  >{properties.pOrganiser}</span
+                ></span
+              >
+            </li>
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-primary-700"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
-                fill="currentColor"
+                fill="none"
                 viewBox="0 0 24 24"
               >
                 <path
-                  fill-rule="evenodd"
-                  d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-                  clip-rule="evenodd"
-                />
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
+                ></path>
               </svg>
-              <p class="text-sm font-medium text-gray-900 dark:text-white">
-                {properties.pVerify}
-              </p>
-            </div>
-          )
-        }
-        <h1
-          class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-        >
-          {properties.pTitle}
-        </h1>
 
-        <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
-          <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg
-              class="w-6 h-6 text-primary-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-              ></path>
-            </svg>
-            <span
-              >Name of project: <span
-                class="font-medium text-gray-900 dark:text-white"
-                >{properties.pOrganiser}</span
-              ></span
-            >
-          </li>
-          <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg
-              class="w-6 h-6 text-primary-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
-              ></path>
-            </svg>
+              <span
+                >Locale(s): <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  >{
+                    Array.isArray(properties.pLocale)
+                      ? properties.pLocale.map((locale, index) => (
+                          <>
+                            {locale}
+                            {index < properties.pLocale.length - 1 && ", "}
+                          </>
+                        ))
+                      : properties.pLocale
+                  }</span
+                ></span
+              >
+            </li>
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-primary-700"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
+                ></path>
+              </svg>
 
-            <span
-              >Locale(s): <span
-                class="font-medium text-gray-900 dark:text-white"
-                >{
-                  Array.isArray(properties.pLocale)
-                    ? properties.pLocale.map((locale, index) => (
-                        <>
-                          {locale}
-                          {index < properties.pLocale.length - 1 && ", "}
-                        </>
-                      ))
-                    : properties.pLocale
-                }</span
-              ></span
-            >
-          </li>
-          <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg
-              class="w-6 h-6 text-primary-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
-              ></path>
-            </svg>
+              <span
+                >Nation(s): <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  >{
+                    Array.isArray(properties.pCountry)
+                      ? properties.pCountry.map((country, index) => (
+                          <>
+                            <a
+                              href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              {country}
+                            </a>
+                            {index < properties.pCountry.length - 1 && ","}{" "}
+                            {/* No space before the comma */}
+                          </>
+                        ))
+                      : properties.pCountry
+                  }</span
+                ></span
+              >
+            </li>
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-primary-700"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
+                ></path>
+              </svg>
 
-            <span
-              >Nation(s): <span
-                class="font-medium text-gray-900 dark:text-white"
-                >{
-                  Array.isArray(properties.pCountry)
-                    ? properties.pCountry.map((country, index) => (
-                        <>
-                          <a
-                            href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
-                          >
-                            {country}
-                          </a>
-                          {index < properties.pCountry.length - 1 && ","}{" "}
-                          {/* No space before the comma */}
-                        </>
-                      ))
-                    : properties.pCountry
-                }</span
-              ></span
-            >
-          </li>
-          <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg
-              class="w-6 h-6 text-primary-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
-              ></path>
-            </svg>
-
-            <span
-              >Categories: <span
-                class="font-medium text-gray-900 dark:text-white"
-                >{
-                  Array.isArray(properties.pCategory)
-                    ? properties.pCategory.map((category, index) => (
-                        <>
-                          {category}
-                          {index < properties.pCategory.length - 1 ? ", " : ""}
-                        </>
-                      ))
-                    : properties.pCategory
-                }</span
-              ></span
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <div class="mx-auto w-full max-w-2xl">
-        <AdBox />
-      </div>
-    </div>
-  </section>
-
-  <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <div class="mx-auto w-full max-w-2xl">
-        <div
-          class="p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
-        >
-          <h5
-            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-          >
-            How to get involved
-          </h5>
-          <div class="mb-3 text-gray-500 dark:text-gray-400">
-            <span
-              >Cost: <span class="font-medium text-gray-900 dark:text-white"
-                >{
-                  Array.isArray(properties.pCost)
-                    ? properties.pCost.map((cost, index) => (
-                        <>
-                          {cost}
-                          {index < properties.pCost.length - 1 && ", "}
-                        </>
-                      ))
-                    : properties.pCost
-                }</span
-              ></span>
-          </div>
-          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            {properties.pGetInvolved && properties.pGetInvolved.trim() !== ""
-              ? properties.pGetInvolved
-              : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."}
-          </p>
-          <a
-            href={properties.pURL}
-            class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Go to website
-            <svg
-              class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-    <article
-      class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
-    >
-      <main
-        class="pt-8 pb-16 lg:pt-12 lg:pb-12 bg-white dark:bg-gray-900 antialiased"
-      >
-        <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-          <article
-            class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
-          >
-            <h2>About this project</h2>
-            <slot />
-          </article>
-        </div>
-      </main>
-    </article>
-    {
-              properties.pVerify && (
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <div class="mx-auto w-full max-w-2xl">
-        <div
-          class="p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
-        >
-        <p class="text-gray-500 text-md dark:text-gray-400 mb-2">
-          This project has been
-        </p>
-        <h5
-  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
->
-  <svg
-    class="h-7 w-7 text-primary-700 dark:text-primary-500 inline-block"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    fill="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      fill-rule="evenodd"
-      d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-      clip-rule="evenodd"
-    />
-  </svg>
-  {properties.pVerify}
-</h5>
-<p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            {properties.pReview && properties.pReview.trim() !== ""
-              ? properties.pReview
-              : "We want you to feel confident when engaging with projects just like this one. That's why we have a verification system. Projects can either be verified by a member of our team or by a member of the Giveback community."}
-          </p>
-          <a href="#" class="inline-flex font-medium items-center text-blue-600 hover:underline">
-        Find out more about verification
-        <svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"/>
-        </svg>
-    </a>
-        </div>
-      </div>
-    </div>
-      )
-}
-    <section class="pb-10 pt-10 bg-white dark:bg-gray-900 antialiased">
-      <div class="px-4 mx-auto max-w-screen-xl">
-        <div class="flex justify-center items-center mx-auto w-full max-w-2xl">
-          <a href="/verify"><button
-            type="button"
-            class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            <svg
-              class="w-4 h-4 me-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 22 22"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-              ></path>
-            </svg>
-            Verify this project
-          </button></a>
-          <a href="/report">
-          <button
-            type="button"
-            class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            <svg
-              class="w-4 h-4 me-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 22 22"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              ></path>
-            </svg>
-            Report a problem
-          </button></a>
+              <span
+                >Categories: <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  >{
+                    Array.isArray(properties.pCategory)
+                      ? properties.pCategory.map((category, index) => (
+                          <>
+                            {category}
+                            {index < properties.pCategory.length - 1
+                              ? ", "
+                              : ""}
+                          </>
+                        ))
+                      : properties.pCategory
+                  }</span
+                ></span
+              >
+            </li>
+          </ul>
         </div>
       </div>
     </section>
-  </section></MainLayout
+
+    <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
+      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+        <div class="mx-auto w-full max-w-2xl">
+          <AdBox />
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
+      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+        <div class="mx-auto w-full max-w-2xl">
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
+          >
+            <h5
+              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              How to get involved
+            </h5>
+            <div class="mb-3 text-gray-500 dark:text-gray-400">
+              <span
+                >Cost: <span class="font-medium text-gray-900 dark:text-white"
+                  >{
+                    Array.isArray(properties.pCost)
+                      ? properties.pCost.map((cost, index) => (
+                          <>
+                            {cost}
+                            {index < properties.pCost.length - 1 && ", "}
+                          </>
+                        ))
+                      : properties.pCost
+                  }</span
+                ></span
+              >
+            </div>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              {
+                properties.pGetInvolved && properties.pGetInvolved.trim() !== ""
+                  ? properties.pGetInvolved
+                  : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."
+              }
+            </p>
+            <a
+              href={properties.pURL}
+              class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Go to website
+              <svg
+                class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <article
+        class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+      >
+        <main
+          class="pt-8 pb-16 lg:pt-12 lg:pb-12 bg-white dark:bg-gray-900 antialiased"
+        >
+          <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+            <article
+              class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+            >
+              <h2>About this project</h2>
+              <slot />
+            </article>
+          </div>
+        </main>
+      </article>
+      {
+        properties.pVerify && (
+          <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+            <div class="mx-auto w-full max-w-2xl">
+              <div class="p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                <p class="text-gray-500 text-md dark:text-gray-400 mb-2">
+                  This project has been
+                </p>
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  <svg
+                    class="h-7 w-7 text-primary-700 dark:text-primary-500 inline-block"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {properties.pVerify}
+                </h5>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                  {properties.pReview && properties.pReview.trim() !== ""
+                    ? properties.pReview
+                    : "We want you to feel confident when engaging with projects just like this one. That's why we have a verification system. Projects can either be verified by a member of our team or by a member of the Giveback community."}
+                </p>
+                <a
+                  href="#"
+                  class="inline-flex font-medium items-center text-blue-600 hover:underline"
+                >
+                  Find out more about verification
+                  <svg
+                    class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      <section class="pb-10 pt-10 bg-white dark:bg-gray-900 antialiased">
+        <div class="px-4 mx-auto max-w-screen-xl">
+          <div
+            class="flex justify-center items-center mx-auto w-full max-w-2xl"
+          >
+            <a href="/verify"
+              ><button
+                type="button"
+                class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 22"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                  ></path>
+                </svg>
+                Verify this project
+              </button></a
+            >
+            <a href="/report">
+              <button
+                type="button"
+                class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 22 22"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  ></path>
+                </svg>
+                Report a problem
+              </button></a
+            >
+          </div>
+        </div>
+      </section>
+    </section>
+  </div></MainLayout
 >

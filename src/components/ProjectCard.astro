@@ -20,7 +20,7 @@ const { project } = Astro.props;
 
 <article class="bg-white rounded-lg">
     <div class="relative">
-        <a href={`/project/${project.data.properties.pSlug}/`}>
+        <a href={`/projects/${project.data.properties.pSlug}/`}>
           <img
             class="w-full rounded-lg h-64 object-cover"
             src={project.data.properties.pImageURL}
@@ -66,7 +66,7 @@ const { project } = Astro.props;
       : project.data.properties.pCountry}
   </p>
   <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
-    <a href={`/project/${project.data.properties.pSlug}/`}>
+    <a href={`/projects/${project.data.properties.pSlug}/`}>
       {project.data.properties.pTitle}
     </a>
   </h2>
