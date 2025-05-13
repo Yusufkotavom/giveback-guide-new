@@ -12,6 +12,36 @@ const title = properties.pTitle || "Default Title";
 <MainLayout title={title}>
   <div data-pagefind-body>
     <section class="bg-white dark:bg-gray-900">
+      <div class="md:hidden pt-4 px-5 mx-auto max-w-screen-xl">
+        <nav class="flex" aria-label="Breadcrumb">
+          <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li class="inline-flex items-center">
+              <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                </svg>
+                Home
+              </a>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <a href="/projects/" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Projects</a>
+              </div>
+            </li>
+            <li aria-current="page">
+              <div class="flex items-center">
+                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">{properties.pOrganiser}</span>
+              </div>
+            </li>
+          </ol>
+        </nav>
+      </div>
       <div
         class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
       >
@@ -26,7 +56,7 @@ const title = properties.pTitle || "Default Title";
             properties.pVerify && (
               <div class="inline-flex items-center gap-1">
                 <svg
-                  class="h-5 w-5 text-primary-700 dark:text-primary-500"
+                  class="h-5 w-5 text-purple-600 dark:text-purple-500"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -55,7 +85,7 @@ const title = properties.pTitle || "Default Title";
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-primary-700"
+                class="w-6 h-6 text-teal-600"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -78,7 +108,7 @@ const title = properties.pTitle || "Default Title";
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-primary-700"
+                class="w-6 h-6 text-teal-600"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -113,7 +143,7 @@ const title = properties.pTitle || "Default Title";
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-primary-700"
+                class="w-6 h-6 text-teal-600"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -159,7 +189,7 @@ const title = properties.pTitle || "Default Title";
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-primary-700"
+                class="w-6 h-6 text-teal-600"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -241,7 +271,7 @@ const title = properties.pTitle || "Default Title";
             </p>
             <a
               href={properties.pURL}
-              class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-teal-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Go to website
               <svg
@@ -270,7 +300,7 @@ const title = properties.pTitle || "Default Title";
         >
           <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
             <article
-              class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+              class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
             >
               <h2>About this project</h2>
               <slot />
@@ -288,7 +318,7 @@ const title = properties.pTitle || "Default Title";
                 </p>
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   <svg
-                    class="h-7 w-7 text-primary-700 dark:text-primary-500 inline-block"
+                    class="h-7 w-7 text-purple-600 dark:text-purple-500 inline-block"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -311,7 +341,7 @@ const title = properties.pTitle || "Default Title";
                 </p>
                 <a
                   href="#"
-                  class="inline-flex font-medium items-center text-blue-600 hover:underline"
+                  class="inline-flex font-medium items-center text-purple-600 hover:underline"
                 >
                   Find out more about verification
                   <svg
@@ -343,7 +373,7 @@ const title = properties.pTitle || "Default Title";
             <a href="/verify"
               ><button
                 type="button"
-                class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="cursor-pointer text-white bg-black hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   class="w-4 h-4 me-2"
@@ -364,7 +394,7 @@ const title = properties.pTitle || "Default Title";
             <a href="/report">
               <button
                 type="button"
-                class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="cursor-pointer text-white bg-black hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   class="w-4 h-4 me-2"
