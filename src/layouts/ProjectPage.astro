@@ -2,11 +2,47 @@
 import type { CollectionEntry } from "astro:content";
 import MainLayout from "./MainLayout.astro";
 import AdBox from "../components/Ads/AdBox.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
 
 type Props = CollectionEntry<"projects">["data"];
 
 const { properties } = Astro.props;
 const title = properties.pTitle || "Default Title";
+
+const allProjects = await getCollection("projects");
+
+// Filter related projects
+const relatedProjects = allProjects
+  .filter((project) => {
+    // Exclude the current project
+    if (project.data.properties.pTitle === properties.pTitle) return false;
+
+    // Match by locale first
+    if (
+      Array.isArray(project.data.properties.pLocale) &&
+      Array.isArray(properties.pLocale) &&
+      project.data.properties.pLocale.some((locale) =>
+        properties.pLocale.includes(locale)
+      )
+    ) {
+      return true;
+    }
+
+    // Match by country if no locale match
+    if (
+      Array.isArray(project.data.properties.pCountry) &&
+      Array.isArray(properties.pCountry) &&
+      project.data.properties.pCountry.some((country) =>
+        properties.pCountry.includes(country)
+      )
+    ) {
+      return true;
+    }
+
+    return false;
+  })
+  .slice(0, 3); // Limit to 3 projects
 ---
 
 <MainLayout title={title}>
@@ -20,7 +56,6 @@ const title = properties.pTitle || "Default Title";
                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                   <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                 </svg>
-                Home
               </a>
             </li>
             <li>
@@ -414,6 +449,26 @@ const title = properties.pTitle || "Default Title";
                 Report a problem
               </button></a
             >
+          </div>
+        </div>
+      </section>
+      <section class="py-10 bg-gray-50 dark:bg-gray-900 antialiased">
+        <div class="px-4 mx-auto max-w-screen-xl">
+          <h2 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            You might also like...
+          </h2>
+          <div
+            class="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0"
+          >
+            {relatedProjects.length > 0 ? (
+              relatedProjects.map((project) => (
+                <ProjectCard project={project} />
+              ))
+            ) : (
+              <p class="text-gray-500 dark:text-gray-400">
+                No related projects found.
+              </p>
+            )}
           </div>
         </div>
       </section>
