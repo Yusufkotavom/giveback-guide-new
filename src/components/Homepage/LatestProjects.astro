@@ -3,6 +3,7 @@
 
 import { getCollection } from "astro:content";
 import ProjectCard from "../ProjectCard.astro";
+import PCountryDropdown from "../PCountryDropdown.astro";
 
 // Props: limit specifies the number of projects to display
 interface Props {
@@ -13,7 +14,7 @@ const { limit } = Astro.props;
 
 // Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
-  const [day, month, year] = dateStr.split('/');
+  const [day, month, year] = dateStr.split("/");
   return new Date(`${year}-${month}-${day}`);
 }
 
@@ -21,49 +22,82 @@ function parseDate(dateStr: string): Date {
 const entries = await getCollection("projects");
 
 // Sort projects by pPublished date (descending order)
-const sortedEntries = entries.map((entry) => ({
-  ...entry,
-  data: {
-    ...entry.data,
-    properties: {
-      ...entry.data.properties,
-      pImageURL: entry.data.properties.pImageURL || "", // Ensure pImageURL is a string
-      pVerify: entry.data.properties.pVerify || "", // Ensure pVerify is a string
+const sortedEntries = entries
+  .map((entry) => ({
+    ...entry,
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+        pImageURL: entry.data.properties.pImageURL || "", // Ensure pImageURL is a string
+        pVerify: entry.data.properties.pVerify || "", // Ensure pVerify is a string
+      },
     },
-  },
-})).sort((a, b) => {
-  const dateA = a.data.properties.pPublished
-    ? a.data.properties.pPublished.start
-    : new Date(0); // Fallback to epoch if date is missing
-  const dateB = b.data.properties.pPublished
-    ? b.data.properties.pPublished.start
-    : new Date(0); // Fallback to epoch if date is missing
-  return dateB.getTime() - dateA.getTime(); // Most recent first
-});
+  }))
+  .sort((a, b) => {
+    const dateA = a.data.properties.pPublished
+      ? a.data.properties.pPublished.start
+      : new Date(0); // Fallback to epoch if date is missing
+    const dateB = b.data.properties.pPublished
+      ? b.data.properties.pPublished.start
+      : new Date(0); // Fallback to epoch if date is missing
+    return dateB.getTime() - dateA.getTime(); // Most recent first
+  });
 
 // Limit the number of projects based on the limit prop
 const limitedEntries = sortedEntries.slice(0, limit);
 ---
 
 <section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h2
-          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-        >
-          Latest Projects
-        </h2>
-        <p class="mb-8 font-light text-gray-500 sm:text-xl dark:text-gray-400">View all projects</p>
-
-      </div>
-      <div
-        class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
+  <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    <div class="max-w-screen-md mb-8 lg:mb-16">
+      <h2
+        class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
       >
-        {limitedEntries.map((project) => (
+        Latest Projects
+      </h2>
+      <div
+        class="flex flex-row w-full gap-4 lg:justify-end"
+      >
+        <div class="flex-auto w-full sm:w-1/2">
+          <PCountryDropdown />
+        </div>
+        <div class="flex-auto w-full sm:w-1/2">
+          <a
+            href="/projects"
+            class="inline-flex items-center w-full justify-center px-4 py-2.5 border border-gray-300 text-gray-900 text-sm rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+          >
+            All Projects
+            <svg
+              class="w-5 h-5 ml-2.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 12H5m14 0-4 4m4-4-4-4"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
+    >
+      {
+        limitedEntries.map((project) => (
           <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
             <ProjectCard project={project} />
           </div>
-        ))}
-      </div>
+        ))
+      }
     </div>
-  </section>
+  </div>
+</section>
