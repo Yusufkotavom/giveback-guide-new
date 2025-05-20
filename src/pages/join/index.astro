@@ -51,10 +51,9 @@ import MainLayout from "../../layouts/MainLayout.astro";
                 the most relevant and valuable information.
               </p>
               <form
-  action="https://api.mailerlite.com/api/v2/subscribers"
+  action="https://submit-form.com/IlQ2jAQOf"
   method="POST"
   class="w-100%"
-  onsubmit="return handleFormSubmit(event)"
 >
   <div class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0">
     <div class="relative w-full">
@@ -73,6 +72,19 @@ import MainLayout from "../../layouts/MainLayout.astro";
         name="email"
         required
       />
+      <input
+    type="checkbox"
+    name="consent"
+    style="display:none"
+    tabindex="-1"
+    autocomplete="off"
+  />
+  <input
+    type="hidden"
+    name="_redirect"
+    value="https://giveback.guide/join"
+  />
+  <input type="hidden" name="_append" value="false" />
     </div>
     <div>
       <button
@@ -84,7 +96,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
     </div>
   </div>
   <div class="mx-auto max-w-screen-sm text-sm text-left text-gray-500 newsletter-form-footer dark:text-gray-300">
-    We care about the protection of your data. <a href="#" class="font-medium text-primary-600 dark:text-primary-500 hover:underline">Read our Privacy Policy</a>.
+    We care about the protection of your data. <a href="/privacy" class="font-medium text-primary-600 dark:text-primary-500 hover:underline">Read our Privacy Policy</a>.
   </div>
 </form>
             </li>

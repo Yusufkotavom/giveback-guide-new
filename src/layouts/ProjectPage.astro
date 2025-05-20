@@ -4,6 +4,7 @@ import MainLayout from "./MainLayout.astro";
 import AdBox from "../components/Ads/AdBox.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
+import SupportBox from "../components/Projects/SupportBox.astro";
 
 type Props = CollectionEntry<"projects">["data"];
 
@@ -400,6 +401,7 @@ const relatedProjects = allProjects
           </div>
         )
       }
+      <SupportBox />
       <section class="pt-4 pb-8 bg-white dark:bg-gray-900 antialiased">
         <div class="px-4 mx-auto max-w-screen-xl">
           <div
