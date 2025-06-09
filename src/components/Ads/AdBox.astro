@@ -1,17 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import AdAvatar from '../../assets/ads/g-adventures-avatar.jpeg';
+---
+
 <div class="p-4 border border-gray-300 rounded-lg text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-800">
-  <aside class="text-xs text-gray-500 uppercase mb-1">
+  <aside class="text-xs text-gray-500 uppercase mb-2">
 Sponsored
   </aside>
-      <h3 class="text-lg font-medium text-gray-800 dark:text-gray-300">Get a free cafetiere worth £26.95 when you subscribe to Pact Coffee</h3>
+      <div class="flex items-center gap-2 mb-2">
+    <Image 
+      src={AdAvatar} 
+      alt="G Adventures Avatar" 
+      class="w-8 h-8 rounded-md object-cover"
+    />
+    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-300 m-0">G Adventures</h3>
+  </div>
     <div class="mt-2 mb-4 text-sm text-gray-800 dark:text-gray-300">
-      Experience the very best of speciality coffee. Pact works directly with farmers around the world to bring you an ever changing rotation of speciality coffee whilst ensuring farmers are paid fairly.
+      Got the urge to get away within the next couple of months? With our Last Minute Travel Deals, you can save on a selection of tours that are departing within 60 days, and that only have a few open spots left.
     </div>
-    <div class="flex">
-      <a href=""><button type="button" class="cursor-pointer text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-        <svg class="me-2 h-3 w-3 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-          <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
-        </svg>
-        Find out more
-      </button></a>
-    </div>
+    <a
+              href="#"
+              class="inline-flex items-center border border-solid px-3 py-2 text-sm font-medium text-center text-black bg-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Check latest deals
+              <svg
+                class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+              </svg>
+            </a>
   </div>
