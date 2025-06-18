@@ -5,6 +5,7 @@ import AdBox from "../components/Ads/AdBox.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
+import { Image } from 'astro:assets';
 
 type Props = CollectionEntry<"projects">["data"];
 
@@ -124,17 +125,17 @@ const relatedProjects = allProjects
         class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
       >
         <img
-          data-pagefind-meta="image[src], image_alt[alt]"
-          class="w-full drop-shadow-xl rounded-lg"
-          src={properties.pImageURL}
-          alt={properties.pOrganiser}
-        />
+  data-pagefind-meta="image[src], image_alt[alt]"
+  class="w-full drop-shadow-xl rounded-lg"
+  src={properties.pImageURL ?? "/default-image.jpg"}
+  alt={properties.pOrganiser}
+/>
         <div class="mt-4 md:mt-0">
           {
             properties.pVerify && (
-              <div class="inline-flex items-center gap-1">
+              <div class="inline-flex bg-gbgpink bg-gbgpink bg-opacity-80 rounded-md px-2 py-1 items-center gap-1">
                 <svg
-                  class="h-5 w-5 text-purple-600 dark:text-purple-500"
+                  class="h-5 w-5 text-black"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -148,7 +149,7 @@ const relatedProjects = allProjects
                     clip-rule="evenodd"
                   />
                 </svg>
-                <p class="text-sm font-medium text-gray-900 dark:text-white">
+                <p class="text-sm font-medium text-black">
                   {properties.pVerify}
                 </p>
               </div>
@@ -163,7 +164,7 @@ const relatedProjects = allProjects
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-teal-600"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -186,7 +187,7 @@ const relatedProjects = allProjects
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-teal-600"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -221,7 +222,7 @@ const relatedProjects = allProjects
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-teal-600"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -267,7 +268,7 @@ const relatedProjects = allProjects
             </li>
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-teal-600"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -347,7 +348,7 @@ const relatedProjects = allProjects
               href={properties.pURL}
               target="_blank"
               rel="noopener"
-              class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-teal-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-gbgblue rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Go to website
               <svg
@@ -371,9 +372,8 @@ const relatedProjects = allProjects
           </div>
         </div>
       </div>
-      <main
-        class="pt-8 pb-6 lg:pt-12 lg:pb-12 bg-white dark:bg-gray-900 antialiased"
-      >
+      <section class="mt-10 pb-10 bg-white dark:bg-gray-900 antialiased">
+      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
         <div class="mx-auto w-full max-w-2xl">
           <h2
             class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
@@ -386,7 +386,8 @@ const relatedProjects = allProjects
             <slot />
           </article>
         </div>
-      </main>
+      </div>
+    </section>
       {
         properties.pVerify && (
           <div class="flex justify-between px-4 mx-auto mb-6 max-w-screen-xl">
@@ -396,7 +397,7 @@ const relatedProjects = allProjects
               </p>
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <svg
-                  class="h-7 w-7 text-purple-600 dark:text-purple-500 inline-block"
+                  class="h-7 w-7 text-black inline-block"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -419,24 +420,19 @@ const relatedProjects = allProjects
               </p>
               <a
                 href="/about/verification"
-                class="inline-flex font-medium items-center text-purple-600 hover:underline"
+                class="inline-flex font-medium items-center text-gray-500 hover:underline"
               >
                 Find out more about verification
                 <svg
-                  class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                  />
-                </svg>
+          class="ml-2 -mr-1 w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path
+            fill-rule="evenodd"
+            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"></path></svg
+        >
               </a>
             </div>
           </div>
@@ -451,7 +447,7 @@ const relatedProjects = allProjects
             <a href="/verify"
               ><button
                 type="button"
-                class="cursor-pointer text-black bg-gray-100 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   class="w-4 h-4 me-2"
@@ -472,7 +468,7 @@ const relatedProjects = allProjects
             <a href="/report">
               <button
                 type="button"
-                class="cursor-pointer text-black bg-gray-100 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   class="w-4 h-4 me-2"

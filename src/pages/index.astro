@@ -3,9 +3,10 @@ import MainLayout from "../layouts/MainLayout.astro";
 import HomeHero from "../components/Homepage/HomeHero.astro";
 import LatestProjects from "../components/Homepage/LatestProjects.astro";
 import LatestPosts from "../components/Homepage/LatestPosts.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
-<MainLayout title="Giveback - Discover amazing ways to give back to the places you visit">
+<MainLayout title={`${SITE_TITLE} - Discover amazing ways to give back to the places you visit`}>
   <HomeHero />
   <main>
 	<LatestProjects limit={6} />

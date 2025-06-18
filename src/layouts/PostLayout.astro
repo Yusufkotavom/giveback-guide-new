@@ -73,7 +73,7 @@ const formattedDate = (() => {
             {
               Array.isArray(properties.bTags)
                 ? properties.bTags.map((tag: string) => (
-                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 mt-4 mb-2">
+                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 mt-4 mb-2">
                       <a
                         href={`/blog/${tag.toLowerCase().replace(/\s+/g, "-")}`}
                       >
@@ -92,7 +92,7 @@ const formattedDate = (() => {
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
               <svg
-                class="w-6 h-6 text-primary-700 dark:text-white"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -136,7 +136,7 @@ const formattedDate = (() => {
           >
             <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
               <article
-                class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+                class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg dark:format-invert"
               >
                 <slot />
               </article>

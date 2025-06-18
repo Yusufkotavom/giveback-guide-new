@@ -27,9 +27,9 @@ const { project } = Astro.props;
             alt=""
           />
           {project.data.properties.pVerify && (
-            <div class="absolute top-2 left-2 bg-white bg-opacity-80 rounded-md px-2 py-1 flex items-center gap-1 shadow">
+            <div class="absolute top-2 left-2 bg-gbgpink bg-opacity-80 rounded-md px-2 py-1 flex items-center gap-1">
               <svg
-                class="h-5 w-5 text-purple-600 dark:text-purple-500"
+                class="h-5 w-5 text-black"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -43,7 +43,7 @@ const { project } = Astro.props;
                   clip-rule="evenodd"
                 />
               </svg>
-              <p class="text-xs font-medium text-gray-900 dark:text-white">
+              <p class="text-xs font-medium text-black dark:text-white">
                 {project.data.properties.pVerify}
               </p>
             </div>
@@ -54,7 +54,7 @@ const { project } = Astro.props;
     {Array.isArray(project.data.properties.pCountry)
       ? project.data.properties.pCountry.map((country: string) => (
           <span
-            class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-300 ml-2 mt-4 mb-2"
+            class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2"
           >
             <a
               href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}

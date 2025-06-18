@@ -1,8 +1,9 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
+import { SITE_TITLE } from "../../consts";
 ---
 
-<MainLayout title="About Giveback">
+<MainLayout title={`About ${SITE_TITLE}`}>
   <main>
     <section class="bg-white dark:bg-gray-900">
       <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
@@ -15,7 +16,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
             We empower travellers to give back to the world
           </h2>
           <p class="mb-4 font-light">
-            Giveback is a platform that connects travellers with projects and
+            {SITE_TITLE} is a platform that connects travellers with projects and
             experiences that have a positive impact on people, places and the
             planet. We believe that travel should be a force for good, and we
             are committed to helping travellers make a difference in the
@@ -214,7 +215,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd"></path></svg
                   >
-                  What kind of projects can be included on Giveback?
+                  What kind of projects can be included on {SITE_TITLE}?
                 </h3>
                 <p class="text-gray-500 dark:text-gray-400">
                   We list all sorts of projects and experiences, provided they
@@ -239,10 +240,10 @@ import MainLayout from "../../layouts/MainLayout.astro";
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd"></path></svg
                   >
-                  Is it free to list projects on Giveback?
+                  Is it free to list projects on {SITE_TITLE}?
                 </h3>
                 <p class="text-gray-500 dark:text-gray-400">
-                  Yes, it's completely free to list projects on Giveback. We
+                  Yes, it's completely free to list projects on {SITE_TITLE}. We
                   want to make it as easy as possible to give back to
                   destinations all over the world. That's why we don't charge
                   any fees or commissions.
@@ -288,10 +289,10 @@ import MainLayout from "../../layouts/MainLayout.astro";
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd"></path></svg
                   >
-                  Do you verify the projects listed on Giveback?
+                  Do you verify the projects listed on {SITE_TITLE}?
                 </h3>
                 <p class="text-gray-500 dark:text-gray-400">
-                  We do our best to verify the projects listed on Giveback. We
+                  We do our best to verify the projects listed on {SITE_TITLE}. We
                   always check the information provided by the project founders
                   and volunteers, and we also encourage users to feedback on the
                   projects they have participated in. We also do our best to
@@ -321,10 +322,10 @@ import MainLayout from "../../layouts/MainLayout.astro";
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd"></path></svg
                   >
-                  How can I show my support for Giveback?
+                  How can I show my support for {SITE_TITLE}?
                 </h3>
                 <p class="text-gray-500 dark:text-gray-400">
-                  The best way of showing your support for Giveback is by
+                  The best way of showing your support for {SITE_TITLE} is by
                   joining our mailing list. You can also share our website with
                   your friends and family, and follow us on <a
                     href="https://www.instagram.com/giveback.guide">Instagram</a
@@ -397,7 +398,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd"></path></svg
                   >
-                  Can I collaborate with Giveback?
+                  Can I collaborate with {SITE_TITLE}?
                 </h3>
                 <p class="text-gray-500 dark:text-gray-400">
                   We are always open to collaboration with like-minded
