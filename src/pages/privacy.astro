@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
 <MainLayout title="Privacy Policy">
@@ -17,7 +18,7 @@ import MainLayout from "../layouts/MainLayout.astro";
             We know you&rsquo;ve heard this line before, but we really mean it.
           </p>
           <p>
-            Giveback operates under its own strict Privacy Policy that is guided
+            {SITE_TITLE} operates under its own strict Privacy Policy that is guided
             by both UK and EU (GDPR) law and guidance. We will always seek to
             exceed the requirements from both jurisdictions, in order to
             maintain the highest levels of user privacy that we can reasonably
@@ -31,7 +32,7 @@ import MainLayout from "../layouts/MainLayout.astro";
           </p>
           <h2>Who we are</h2>
           <p>
-            We are Giveback. We are based in the United Kingdom. Our website
+            We are {SITE_TITLE}. We are based in the United Kingdom. Our website
             address is https://giveback.guide.
           </p>
           <h2>What personal data we collect and why we collect it</h2>

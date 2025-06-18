@@ -1,8 +1,9 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
-<MainLayout title="Giveback Concierge">
+<MainLayout title={`${SITE_TITLE} Concierge`}>
   <section class="bg-white dark:bg-gray-900">
     <div
       class="text-gray-500 sm:text-lg dark:text-gray-400 gap-8 py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
@@ -14,11 +15,11 @@ import MainLayout from "../layouts/MainLayout.astro";
           Concierge
         </h1>
         <p class="mb-4 font-light">
-          This is Giveback Concierge, a free personalised social impact project
+          This is {SITE_TITLE} Concierge, a free personalised social impact project
           finder.
         </p>
         <p class="mb-4 font-light">
-          In these early stages of Giveback, our database is still growing. We
+          In these early stages of {SITE_TITLE}, our database is still growing. We
           therefore don’t have public listings for everywhere in the world.
           Until we do, you can request personalised suggestions to be sent to
           your inbox for free!
