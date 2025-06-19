@@ -1,8 +1,7 @@
 ---
 import '../styles/global.css';
 import { SITE_TITLE } from '../consts';
-import Posthog from './posthog.astro';
-import { ClientRouter } from "astro:transitions";
+import Analytics from './Analytics.astro';
 
 interface Props {
 	title?: string; // Make title optional
@@ -33,7 +32,7 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<Posthog />
+<Analytics />
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
