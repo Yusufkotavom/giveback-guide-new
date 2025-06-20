@@ -11,6 +11,16 @@ type Props = CollectionEntry<"projects">["data"];
 
 const { properties } = Astro.props;
 const title = properties.pTitle || "Default Title";
+const image = properties.pImageURL || "/giveback-guide-placeholder.jpg"; // Fallback image
+
+// Format pLocale as a comma-separated string
+const localeString = Array.isArray(properties.pLocale)
+  ? properties.pLocale.join(", ")
+  : properties.pLocale || "";
+
+// Generate the description
+const description = `Give back to the local community in ${localeString} by engaging with ${properties.pOrganiser} on your next trip.`;
+
 
 const allProjects = await getCollection("projects");
 
@@ -47,7 +57,7 @@ const relatedProjects = allProjects
   .slice(0, 3); // Limit to 3 projects
 ---
 
-<MainLayout title={title}>
+<MainLayout title={title} description={description} image={image}>
   <div data-pagefind-body>
     <section class="bg-white dark:bg-gray-900">
       <div class="md:hidden pt-4 px-5 mx-auto max-w-screen-xl">

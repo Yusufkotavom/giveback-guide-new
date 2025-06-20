@@ -8,6 +8,8 @@ type Props = CollectionEntry<"posts">["data"];
 
 const { properties } = Astro.props;
 const title = properties.bTitle || "Default Title";
+const description = properties.bDescription || "";
+const image = properties.bCoverImage || "//giveback-guide-placeholder.jpg";
 
 // Format the date
 const formattedDate = (() => {
@@ -27,7 +29,7 @@ const formattedDate = (() => {
 })();
 ---
 
-<MainLayout title={title}>
+<MainLayout title={title} description={description} image={image}>
   <div data-pagefind-body>
     <section class="bg-white dark:bg-gray-900">
       <div class="md:hidden pt-4 px-5 mx-auto max-w-screen-xl">
@@ -64,7 +66,7 @@ const formattedDate = (() => {
       >
         <img
           data-pagefind-meta="image[src], image_alt[alt]"
-          class="w-full rounded-lg"
+          class="w-full rounded-lg shadow-lg"
           src={properties.bCoverImage}
           alt=""
         />

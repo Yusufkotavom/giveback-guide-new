@@ -6,15 +6,17 @@ import Announcement from "../components/Announcement.astro";
 
 interface Props {
   title?: string; // Accept the title prop
+  description?: string; // Accept the description prop
+  image?: string; // Accept the image prop
 }
 
-const { title } = Astro.props;
+const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} />
+    <BaseHead title={title} description={description} image={image} />
   </head>
   <body>
     <Header />
