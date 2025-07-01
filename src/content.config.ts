@@ -69,4 +69,42 @@ const posts = defineCollection({
 	  }),
   });
 
-export const collections = { posts, projects };
+  const stays = defineCollection({
+	loader: notionLoader({
+		auth: getEnvVar('STAYS_NOTION_TOKEN'),
+    database_id: getEnvVar('STAYS_NOTION_DATABASE_ID'),
+	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
+	  // Default value is 'assets/images/notion'
+	  // imageSavePath: 'assets/images/notion',
+	  // Use Notion sorting and filtering with the same options like notionhq client
+	  filter: {
+		property: 'Status',
+		select: { "equals": "Published" },
+	  },
+	}),
+	schema: notionPageSchema({
+		properties: z.object({
+		  sTitle: transformedPropertySchema.title,
+		  sCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  sLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  sCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  sFacilities: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  sName: transformedPropertySchema.rich_text,
+		  sType: transformedPropertySchema.multi_select,
+		  sSlug: transformedPropertySchema.rich_text,
+		  sURL: transformedPropertySchema.url,
+		  sOtherURL: transformedPropertySchema.url,
+		  sBookingURL: transformedPropertySchema.url,
+		  sHotelsURL: transformedPropertySchema.url,
+		  sAgodaURL: transformedPropertySchema.url,
+		  sVerify: transformedPropertySchema.select,
+		  sImageURL1: transformedPropertySchema.url,
+		  sImageURL2: transformedPropertySchema.url,
+		  sImageURL3: transformedPropertySchema.url,
+		  sPublished: transformedPropertySchema.date,
+		  sReview: transformedPropertySchema.rich_text,
+		}),
+	  }),
+  });
+
+export const collections = { posts, projects, stays };

@@ -1,0 +1,121 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import StayCard from "../../../components/StayCard.astro";
+import SCountryDropdown from "../../../components/SCountryDropdown.astro";
+import SLocaleDropdown from "../../../components/SLocaleDropdown.astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Fetch all stays
+  const stays = await getCollection("stays");
+
+  // Extract unique countries
+  const countries = Array.from(
+    new Set(
+      stays.flatMap((stay) =>
+        Array.isArray(stay.data.properties.sCountry)
+          ? stay.data.properties.sCountry
+          : [stay.data.properties.sCountry]
+      )
+    )
+  ).map((country) => country.toLowerCase().replace(/\s+/g, "-"));
+
+  // Generate paginated paths for each country
+  const paths = countries.map((country) => {
+    const countryStays = stays.filter((stay) => {
+      const stayCountries = Array.isArray(stay.data.properties.sCountry)
+        ? stay.data.properties.sCountry.map((c) =>
+            c.toLowerCase().replace(/\s+/g, "-")
+          )
+        : [stay.data.properties.sCountry.toLowerCase().replace(/\s+/g, "-")];
+
+      return stayCountries.includes(country);
+    });
+
+    return paginate(countryStays, {
+      pageSize: 9, // Number of stays per page
+      params: { country },
+      props: { country }, // Pass country as a prop
+    });
+  });
+
+  return paths.flat();
+}
+
+const { country } = Astro.params; // Get the current country from the URL
+const { page } = Astro.props; // Get the paginated data
+
+// Convert the country slug back to a readable format
+const readableCountry = country
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+---
+
+<MainLayout title={`Stays in ${readableCountry} - Page ${page.currentPage} of ${page.lastPage}`}>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1  
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Stays in {readableCountry}
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          A list of stays located in {readableCountry}.
+        </p>
+      </div>
+
+      <div class="flex flex-col md:flex-row mb-5">
+        <!-- Div 1 (Showing projects) -->
+        <div id="1" class="w-full md:w-1/2 p-2 order-3 md:order-1">
+          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            Showing <span class="font-semibold text-gray-900 dark:text-white">
+              {page.start + 1}-{page.end + 1}
+            </span> of <span class="font-semibold text-gray-900 dark:text-white">
+              {page.total}
+            </span> projects
+          </span>
+        </div>
+      
+        <!-- Div 2 (Locale Dropdown) -->
+        <div id="2" class="w-full md:w-1/4 p-2 order-1 md:order-2">
+            <SCountryDropdown />
+          </div>
+        
+          <!-- Div 3 (Country Dropdown) -->
+          <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
+            <SLocaleDropdown />
+          </div>
+      </div>
+
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+      >
+        {page.data.map((stay) => (
+          <StayCard stay={stay} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="flex justify-center items-center">
+        <!-- Previous Button -->
+        {page.url.prev ? (
+          <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Previous
+          </a>
+        ) : null}
+        {page.url.next ? (
+          <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Next
+          </a>
+        ) : null}
+      </div>
+    </div>
+  </section>
+</MainLayout>
