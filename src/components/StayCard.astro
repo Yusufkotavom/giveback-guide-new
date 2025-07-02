@@ -57,7 +57,7 @@ const { stay } = Astro.props;
             class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2"
           >
             <a
-              href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/stays/${country.toLowerCase().replace(/\s+/g, "-")}`}
             >
               {country}
             </a>
@@ -66,7 +66,7 @@ const { stay } = Astro.props;
       : stay.data.properties.sCountry}
   </p>
   <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
-    <a href={`/projects/${stay.data.properties.sSlug}/`}>
+    <a href={`/stays/${stay.data.properties.sSlug}/`}>
       {stay.data.properties.sTitle}
     </a>
   </h2>
