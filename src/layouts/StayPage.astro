@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import MainLayout from "./MainLayout.astro";
 import AdBox from "../components/Ads/AdBox.astro";
+import ClickModal from "../components/Modals/ClickModal.astro";
 import StayCard from "../components/StayCard.astro";
 import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
@@ -429,6 +430,8 @@ const images = [
                 properties.sBookingURL.trim() !== "" && (
                   <a
                     href={properties.sBookingURL}
+                    data-modal-target="click-modal"
+                    data-modal-toggle="click-modal"
                     target="_blank"
                     rel="noopener"
                     class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#003b95] rounded-lg hover:bg-[#004ecc] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -458,6 +461,8 @@ const images = [
               properties.sHotelsURL && properties.sHotelsURL.trim() !== "" && (
                 <a
                   href={properties.sHotelsURL}
+                  data-modal-target="click-modal"
+                    data-modal-toggle="click-modal"
                   target="_blank"
                   rel="noopener"
                   class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#ef3346] rounded-lg hover:bg-[#ff3f57] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -487,6 +492,8 @@ const images = [
               properties.sAgodaURL && properties.sAgodaURL.trim() !== "" && (
                 <a
                   href={properties.sAgodaURL}
+                  data-modal-target="click-modal"
+                    data-modal-toggle="click-modal"
                   target="_blank"
                   rel="noopener"
                   class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#a1479a] rounded-lg hover:bg-[#c357be] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -516,6 +523,8 @@ const images = [
               properties.sOtherURL && properties.sOtherURL.trim() !== "" && (
                 <a
                   href={properties.sOtherURL}
+                  data-modal-target="click-modal"
+                    data-modal-toggle="click-modal"
                   target="_blank"
                   rel="noopener"
                   class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -545,6 +554,8 @@ const images = [
               properties.sURL && properties.sURL.trim() !== "" && (
                 <a
                   href={properties.sURL}
+                  data-modal-target="click-modal"
+                    data-modal-toggle="click-modal"
                   target="_blank"
                   rel="noopener"
                   class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-black bg-white border border-solid rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -805,4 +816,5 @@ const images = [
       </section>
     </section>
   </div>
+  <ClickModal />
 </MainLayout>
