@@ -11,7 +11,8 @@ import { Image } from "astro:assets";
 type Props = CollectionEntry<"stays">["data"];
 
 const { properties } = Astro.props;
-const title = (properties.sTitle || "Default Title") + " - Stays on Giveback Guide";
+const title =
+  (properties.sTitle || "Default Title") + " - Stays on Giveback Guide";
 const image = properties.sImageURL1 || "/giveback-guide-placeholder.jpg"; // Fallback image
 
 // Format pLocale as a comma-separated string
@@ -77,162 +78,167 @@ const images = [
 ---
 
 <MainLayout title={title} description={description} image={image}>
-  <div>
-    <section class="bg-white dark:bg-gray-900">
-      <div class="md:hidden pt-4 px-5 mx-auto max-w-screen-xl">
-        <nav class="flex" aria-label="Breadcrumb">
-          <ol
-            class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
-          >
-            <li class="inline-flex items-center">
-              <a
-                href="/"
-                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-              >
-                <svg
-                  class="w-3 h-3 me-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-            <li>
-              <div class="flex items-center">
-                <svg
-                  class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"></path>
-                </svg>
+  <div class="bg-white dark:bg-gray-900">
+    <div
+      class="mx-auto max-w-screen-xl grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 px-0 lg:px-6"
+    >
+      <!-- Main column -->
+      <main class="w-full">
+        <!-- Breadcrumbs (now always visible) -->
+        <section class="py-6 px-4">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol
+              class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
+            >
+              <li class="inline-flex items-center">
                 <a
-                  href="/stays/"
-                  class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
-                  >Stays</a
+                  href="/"
+                  class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                 >
-              </div>
-            </li>
-            <li aria-current="page">
-              <div class="flex items-center">
-                <svg
-                  class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"></path>
-                </svg>
-                <span
-                  class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400"
-                  >{properties.sName}</span
-                >
-              </div>
-            </li>
-          </ol>
-        </nav>
-      </div>
-      <div
-        class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
-      >
-        <div id="gallery" class="relative w-full" data-carousel="static">
-          <!-- Carousel wrapper -->
-          <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-            {
-              images.map((img, idx) => (
-                <div
-                  class={`duration-700 ease-in-out${idx === 0 ? " block" : " hidden"}`}
-                  data-carousel-item={idx === 0 ? "active" : ""}
-                >
-                  <img
-                    src={img}
-                    class="absolute block max-w-full h-auto rounded-lg -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                    alt={properties.sName}
-                    data-pagefind-meta="image[src], image_alt[alt]"
-                  />
+                  <svg
+                    class="w-3 h-3 me-2.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+                    ></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <svg
+                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"></path>
+                  </svg>
+                  <a
+                    href="/stays/"
+                    class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                    >Stays</a
+                  >
                 </div>
-              ))
+              </li>
+              <li aria-current="page">
+                <div class="flex items-center">
+                  <svg
+                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"></path>
+                  </svg>
+                  <span
+                    class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400"
+                    >{properties.sName}</span
+                  >
+                </div>
+              </li>
+            </ol>
+          </nav>
+        </section>
+
+        <!-- Gallery (now full width above title/info) -->
+        <section class="py-6 px-4">
+          <div id="gallery" class="relative w-full" data-carousel="static">
+            <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+              {
+                images.map((img, idx) => (
+                  <div
+                    class={`duration-700 ease-in-out${idx === 0 ? " block" : " hidden"}`}
+                    data-carousel-item={idx === 0 ? "active" : ""}
+                  >
+                    <img
+                      src={img}
+                      class="absolute block max-w-full h-auto rounded-lg -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                      alt={properties.sName}
+                      data-pagefind-meta="image[src], image_alt[alt]"
+                    />
+                  </div>
+                ))
+              }
+            </div>
+            {
+              images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-prev
+                  >
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                      <svg
+                        class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 6 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 1 1 5l4 4"
+                        />
+                      </svg>
+                      <span class="sr-only">Previous</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-next
+                  >
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                      <svg
+                        class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 6 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m1 9 4-4-4-4"
+                        />
+                      </svg>
+                      <span class="sr-only">Next</span>
+                    </span>
+                  </button>
+                </>
+              )
             }
           </div>
-          <!-- Slider controls -->
-          {
-            images.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  data-carousel-prev
-                >
-                  <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg
-                      class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 6 10"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 1 1 5l4 4"
-                      />
-                    </svg>
-                    <span class="sr-only">Previous</span>
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  data-carousel-next
-                >
-                  <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg
-                      class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 6 10"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m1 9 4-4-4-4"
-                      />
-                    </svg>
-                    <span class="sr-only">Next</span>
-                  </span>
-                </button>
-              </>
-            )
-          }
-        </div>
+        </section>
 
-        <div class="mt-4 md:mt-0">
+        <!-- Title and Info (now below gallery, full width) -->
+        <section class="py-6 px-4">
           {
             properties.sVerify && (
-              <div class="inline-flex bg-gbgpink bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 items-center gap-1">
+              <div class="inline-flex bg-gbgpink bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 items-center gap-1 mb-2">
                 <svg
                   class="h-5 w-5 text-black"
                   aria-hidden="true"
@@ -259,9 +265,10 @@ const images = [
           >
             {properties.sTitle}
           </h1>
-
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+            <!-- Name -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...name icon and content... -->
               <svg
                 class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
@@ -277,14 +284,16 @@ const images = [
                   d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
                 ></path>
               </svg>
-              <span
-                >Name of stay: <span
+              <span>
+                Name of stay: <span
                   class="font-medium text-gray-900 dark:text-white"
                   >{properties.sName}</span
-                ></span
-              >
+                >
+              </span>
             </li>
+            <!-- Locale(s) -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...locale icon and content... -->
               <svg
                 class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
@@ -302,11 +311,11 @@ const images = [
                   d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
                 ></path>
               </svg>
-
-              <span
-                >Locale(s): <span
+              <span>
+                Locale(s): <span
                   class="font-medium text-gray-900 dark:text-white"
-                  >{
+                >
+                  {
                     Array.isArray(properties.sLocale)
                       ? properties.sLocale.map((locale, index) => (
                           <>
@@ -315,11 +324,13 @@ const images = [
                           </>
                         ))
                       : properties.sLocale
-                  }</span
-                ></span
-              >
+                  }
+                </span>
+              </span>
             </li>
+            <!-- Nation(s) -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...nation icon and content... -->
               <svg
                 class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
@@ -343,11 +354,11 @@ const images = [
                   d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
                 ></path>
               </svg>
-
-              <span
-                >Nation(s): <span
+              <span>
+                Nation(s): <span
                   class="font-medium text-gray-900 dark:text-white"
-                  >{
+                >
+                  {
                     Array.isArray(properties.sCountry)
                       ? properties.sCountry.map((country, index) => (
                           <>
@@ -357,15 +368,16 @@ const images = [
                               {country}
                             </a>
                             {index < properties.sCountry.length - 1 && ","}{" "}
-                            {/* No space before the comma */}
                           </>
                         ))
                       : properties.sCountry
-                  }</span
-                ></span
-              >
+                  }
+                </span>
+              </span>
             </li>
+            <!-- Categories -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...categories icon and content... -->
               <svg
                 class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
@@ -381,11 +393,11 @@ const images = [
                   d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
                 ></path>
               </svg>
-
-              <span
-                >Categories: <span
+              <span>
+                Categories: <span
                   class="font-medium text-gray-900 dark:text-white"
-                  >{
+                >
+                  {
                     Array.isArray(properties.sCategory)
                       ? properties.sCategory.map((category, index) => (
                           <>
@@ -396,45 +408,101 @@ const images = [
                           </>
                         ))
                       : properties.sCategory
-                  }</span
-                ></span
-              >
+                  }
+                </span>
+              </span>
             </li>
           </ul>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
-      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-        <div class="mx-auto w-full max-w-2xl">
-          <AdBox />
-        </div>
-      </div>
-    </section>
+        <!-- AdBox (mobile only) -->
+        <section class="py-6 px-4 md:hidden">
+          <div class="mx-auto w-full max-w-2xl">
+            <AdBox />
+          </div>
+        </section>
 
-    <section class="pb-10 bg-white dark:bg-gray-900 antialiased">
-      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-        <div class="mx-auto w-full max-w-2xl">
-          <h2
-            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-          >
-            Book a stay at {properties.sName}
-          </h2>
-          <div class="mb-3 text-gray-500 dark:text-gray-400">
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Find out more about this stay and place a booking now.
-            </p>
-            {
-              properties.sBookingURL &&
-                properties.sBookingURL.trim() !== "" && (
+        <!-- Booking Section -->
+        <section class="py-6 px-4">
+            <h2
+              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              Book a stay at {properties.sName}
+            </h2>
+            <div class="mb-3 text-gray-500 dark:text-gray-400">
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                Find out more about this stay and place a booking now.
+              </p>
+              {/* Booking buttons */}
+              {
+                properties.sBookingURL &&
+                  properties.sBookingURL.trim() !== "" && (
+                    <a
+                      href={properties.sBookingURL}
+                      target="_blank"
+                      rel="noopener"
+                      class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#003b95] rounded-lg hover:bg-[#004ecc] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Booking.com
+                      <svg
+                        class="w-5 h-5 text-white ml-2"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                        />
+                      </svg>
+                    </a>
+                  )
+              }
+              {
+                properties.sHotelsURL &&
+                  properties.sHotelsURL.trim() !== "" && (
+                    <a
+                      href={properties.sHotelsURL}
+                      target="_blank"
+                      rel="noopener"
+                      class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#ef3346] rounded-lg hover:bg-[#ff3f57] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Hotels.com
+                      <svg
+                        class="w-5 h-5 text-white ml-2"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                        />
+                      </svg>
+                    </a>
+                  )
+              }
+              {
+                properties.sAgodaURL && properties.sAgodaURL.trim() !== "" && (
                   <a
-                    href={properties.sBookingURL}
+                    href={properties.sAgodaURL}
                     target="_blank"
                     rel="noopener"
-                    class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#003b95] rounded-lg hover:bg-[#004ecc] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#a1479a] rounded-lg hover:bg-[#c357be] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    Booking.com
+                    Agoda
                     <svg
                       class="w-5 h-5 text-white ml-2"
                       aria-hidden="true"
@@ -454,140 +522,80 @@ const images = [
                     </svg>
                   </a>
                 )
-            }
-            {
-              properties.sHotelsURL && properties.sHotelsURL.trim() !== "" && (
-                <a
-                  href={properties.sHotelsURL}
-                  target="_blank"
-                  rel="noopener"
-                  class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#ef3346] rounded-lg hover:bg-[#ff3f57] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Hotels.com
-                  <svg
-                    class="w-5 h-5 text-white ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
+              }
+              {
+                properties.sOtherURL && properties.sOtherURL.trim() !== "" && (
+                  <a
+                    href={properties.sOtherURL}
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                    />
-                  </svg>
-                </a>
-              )
-            }
-            {
-              properties.sAgodaURL && properties.sAgodaURL.trim() !== "" && (
-                <a
-                  href={properties.sAgodaURL}
-                  target="_blank"
-                  rel="noopener"
-                  class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-[#a1479a] rounded-lg hover:bg-[#c357be] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Agoda
-                  <svg
-                    class="w-5 h-5 text-white ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                    Book your stay
+                    <svg
+                      class="w-5 h-5 text-white ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      />
+                    </svg>
+                  </a>
+                )
+              }
+              {
+                properties.sURL && properties.sURL.trim() !== "" && (
+                  <a
+                    href={properties.sURL}
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-black bg-white border border-solid rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                    />
-                  </svg>
-                </a>
-              )
-            }
-            {
-              properties.sOtherURL && properties.sOtherURL.trim() !== "" && (
-                <a
-                  href={properties.sOtherURL}
-                  target="_blank"
-                  rel="noopener"
-                  class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Book your stay
-                  <svg
-                    class="w-5 h-5 text-white ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                    />
-                  </svg>
-                </a>
-              )
-            }
-            {
-              properties.sURL && properties.sURL.trim() !== "" && (
-                <a
-                  href={properties.sURL}
-                  target="_blank"
-                  rel="noopener"
-                  class="inline-flex items-center px-3 py-2 mb-4 text-lg font-medium text-center text-black bg-white border border-solid rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Official website
-                  <svg
-                    class="w-5 h-5 text-black ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                    />
-                  </svg>
-                </a>
-              )
-            }
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              We may earn a small commission if you book through these links, at
-              no extra cost to you. Thank you for supporting our mission to
-              promote regenerative travel.
-            </p>
-          </div>
-        </div>
-      </div>
-      <section class="mt-8 pb-6 bg-white dark:bg-gray-900 antialiased">
-        <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-          <div class="mx-auto w-full max-w-2xl">
+                    Official website
+                    <svg
+                      class="w-5 h-5 text-black ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      />
+                    </svg>
+                  </a>
+                )
+              }
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                We may earn a small commission if you book through these links,
+                at no extra cost to you. Thank you for supporting our mission to
+                promote regenerative travel.
+              </p>
+            </div>
+        </section>
+
+        <!-- Facilities Section -->
+        <section class="py-6 px-4">
             <h2
               class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
             >
               Facilities and amenities
             </h2>
-
             <div class="grid grid-cols-2 gap-6">
               <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
                 {
@@ -659,29 +667,26 @@ const images = [
                 }
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
-      <section class="mt-10 pb-10 bg-white dark:bg-gray-900 antialiased">
-        <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-          <div class="mx-auto w-full max-w-2xl">
+        </section>
+
+        <!-- About Section -->
+        <section class="py-6 px-4">
             <h2
               class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
             >
               About this stay
             </h2>
             <article
-              class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+              class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
             >
               <slot />
             </article>
-          </div>
-        </div>
-      </section>
-      {
-        properties.sVerify && (
-          <div class="flex justify-between px-4 mx-auto mb-6 max-w-screen-xl">
-            <div class="mx-auto w-full max-w-2xl">
+        </section>
+
+        <!-- Verification Section -->
+        {
+          properties.sVerify && (
+            <div class="py-4 px-4">
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <svg
                   class="h-7 w-7 text-black inline-block"
@@ -724,17 +729,18 @@ const images = [
                 </svg>
               </a>
             </div>
-          </div>
-        )
-      }
-      <SupportBox />
-      <section class="pt-4 pb-8 bg-white dark:bg-gray-900 antialiased">
-        <div class="px-4 mx-auto max-w-screen-xl">
+          )
+        }
+
+        <SupportBox />
+
+        <!-- Verify/Report Buttons -->
+        <section class="pt-6 pb-8">
           <div
-            class="flex justify-center items-center mx-auto w-full max-w-2xl"
+            class="mx-auto w-full max-w-2xl flex justify-center items-center"
           >
-            <a href="/verify"
-              ><button
+            <a href="/verify">
+              <button
                 type="button"
                 class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
@@ -752,8 +758,8 @@ const images = [
                   ></path>
                 </svg>
                 Verify this stay
-              </button></a
-            >
+              </button>
+            </a>
             <a href="/report">
               <button
                 type="button"
@@ -775,36 +781,45 @@ const images = [
                   ></path>
                 </svg>
                 Report a problem
-              </button></a
-            >
+              </button>
+            </a>
           </div>
+        </section>
+      </main>
+
+      <!-- Aside column (desktop only) -->
+      <aside class="hidden lg:block pt-16">
+        <div class="sticky top-24">
+          <AdBox />
         </div>
-      </section>
-      <section class="py-10 bg-gray-50 dark:bg-gray-900 antialiased">
-        <div class="px-4 mx-auto max-w-screen-xl">
-          <h2
-            class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-          >
-            You might also like...
-          </h2>
-          <div class="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0">
-            {
-              relatedProjects.length > 0 ? (
-                relatedProjects.map((stay) => <StayCard stay={stay} />)
-              ) : (
-                <p class="text-gray-500 dark:text-gray-400">
-                  There are no related stays at the moment. If you know of a
-                  stay that would look awesome here,{" "}
-                  <a class="text-black underline" href="/submit">
-                    please let us know!
-                  </a>
-                </p>
-              )
-            }
-          </div>
-        </div>
-      </section>
-    </section>
+      </aside>
+    </div>
   </div>
-  <ClickModal />
+  <!-- Related Projects -->
+        <section class="py-10 px-4 bg-gray-50 dark:bg-gray-900">
+          <div class="mx-auto w-full max-w-screen-xl">
+            <h2
+              class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              You might also like...
+            </h2>
+            <div
+              class="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0"
+            >
+              {
+                relatedProjects.length > 0 ? (
+                  relatedProjects.map((stay) => <StayCard stay={stay} />)
+                ) : (
+                  <p class="text-gray-500 dark:text-gray-400">
+                    There are no related stays at the moment. If you know of a
+                    stay that would look awesome here,{" "}
+                    <a class="text-black underline" href="/submit">
+                      please let us know!
+                    </a>
+                  </p>
+                )
+              }
+            </div>
+          </div>
+        </section>
 </MainLayout>
