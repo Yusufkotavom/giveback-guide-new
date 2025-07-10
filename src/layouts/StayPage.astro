@@ -2,11 +2,11 @@
 import type { CollectionEntry } from "astro:content";
 import MainLayout from "./MainLayout.astro";
 import AdBox from "../components/Ads/AdBox.astro";
-import ClickModal from "../components/Modals/ClickModal.astro";
 import StayCard from "../components/StayCard.astro";
 import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
 import { Image } from "astro:assets";
+import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 
 type Props = CollectionEntry<"stays">["data"];
 
@@ -822,4 +822,5 @@ const images = [
             </div>
           </div>
         </section>
+        <SubscribeDrawer />
 </MainLayout>
