@@ -60,6 +60,7 @@ const posts = defineCollection({
 		  pSlug: transformedPropertySchema.rich_text,
 		  pCost: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 		  pURL: transformedPropertySchema.url,
+		  pMapsURL: transformedPropertySchema.url,
 		  pVerify: transformedPropertySchema.select,
 		  pImageURL: transformedPropertySchema.url,
 		  pPublished: transformedPropertySchema.date,

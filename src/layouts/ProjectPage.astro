@@ -139,76 +139,241 @@ const relatedProjects = allProjects
 
         <!-- Featured Image -->
         <section class="py-6 px-4">
-              <img
-                data-pagefind-meta="image[src], image_alt[alt]"
-                class="w-full drop-shadow-xl rounded-lg"
-                src={properties.pImageURL ?? "/default-image.jpg"}
-                alt={properties.pOrganiser}
-              />
+          <img
+            data-pagefind-meta="image[src], image_alt[alt]"
+            class="w-full drop-shadow-xl rounded-lg"
+            src={properties.pImageURL ?? "/default-image.jpg"}
+            alt={properties.pOrganiser}
+          />
         </section>
 
-          <!-- Title and Info (now below gallery, full width) -->
-          <section class="py-6 px-4">
-            {
-              properties.pVerify && (
-                <div class="inline-flex bg-gbgpink bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 items-center gap-1 mb-2">
-                  <svg
-                    class="h-5 w-5 text-black"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  <p class="text-sm font-medium text-black">
-                    {properties.pVerify}
-                  </p>
-                </div>
-              )
-            }
-            <h1
-              class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-            >
-              {properties.pTitle}
-            </h1>
-            <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
-              <!-- Name -->
-              <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                <!-- ...name icon and content... -->
+        <!-- Title and Info (now below gallery, full width) -->
+        <section class="py-6 px-4">
+          {
+            properties.pVerify && (
+              <div class="inline-flex bg-gbgpink bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 items-center gap-1 mb-2">
                 <svg
-                  class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                  class="h-5 w-5 text-black"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-                  ></path>
+                    fill-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
-                <span>
-                  Name of stay: <span
-                    class="font-medium text-gray-900 dark:text-white"
-                    >{properties.pOrganiser}</span
-                  >
+                <p class="text-sm font-medium text-black">
+                  {properties.pVerify}
+                </p>
+              </div>
+            )
+          }
+          <h1
+            class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+          >
+            {properties.pTitle}
+          </h1>
+          <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+            <!-- Name -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...name icon and content... -->
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                ></path>
+              </svg>
+              <span>
+                Name of stay: <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  >{properties.pOrganiser}</span
+                >
+              </span>
+            </li>
+            <!-- Locale(s) -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...locale icon and content... -->
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
+                ></path>
+              </svg>
+              <span>
+                Locale(s): <span
+                  class="font-medium text-gray-900 dark:text-white"
+                >
+                  {
+                    Array.isArray(properties.pLocale)
+                      ? properties.pLocale.map((locale, index) => (
+                          <>
+                            {locale}
+                            {index < properties.pLocale.length - 1 && ", "}
+                          </>
+                        ))
+                      : properties.pLocale
+                  }
                 </span>
-              </li>
-              <!-- Locale(s) -->
-              <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                <!-- ...locale icon and content... -->
+              </span>
+            </li>
+            <!-- Nation(s) -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...nation icon and content... -->
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
+                ></path>
+              </svg>
+              <span>
+                Nation(s): <span
+                  class="font-medium text-gray-900 dark:text-white"
+                >
+                  {
+                    Array.isArray(properties.pCountry)
+                      ? properties.pCountry.map((country, index) => (
+                          <>
+                            <a
+                              href={`/stays/${country.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              {country}
+                            </a>
+                            {index < properties.pCountry.length - 1 && ","}{" "}
+                          </>
+                        ))
+                      : properties.pCountry
+                  }
+                </span>
+              </span>
+            </li>
+            <!-- Categories -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <!-- ...categories icon and content... -->
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
+                ></path>
+              </svg>
+              <span>
+                Categories: <span
+                  class="font-medium text-gray-900 dark:text-white"
+                >
+                  {
+                    Array.isArray(properties.pCategory)
+                      ? properties.pCategory.map((category, index) => (
+                          <>
+                            {category}
+                            {index < properties.pCategory.length - 1
+                              ? ", "
+                              : ""}
+                          </>
+                        ))
+                      : properties.pCategory
+                  }
+                </span>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- AdBox (mobile only) -->
+        <section class="py-6 px-4 md:hidden">
+          <div class="mx-auto w-full max-w-2xl">
+            <AdBox />
+          </div>
+        </section>
+
+        <!-- Get Involved Section -->
+        <section class="py-6 px-4">
+          <h2
+            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+          >
+            How to get involved
+          </h2>
+          <div class="mb-3 text-gray-500 dark:text-gray-400">
+            <span
+              >Cost: <span class="font-medium text-gray-900 dark:text-white"
+                >{
+                  Array.isArray(properties.pCost)
+                    ? properties.pCost.map((cost, index) => (
+                        <>
+                          {cost}
+                          {index < properties.pCost.length - 1 && ", "}
+                        </>
+                      ))
+                    : properties.pCost
+                }</span
+              ></span
+            >
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              {
+                properties.pGetInvolved && properties.pGetInvolved.trim() !== ""
+                  ? properties.pGetInvolved
+                  : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."
+              }
+            </p>
+            <div class="flex items-center gap-2 w-full">
+              <a
+                href={properties.pURL}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Visit website
                 <svg
-                  class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                  class="w-5 h-5 text-white ml-2"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -221,31 +386,19 @@ const relatedProjects = allProjects
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
+                    d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
                   ></path>
                 </svg>
-                <span>
-                  Locale(s): <span
-                    class="font-medium text-gray-900 dark:text-white"
-                  >
-                    {
-                      Array.isArray(properties.pLocale)
-                        ? properties.pLocale.map((locale, index) => (
-                            <>
-                              {locale}
-                              {index < properties.pLocale.length - 1 && ", "}
-                            </>
-                          ))
-                        : properties.pLocale
-                    }
-                  </span>
-                </span>
-              </li>
-              <!-- Nation(s) -->
-              <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                <!-- ...nation icon and content... -->
+              </a>
+              {properties.pMapsURL && (
+              <a
+                href={properties.pMapsURL}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center px-3 py-2 text-lg font-medium text-center bg-white border border-solid border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
                 <svg
-                  class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                  class="w-6 h-6 text-black dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -267,255 +420,135 @@ const relatedProjects = allProjects
                     d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
                   ></path>
                 </svg>
-                <span>
-                  Nation(s): <span
-                    class="font-medium text-gray-900 dark:text-white"
-                  >
-                    {
-                      Array.isArray(properties.pCountry)
-                        ? properties.pCountry.map((country, index) => (
-                            <>
-                              <a
-                                href={`/stays/${country.toLowerCase().replace(/\s+/g, "-")}`}
-                              >
-                                {country}
-                              </a>
-                              {index < properties.pCountry.length - 1 && ","}{" "}
-                            </>
-                          ))
-                        : properties.pCountry
-                    }
-                  </span>
-                </span>
-              </li>
-              <!-- Categories -->
-              <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                <!-- ...categories icon and content... -->
-                <svg
-                  class="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
-                  ></path>
-                </svg>
-                <span>
-                  Categories: <span
-                    class="font-medium text-gray-900 dark:text-white"
-                  >
-                    {
-                      Array.isArray(properties.pCategory)
-                        ? properties.pCategory.map((category, index) => (
-                            <>
-                              {category}
-                              {index < properties.pCategory.length - 1
-                                ? ", "
-                                : ""}
-                            </>
-                          ))
-                        : properties.pCategory
-                    }
-                  </span>
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- AdBox (mobile only) -->
-          <section class="py-6 px-4 md:hidden">
-            <div class="mx-auto w-full max-w-2xl">
-              <AdBox />
+              </a>
+              )}
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Get Involved Section -->
-          <section class="py-6 px-4">
-            <h2
-              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-            >
-              How to get involved
-            </h2>
-            <div class="mb-3 text-gray-500 dark:text-gray-400">
-              <span
-                >Cost: <span class="font-medium text-gray-900 dark:text-white"
-                  >{
-                    Array.isArray(properties.pCost)
-                      ? properties.pCost.map((cost, index) => (
-                          <>
-                            {cost}
-                            {index < properties.pCost.length - 1 && ", "}
-                          </>
-                        ))
-                      : properties.pCost
-                  }</span
-                ></span
-              >
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                {
-                  properties.pGetInvolved &&
-                  properties.pGetInvolved.trim() !== ""
-                    ? properties.pGetInvolved
-                    : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."
-                }
-              </p>
-              <a
-                href={properties.pURL}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Go to website
+        <!-- About Section -->
+        <section class="py-6 px-4">
+          <h2
+            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+          >
+            About this project
+          </h2>
+          <article
+            class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+          >
+            <slot />
+          </article>
+        </section>
+
+        <!-- Verification Section -->
+        {
+          properties.pVerify && (
+            <div class="py-4 px-4">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <svg
-                  class="w-5 h-5 text-white ml-2"
+                  class="h-7 w-7 text-black inline-block"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
-                  fill="none"
+                  fill="currentColor"
                   viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                This project is {properties.pVerify}
+              </h5>
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                {properties.pReview && properties.pReview.trim() !== ""
+                  ? properties.pReview
+                  : "We want you to feel confident when engaging with projects just like this one. That's why we have a verification system. Projects can either be verified by a member of our team or by a member of the Giveback community."}
+              </p>
+              <a
+                href="/about/verification"
+                class="inline-flex font-medium items-center text-gray-500 hover:underline"
+              >
+                Find out more about verification
+                <svg
+                  class="ml-2 -mr-1 w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </div>
+          )
+        }
+
+        <SupportBox />
+
+        <!-- Verify/Report Buttons -->
+        <section class="pt-6 pb-8">
+          <div
+            class="mx-auto w-full max-w-2xl flex justify-center items-center"
+          >
+            <a href="/verify">
+              <button
+                type="button"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 22"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                  ></path>
+                </svg>
+                Verify this stay
+              </button>
+            </a>
+            <a href="/report">
+              <button
+                type="button"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 22 22"
                 >
                   <path
                     stroke="currentColor"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                    d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   ></path>
                 </svg>
-              </a>
-            </div>
-          </section>
-
-          <!-- About Section -->
-          <section class="py-6 px-4">
-            <h2
-              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-            >
-              About this project
-            </h2>
-            <article
-              class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
-            >
-              <slot />
-            </article>
-          </section>
-
-          <!-- Verification Section -->
-          {
-            properties.pVerify && (
-              <div class="py-4 px-4">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  <svg
-                    class="h-7 w-7 text-black inline-block"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  This project is {properties.pVerify}
-                </h5>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                  {properties.pReview && properties.pReview.trim() !== ""
-                    ? properties.pReview
-                    : "We want you to feel confident when engaging with projects just like this one. That's why we have a verification system. Projects can either be verified by a member of our team or by a member of the Giveback community."}
-                </p>
-                <a
-                  href="/about/verification"
-                  class="inline-flex font-medium items-center text-gray-500 hover:underline"
-                >
-                  Find out more about verification
-                  <svg
-                    class="ml-2 -mr-1 w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </a>
-              </div>
-            )
-          }
-
-          <SupportBox />
-
-          <!-- Verify/Report Buttons -->
-          <section class="pt-6 pb-8">
-            <div
-              class="mx-auto w-full max-w-2xl flex justify-center items-center"
-            >
-              <a href="/verify">
-                <button
-                  type="button"
-                  class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  <svg
-                    class="w-4 h-4 me-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 22"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-                    ></path>
-                  </svg>
-                  Verify this stay
-                </button>
-              </a>
-              <a href="/report">
-                <button
-                  type="button"
-                  class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  <svg
-                    class="w-4 h-4 me-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 22 22"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    ></path>
-                  </svg>
-                  Report a problem
-                </button>
-              </a>
-            </div>
-          </section>
-          </main>
-
-        <!-- Aside column (desktop only) -->
-        <aside class="hidden lg:block pt-16">
-          <div class="sticky top-24 mb-10">
-            <AdBox />
+                Report a problem
+              </button>
+            </a>
           </div>
+        </section>
+      </main>
+
+      <!-- Aside column (desktop only) -->
+      <aside class="hidden lg:block pt-16">
+        <div class="sticky top-24 mb-10">
+          <AdBox />
+        </div>
       </aside>
     </div>
     <!-- Related Projects -->
@@ -529,7 +562,9 @@ const relatedProjects = allProjects
         <div class="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0">
           {
             relatedProjects.length > 0 ? (
-              relatedProjects.map((project) => <ProjectCard project={project} />)
+              relatedProjects.map((project) => (
+                <ProjectCard project={project} />
+              ))
             ) : (
               <p class="text-gray-500 dark:text-gray-400">
                 There are no related stays at the moment. If you know of a stay
