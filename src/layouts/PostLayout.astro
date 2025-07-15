@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import MainLayout from "./MainLayout.astro";
 import AdBox from "../components/Ads/AdBox.astro";
 import SupportBox from "../components/Projects/SupportBox.astro";
+import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 
 type Props = CollectionEntry<"posts">["data"];
 
@@ -197,4 +198,5 @@ const formattedDate = (() => {
       </aside>
     </div>
   </div>
+  <SubscribeDrawer />
 </MainLayout>

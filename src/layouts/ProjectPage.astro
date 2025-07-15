@@ -6,6 +6,7 @@ import ProjectCard from "../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
 import { Image } from "astro:assets";
+import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 
 type Props = CollectionEntry<"projects">["data"];
 
@@ -579,4 +580,5 @@ const relatedProjects = allProjects
       </div>
     </section>
   </div>
+  <SubscribeDrawer />
 </MainLayout>
