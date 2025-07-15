@@ -1,103 +1,100 @@
-
 <!-- Subscribe Drawer component -->
 <div id="subscribe-drawer-bottom" class="hidden fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto border-t border-gray-300 border-solid transition-transform bg-[#F1E8FB] dark:bg-gray-800 transform-none" tabindex="-1" aria-labelledby="subscribe-drawer-bottom">
+  <div id="subscribe-content">
     <button id="subscribe-drawer-close" type="button" aria-controls="subscribe-drawer-bottom" class="cursor-pointer text-gray-400 bg-transparent hover:bg-white hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white" >
       <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
       </svg>
       <span class="sr-only">Close menu</span>
-   </button>
+    </button>
     <h2
-        id="newsletter-heading"
-        class="mb-2 text-2xl text-center tracking-tight font-extrabold text-gray-900 dark:text-white"
+      id="newsletter-heading"
+      class="mb-2 text-2xl text-center tracking-tight font-extrabold text-gray-900 dark:text-white"
+    >
+      Show your support for Giveback Guide
+    </h2>
+    <p
+      class="mx-auto mb-4 max-w-2xl text-center text-md font-light text-gray-500 dark:text-gray-400"
+    >
+      Sign-up to our newsletter and stay up to date with the latest projects and news
+    </p>
+    <form id="subscribe-form" class="w-100%">
+      <div
+        class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0"
       >
-        Show your support for Giveback Guide
-      </h2>
-      <p
-        class="mx-auto mb-4 max-w-2xl text-center text-md font-light text-gray-500 dark:text-gray-400"
-      >
-        Sign-up to our newsletter and stay up to date with the latest projects and news
-      </p>
-      <form
-        action="https://submit-form.com/IlQ2jAQOf"
-        method="POST"
-        class="w-100%"
-      >
-        <div
-          class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0"
-        >
-          <div class="relative w-full">
-            <label
-              for="email"
-              class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Email address</label
+        <div class="relative w-full">
+          <label
+            for="email"
+            class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Email address</label
+          >
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <svg
+              class="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
             >
-            <div
-              class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-            >
-              <svg
-                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
-                ></path>
-                <path
-                  d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-                ></path>
-              </svg>
-            </div>
-            <input
-              class="block p-3 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none sm:rounded-l-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Enter your email"
-              type="email"
-              id="email"
-              name="email"
-              required
-            />
-            <input
-              type="checkbox"
-              name="consent"
-              style="display:none"
-              tabindex="-1"
-              autocomplete="off"
-            />
-            <input
-              type="hidden"
-              name="_redirect"
-              value="https://giveback-guide.pages.dev/join/confirm"
-            />
-            <input type="hidden" name="_append" value="false" />
+              <path
+                d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+              ></path>
+              <path
+                d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+              ></path>
+            </svg>
           </div>
-          <div>
-            <button
-              type="submit"
-              aria-label="Subscribe to newsletter"
-              class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-black border-black sm:rounded-none sm:rounded-r-lg hover:bg-gray-700 hover:border-gray-700 focus:ring-4 focus:ring-primary-300 dark:bg-black dark:hover:bg-black dark:focus:ring-primary-800"
-            >
-              Subscribe
-            </button>
-          </div>
+          <input
+            class="block p-3 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none sm:rounded-l-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Enter your email"
+            type="email"
+            id="email"
+            name="email"
+            required
+          />
+          <input
+            type="checkbox"
+            name="consent"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+          />
         </div>
-        <div
-          class="mx-auto max-w-screen-sm text-xs text-center text-gray-500 newsletter-form-footer dark:text-gray-300"
-        >
-          We won't share your details. Unsubscribe anytime. <a
-            href="/privacy"
-            class="font-medium text-black hover:underline"
-            >Read our Privacy Policy</a
-          >.
+        <div>
+          <button
+            type="submit"
+            aria-label="Subscribe to newsletter"
+            class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-black border-black sm:rounded-none sm:rounded-r-lg hover:bg-gray-700 hover:border-gray-700 focus:ring-4 focus:ring-primary-300 dark:bg-black dark:hover:bg-black dark:focus:ring-primary-800"
+          >
+            Subscribe
+          </button>
         </div>
-        <div
-          class="mx-auto max-w-screen-sm text-xs text-center text-gray-500 dark:text-gray-300"
-        >
-          <a href="#" id="already-subscribed-link" class="underline hover:text-black dark:hover:text-white">
-    I've already subscribed
-  </a>
-        </div>
-      </form>
+      </div>
+      <div
+        class="mx-auto max-w-screen-sm text-xs text-center text-gray-500 newsletter-form-footer dark:text-gray-300"
+      >
+        We won't share your details. Unsubscribe anytime. <a
+          href="/privacy"
+          class="font-medium text-black hover:underline"
+          >Read our Privacy Policy</a
+        >.
+      </div>
+      <div
+        class="mx-auto max-w-screen-sm text-xs text-center text-gray-500 dark:text-gray-300"
+      >
+        <a href="#" id="already-subscribed-link" class="underline hover:text-black dark:hover:text-white">
+          I've already subscribed
+        </a>
+      </div>
+    </form>
+  </div>
+  <div id="subscribe-confirmation" class="hidden mx-auto max-w-screen-sm text-center text-green-600 dark:text-green-400 text-md font-semibold mt-4">
+    Thank you for subscribing! Please check your inbox for a confirmation email.
+  </div>
+  <div id="subscribe-error" class="hidden mx-auto max-w-screen-sm text-center text-red-600 dark:text-red-400 text-md font-semibold mt-4">
+    Sorry, there was a problem subscribing. Please try again.
+  </div>
 </div>
 
 <script is:inline>
@@ -120,8 +117,8 @@
     }
   }, 5000);
 
-  // Hide the drawer and set cookie for 2 days (48 hours) when closed
   document.addEventListener('DOMContentLoaded', () => {
+    // Hide the drawer and set cookie for 2 days (48 hours) when closed
     const closeBtn = document.getElementById('subscribe-drawer-close');
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
@@ -138,6 +135,38 @@
         const drawer = document.getElementById('subscribe-drawer-bottom');
         if (drawer) drawer.classList.add('hidden');
         setCookie('subscribe_dismissed', 'true', 90); // 90 days = ~3 months
+      });
+    }
+
+    // AJAX form submission for Formspark
+    const form = document.getElementById('subscribe-form');
+    const confirmation = document.getElementById('subscribe-confirmation');
+    const errorMsg = document.getElementById('subscribe-error');
+    const content = document.getElementById('subscribe-content');
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        confirmation.classList.add('hidden');
+        errorMsg.classList.add('hidden');
+        const formData = new FormData(form);
+        try {
+          const response = await fetch('https://submit-form.com/IlQ2jAQOf', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          if (response.ok) {
+            form.reset();
+            content.classList.add('hidden');
+            confirmation.classList.remove('hidden');
+          } else {
+            errorMsg.classList.remove('hidden');
+          }
+        } catch (error) {
+          errorMsg.classList.remove('hidden');
+        }
       });
     }
   });
