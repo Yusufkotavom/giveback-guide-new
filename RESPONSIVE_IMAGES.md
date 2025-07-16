@@ -297,6 +297,8 @@ The skeleton inherits the same border radius and positioning as your main compon
 />
 ```
 
+**Note**: The `class` attribute is applied to both the skeleton and the final image, ensuring consistent styling throughout the loading process.
+
 ## Files
 
 - `src/utils/cloudinary.ts` - Core utilities and presets

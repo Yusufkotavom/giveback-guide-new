@@ -51,11 +51,11 @@ const responsiveImage = createResponsiveImage(src, {
 });
 ---
 
-<div class={`relative ${className}`}>
+<div class="relative">
   {showSkeleton && (
     <div 
       id={`skeleton-${imageId}`}
-      class="absolute inset-0 animate-pulse bg-gray-300 dark:bg-gray-700 rounded"
+      class={`absolute inset-0 animate-pulse bg-gray-300 dark:bg-gray-700 ${className}`}
       role="status" 
       aria-label="Loading image..."
     >
@@ -83,7 +83,7 @@ const responsiveImage = createResponsiveImage(src, {
     height={responsiveImage.height}
     loading={loading}
     fetchpriority={fetchpriority}
-    class={showSkeleton ? 'opacity-0 transition-opacity duration-300' : ''}
+    class={showSkeleton ? `opacity-0 transition-opacity duration-300 ${className}` : className}
     onload={showSkeleton ? `
       this.style.opacity = '1';
       document.getElementById('skeleton-${imageId}').style.display = 'none';
