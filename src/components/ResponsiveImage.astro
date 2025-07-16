@@ -1,0 +1,97 @@
+---
+import { createResponsiveImage, RESPONSIVE_PRESETS, type ResponsiveImageSizes } from '../utils/cloudinary';
+
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  preset?: keyof typeof RESPONSIVE_PRESETS;
+  sizes?: ResponsiveImageSizes[];
+  sizesAttribute?: string[];
+  quality?: number;
+  format?: string;
+  fallbackWidth?: number;
+  maintainAspectRatio?: boolean;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  showSkeleton?: boolean;
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  preset,
+  sizes,
+  sizesAttribute,
+  quality = 85,
+  format = 'auto',
+  fallbackWidth = 1200,
+  maintainAspectRatio = true,
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  showSkeleton = true,
+  ...rest
+} = Astro.props;
+
+// Use preset if provided, otherwise use custom config
+const config = preset ? RESPONSIVE_PRESETS[preset] : { sizes, sizesAttribute };
+
+// Generate unique ID for this image instance
+const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
+
+// Generate responsive image data
+const responsiveImage = createResponsiveImage(src, {
+  sizes: config.sizes ? [...config.sizes] : sizes,
+  sizesAttribute: config.sizesAttribute ? [...config.sizesAttribute] : sizesAttribute,
+  quality,
+  format,
+  fallbackWidth,
+  maintainAspectRatio
+});
+---
+
+<div class={`relative ${className}`}>
+  {showSkeleton && (
+    <div 
+      id={`skeleton-${imageId}`}
+      class="absolute inset-0 animate-pulse bg-gray-300 dark:bg-gray-700 rounded"
+      role="status" 
+      aria-label="Loading image..."
+    >
+      <div class="flex items-center justify-center h-full">
+        <svg 
+          class="w-10 h-10 text-gray-200 dark:text-gray-600" 
+          aria-hidden="true" 
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="currentColor" 
+          viewBox="0 0 20 18"
+        >
+          <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+        </svg>
+      </div>
+    </div>
+  )}
+  
+  <img
+    id={imageId}
+    src={responsiveImage.src}
+    srcset={responsiveImage.srcset}
+    sizes={responsiveImage.sizes}
+    alt={alt}
+    width={responsiveImage.width}
+    height={responsiveImage.height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    class={showSkeleton ? 'opacity-0 transition-opacity duration-300' : ''}
+    onload={showSkeleton ? `
+      this.style.opacity = '1';
+      document.getElementById('skeleton-${imageId}').style.display = 'none';
+    ` : undefined}
+    onerror={showSkeleton ? `
+      document.getElementById('skeleton-${imageId}').innerHTML = '<div class="flex items-center justify-center h-full text-gray-400 dark:text-gray-600"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 18"><path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/></svg></div>';
+      document.getElementById('skeleton-${imageId}').classList.remove('animate-pulse');
+    ` : undefined}
+    {...rest}
+  />
+</div>

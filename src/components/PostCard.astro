@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
+
 interface Props {
   post: {
     data: {
@@ -18,10 +20,12 @@ const { post } = Astro.props;
 <article class="rounded-lg">
     <div class="relative">
         <a href={`/blog/${post.data.properties.bSlug}/`}>
-          <img
+          <ResponsiveImage
             class="w-full rounded-lg h-64 object-cover"
             src={post.data.properties.bCoverImage}
             alt=""
+            preset="card"
+            fallbackWidth={600}
           />
         </a>
       </div>

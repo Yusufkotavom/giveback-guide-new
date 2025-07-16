@@ -5,8 +5,8 @@ import AdBox from "../components/Ads/AdBox.astro";
 import StayCard from "../components/StayCard.astro";
 import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
-import { Image } from "astro:assets";
 import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
+import ResponsiveImage from "../components/ResponsiveImage.astro";
 
 type Props = CollectionEntry<"stays">["data"];
 
@@ -167,10 +167,13 @@ const images = [
                     class={`duration-700 ease-in-out${idx === 0 ? " block" : " hidden"}`}
                     data-carousel-item={idx === 0 ? "active" : ""}
                   >
-                    <img
+                    <ResponsiveImage
                       src={img}
                       class="absolute block max-w-full h-auto rounded-lg -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                       alt={properties.sName}
+                      preset="hero"
+                      fetchpriority={idx === 0 ? "high" : "auto"}
+                      loading={idx === 0 ? "eager" : "lazy"}
                       data-pagefind-meta="image[src], image_alt[alt]"
                     />
                   </div>

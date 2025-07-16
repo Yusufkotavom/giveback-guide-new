@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
+
 interface Props {
   stay: {
     data: {
@@ -21,10 +23,12 @@ const { stay } = Astro.props;
 <article class="rounded-lg">
     <div class="relative">
         <a href={`/stays/${stay.data.properties.sSlug}/`}>
-          <img
+          <ResponsiveImage
             class="w-full rounded-lg h-64 object-cover"
             src={stay.data.properties.sImageURL1}
             alt=""
+            preset="card"
+            fallbackWidth={600}
           />
           {stay.data.properties.sVerify && (
             <div class="absolute top-2 left-2 bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 flex items-center gap-1">

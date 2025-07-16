@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
+
 interface Props {
   project: {
     data: {
@@ -21,10 +23,12 @@ const { project } = Astro.props;
 <article class="rounded-lg">
     <div class="relative">
         <a href={`/projects/${project.data.properties.pSlug}/`}>
-          <img
+          <ResponsiveImage
             class="w-full rounded-lg h-64 object-cover"
             src={project.data.properties.pImageURL}
             alt=""
+            preset="card"
+            fallbackWidth={600}
           />
           {project.data.properties.pVerify && (
             <div class="absolute top-2 left-2 bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 flex items-center gap-1">
