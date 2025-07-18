@@ -179,6 +179,7 @@ const relatedProjects = allProjects
           }
           <h1
             class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            data-pagefind-meta="title"
           >
             {properties.pTitle}
           </h1>
@@ -204,6 +205,7 @@ const relatedProjects = allProjects
               <span>
                 Name of project: <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="organiser"
                   >{properties.pOrganiser}</span
                 >
               </span>
@@ -231,6 +233,7 @@ const relatedProjects = allProjects
               <span>
                 Locale(s): <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="locale"
                 >
                   {
                     Array.isArray(properties.pLocale)
@@ -274,6 +277,7 @@ const relatedProjects = allProjects
               <span>
                 Nation(s): <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="countries"
                 >
                   {
                     Array.isArray(properties.pCountry)
@@ -439,6 +443,8 @@ const relatedProjects = allProjects
           </h2>
           <article
             class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+            data-pagefind-body
+            data-pagefind-filter="type:project"
           >
             <slot />
           </article>

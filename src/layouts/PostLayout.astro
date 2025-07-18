@@ -107,7 +107,6 @@ const formattedDate = (() => {
                 </div>
               </li>
             </ol>
-          </nav>
         </section>
 
         <!-- Featured Image -->
@@ -125,7 +124,7 @@ const formattedDate = (() => {
 
           <!-- Title and Info -->
           <section class="py-6 px-4">
-            <p>
+            <p data-pagefind-meta="categories">
             {
               Array.isArray(properties.bTags)
                 ? properties.bTags.map((tag: string) => (
@@ -142,6 +141,7 @@ const formattedDate = (() => {
           </p>
           <h1
             class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            data-pagefind-meta="title"
           >
             {properties.bTitle}
           </h1>
@@ -185,6 +185,8 @@ const formattedDate = (() => {
           <section class="py-6 px-4">
             <article
               class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+              data-pagefind-body
+              data-pagefind-filter="type:post"
             >
               <slot />
             </article>

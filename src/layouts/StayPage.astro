@@ -265,6 +265,7 @@ const images = [
           }
           <h1
             class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            data-pagefind-meta="title"
           >
             {properties.sTitle}
           </h1>
@@ -290,6 +291,7 @@ const images = [
               <span>
                 Name of stay: <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="organiser"
                   >{properties.sName}</span
                 >
               </span>
@@ -317,6 +319,7 @@ const images = [
               <span>
                 Locale(s): <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="locale"
                 >
                   {
                     Array.isArray(properties.sLocale)
@@ -360,6 +363,7 @@ const images = [
               <span>
                 Nation(s): <span
                   class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="countries"
                 >
                   {
                     Array.isArray(properties.sCountry)
@@ -681,6 +685,8 @@ const images = [
             </h2>
             <article
               class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+              data-pagefind-body
+              data-pagefind-filter="type:stay"
             >
               <slot />
             </article>

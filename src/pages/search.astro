@@ -1,0 +1,710 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { SITE_TITLE } from "../consts";
+---
+
+<MainLayout title={`Search ${SITE_TITLE}`}>
+  <main>
+    <section class="max-w-screen-xl mx-auto py-16 px-4 lg:py-24 lg:px-6">
+      <div class="max-w-screen-md mx-auto text-center mb-8">
+        <h1 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">
+          Search
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          Find projects, blog posts, and stays that matter to you
+        </p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="max-w-screen-md mx-auto mb-8">
+        <form class="flex items-center">
+          <label for="search-input" class="sr-only">Search</label>
+          <div class="relative w-full">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+            </div>
+            <input 
+              type="search" 
+              id="search-input" 
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+              placeholder="Search for projects, posts, or stays..." 
+              autocomplete="off"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="max-w-screen-md mx-auto mb-8">
+        <div class="flex flex-wrap justify-center gap-2">
+          <button 
+            type="button" 
+            id="filter-all" 
+            class="filter-btn filter-active px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
+            data-filter="all"
+            aria-pressed="true"
+          >
+            All <span id="count-all" class="ml-1 opacity-75"></span>
+          </button>
+          <button 
+            type="button" 
+            id="filter-projects" 
+            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
+            data-filter="projects"
+            aria-pressed="false"
+          >
+            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.333 6.764a3 3 0 1 1 3.141-5.023M2.5 16H1v-2a4 4 0 0 1 4-4m7.379-8.121a3 3 0 1 1 2.976 5M15 10a4 4 0 0 1 4 4v2h-1.761M13 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 14a4 4 0 0 1 8 0v2H0v-2a4 4 0 0 1 8 0Z"/>
+            </svg>
+            Projects <span id="count-projects" class="ml-1 opacity-75"></span>
+          </button>
+          <button 
+            type="button" 
+            id="filter-posts" 
+            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
+            data-filter="posts"
+            aria-pressed="false"
+          >
+            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17v1a.97.97 0 0 1-.933 1H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2v4M6 1v4a1 1 0 0 1-1 1H1m13.14.45a2.025 2.025 0 0 1 0 2.86L7.58 15.87a.5.5 0 0 1-.34.13H3.74a.5.5 0 0 1-.5-.5v-3.5a.5.5 0 0 1 .14-.35L10.94 4.1a2.025 2.025 0 0 1 2.86 0l1.34 1.35Z"/>
+            </svg>
+            Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
+          </button>
+          <button 
+            type="button" 
+            id="filter-stays" 
+            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
+            data-filter="stays"
+            aria-pressed="false"
+          >
+            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h1m14 0h1M4 14h1m14 0h1M4 18h1m14 0h1M9 7h1m4 0h1"/>
+            </svg>
+            Stays <span id="count-stays" class="ml-1 opacity-75"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div id="search-status" class="text-center text-gray-500 dark:text-gray-400 mb-8 hidden">
+        <p id="status-text">Enter a search term to get started</p>
+      </div>
+
+      <div id="search-results" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Results will be populated here -->
+      </div>
+
+      <!-- Load More Button -->
+      <div id="load-more-container" class="hidden text-center mt-8">
+        <button 
+          id="load-more-btn" 
+          type="button"
+          class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+        >
+          Load More Results
+          <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14l-4-4m4 4 4-4"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Loading indicator -->
+      <div id="loading" class="hidden text-center py-8">
+        <div role="status">
+          <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+          </svg>
+          <span class="sr-only">Loading...</span>
+        </div>
+        <p class="mt-2 text-gray-500 dark:text-gray-400">Searching...</p>
+      </div>
+    </section>
+  </main>
+</MainLayout>
+
+<script>
+  let pagefind: any = null;
+  let currentQuery = '';
+  let allResults: any[] = [];
+  let activeFilters = new Set(['all']);
+  let displayedResults = 0;
+  const resultsPerPage = 12;
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const searchInput = document.getElementById("search-input") as HTMLInputElement;
+    const searchResults = document.getElementById("search-results");
+    const searchStatus = document.getElementById("search-status");
+    const statusText = document.getElementById("status-text");
+    const loading = document.getElementById("loading");
+    const loadMoreContainer = document.getElementById("load-more-container");
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    const searchForm = searchInput?.closest("form");
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // Initialize Pagefind (works in dev mode if search index exists)
+    try {
+      // Use Function constructor to create truly dynamic import that Vite won't analyze
+      const importPath = "/pagefind/pagefind.js";
+      const dynamicImport = new Function('path', 'return import(path)');
+      const pagefindModule = await dynamicImport(importPath);
+      pagefind = pagefindModule;
+      await pagefind.init();
+      console.log("Pagefind initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize Pagefind:", error);
+      const isDev = import.meta.env.DEV;
+      if (isDev) {
+        showStatus("Search requires a built index. Run 'npm run build' first, then restart dev server to use search in development.");
+      } else {
+        showStatus("Search is currently unavailable. Make sure your site has been built with Pagefind enabled.");
+      }
+      return;
+    }
+
+    // Get search query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery && searchInput) {
+      searchInput.value = initialQuery;
+      performSearch(initialQuery);
+    } else {
+      showStatus("Enter a search term to get started");
+    }
+
+    // Handle form submission
+    if (searchForm) {
+      searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const query = searchInput?.value?.trim();
+        if (query) {
+          updateURL(query);
+          performSearch(query);
+        }
+      });
+    }
+
+    // Handle input changes with debouncing
+    let searchTimeout: ReturnType<typeof setTimeout>;
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        const target = e.target as HTMLInputElement;
+        const query = target?.value?.trim() || '';
+        clearTimeout(searchTimeout);
+        
+        if (query.length === 0) {
+          clearResults();
+          showStatus("Enter a search term to get started");
+          updateURL("");
+          return;
+        }
+
+        if (query.length < 2) {
+          showStatus("Type at least 2 characters to search");
+          return;
+        }
+
+        searchTimeout = setTimeout(() => {
+          updateURL(query);
+          performSearch(query);
+        }, 300);
+      });
+    }
+
+    // Setup filter buttons
+    filterButtons.forEach(button => {
+      button.addEventListener('click', handleFilterClick);
+    });
+
+    // Setup load more button
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', loadMoreResults);
+    }
+
+    function handleFilterClick(event: Event) {
+      const button = event.currentTarget as HTMLButtonElement;
+      const filterType = button.getAttribute('data-filter');
+      
+      if (!filterType || button.disabled) return; // Don't process clicks on disabled buttons
+
+      if (filterType === 'all') {
+        // If "All" is clicked, clear other filters and activate only "All"
+        activeFilters.clear();
+        activeFilters.add('all');
+        updateFilterButtons();
+      } else {
+        // Remove "All" if it's active and this is a specific filter
+        if (activeFilters.has('all')) {
+          activeFilters.delete('all');
+        }
+        
+        // Toggle the specific filter
+        if (activeFilters.has(filterType)) {
+          activeFilters.delete(filterType);
+        } else {
+          activeFilters.add(filterType);
+        }
+
+        // If no filters are active, activate "All"
+        if (activeFilters.size === 0) {
+          activeFilters.add('all');
+        }
+
+        updateFilterButtons();
+      }
+
+      // Re-filter and display current results
+      if (allResults.length > 0) {
+        displayFilteredResults();
+      }
+    }
+
+    function updateFilterButtons() {
+      filterButtons.forEach(buttonElement => {
+        const button = buttonElement as HTMLButtonElement;
+        const filterType = button.getAttribute('data-filter');
+        const isActive = activeFilters.has(filterType || '');
+        
+        // Check if this filter type has results
+        let hasResults = true;
+        if (filterType !== 'all') {
+          if (allResults.length === 0) {
+            hasResults = false; // No results at all
+          } else {
+            hasResults = allResults.some(result => result.contentType === filterType);
+          }
+        }
+        
+        if (isActive) {
+          button.classList.add('filter-active');
+          button.setAttribute('aria-pressed', 'true');
+        } else {
+          button.classList.remove('filter-active');
+          button.setAttribute('aria-pressed', 'false');
+        }
+
+        // Disable button if no results for this type
+        if (!hasResults && filterType !== 'all') {
+          button.disabled = true;
+          button.classList.add('filter-disabled');
+        } else {
+          button.disabled = false;
+          button.classList.remove('filter-disabled');
+        }
+      });
+    }
+
+    function updateURL(query: string) {
+      const newUrl = new URL(window.location.href);
+      if (query) {
+        newUrl.searchParams.set('q', query);
+      } else {
+        newUrl.searchParams.delete('q');
+      }
+      window.history.replaceState(null, '', newUrl.toString());
+    }
+
+    function showLoading() {
+      if (loading) loading.classList.remove("hidden");
+      if (searchStatus) searchStatus.classList.add("hidden");
+    }
+
+    function hideLoading() {
+      if (loading) loading.classList.add("hidden");
+    }
+
+    function showStatus(message: string) {
+      if (statusText) statusText.textContent = message;
+      if (searchStatus) searchStatus.classList.remove("hidden");
+      hideLoading();
+    }
+
+    function clearResults() {
+      if (searchResults) searchResults.innerHTML = "";
+      displayedResults = 0;
+      allResults = []; // Clear the results array
+      updateFilterButtons(); // Update button states when clearing
+      if (loadMoreContainer) loadMoreContainer.classList.add("hidden");
+    }
+
+    function loadMoreResults() {
+      displayFilteredResults(false); // false means append, not replace
+    }
+
+    async function performSearch(query: string) {
+      if (!pagefind || query === currentQuery) return;
+      
+      console.log('Performing search for:', query);
+      currentQuery = query;
+      showLoading();
+      clearResults();
+
+      try {
+        const search = await pagefind.search(query);
+        console.log('Search results:', search.results.length);
+        hideLoading();
+        
+        if (search.results.length === 0) {
+          allResults = [];
+          updateFilterButtons(); // Update button states when no results
+          showStatus(`No results found for "${query}"`);
+          return;
+        }
+
+        // Process all results and store them
+        const processedResults = await Promise.all(
+          search.results.map(async (result: any) => {
+            try {
+              const data = await result.data();
+              console.log('Result metadata:', data.meta); // Debug metadata
+              return {
+                data,
+                contentType: getContentType(data),
+                card: createResultCard(data)
+              };
+            } catch (error) {
+              console.error("Error processing result:", error);
+              return null;
+            }
+          })
+        );
+
+        // Filter out null results and store
+        allResults = processedResults.filter(result => result !== null);
+        console.log('Processed results:', allResults.length);
+        
+        // Update result counts
+        updateResultCounts();
+        
+        // Update filter button states
+        updateFilterButtons();
+        
+        // Display filtered results
+        displayFilteredResults();
+
+      } catch (error) {
+        hideLoading();
+        console.error("Search error:", error);
+        showStatus("An error occurred while searching. Please try again.");
+      }
+    }
+
+    function getContentType(data: any): string {
+      // Use Pagefind's filter data if available, otherwise fall back to URL
+      if (data.filters && data.filters.type) {
+        const type = data.filters.type[0]; // Pagefind filters are arrays
+        if (type === 'project') return 'projects';
+        if (type === 'post') return 'posts';
+        if (type === 'stay') return 'stays';
+      }
+      
+      // Fallback to URL-based detection
+      if (data.url.includes('/projects/')) return 'projects';
+      if (data.url.includes('/blog/')) return 'posts';
+      if (data.url.includes('/stays/')) return 'stays';
+      return 'page';
+    }
+
+    function updateResultCounts() {
+      if (allResults.length === 0) {
+        // Clear all counts
+        const countAll = document.getElementById('count-all');
+        const countProjects = document.getElementById('count-projects');
+        const countPosts = document.getElementById('count-posts');
+        const countStays = document.getElementById('count-stays');
+        
+        if (countAll) countAll.textContent = '';
+        if (countProjects) countProjects.textContent = '';
+        if (countPosts) countPosts.textContent = '';
+        if (countStays) countStays.textContent = '';
+        return;
+      }
+
+      // Count results by type
+      const counts = {
+        projects: 0,
+        posts: 0,
+        stays: 0,
+        page: 0
+      };
+
+      allResults.forEach(result => {
+        if (counts.hasOwnProperty(result.contentType)) {
+          counts[result.contentType as keyof typeof counts]++;
+        }
+      });
+
+      const total = allResults.length;
+
+      // Update count displays
+      const countAll = document.getElementById('count-all');
+      const countProjects = document.getElementById('count-projects');
+      const countPosts = document.getElementById('count-posts');
+      const countStays = document.getElementById('count-stays');
+      
+      if (countAll) countAll.textContent = `(${total})`;
+      if (countProjects) countProjects.textContent = counts.projects > 0 ? `(${counts.projects})` : '';
+      if (countPosts) countPosts.textContent = counts.posts > 0 ? `(${counts.posts})` : '';
+      if (countStays) countStays.textContent = counts.stays > 0 ? `(${counts.stays})` : '';
+    }
+
+    function displayFilteredResults(replace: boolean = true) {
+      if (allResults.length === 0) return;
+
+      let filteredResults = allResults;
+      
+      // Apply filters unless "all" is selected
+      if (!activeFilters.has('all')) {
+        filteredResults = allResults.filter(result => 
+          activeFilters.has(result.contentType)
+        );
+      }
+
+      // Update status
+      const totalCount = allResults.length;
+      const filteredCount = filteredResults.length;
+      
+      if (activeFilters.has('all')) {
+        showStatus(`Found ${totalCount} result${totalCount !== 1 ? 's' : ''} for "${currentQuery}"`);
+      } else {
+        showStatus(`Showing ${filteredCount} of ${totalCount} results for "${currentQuery}"`);
+      }
+
+      // Determine how many results to show
+      const startIndex = replace ? 0 : displayedResults;
+      const endIndex = replace ? resultsPerPage : displayedResults + resultsPerPage;
+      const resultsToShow = filteredResults.slice(startIndex, endIndex);
+      const resultCards = resultsToShow.map(result => result.card).filter(card => card !== null);
+      
+      if (searchResults) {
+        if (replace) {
+          searchResults.innerHTML = resultCards.join('');
+          displayedResults = resultsToShow.length;
+        } else {
+          searchResults.innerHTML += resultCards.join('');
+          displayedResults += resultsToShow.length;
+        }
+      }
+
+      // Show/hide load more button
+      if (loadMoreContainer) {
+        if (displayedResults < filteredResults.length) {
+          loadMoreContainer.classList.remove("hidden");
+        } else {
+          loadMoreContainer.classList.add("hidden");
+        }
+      }
+
+      // Show message if no results after filtering
+      if (filteredResults.length === 0 && totalCount > 0) {
+        showStatus(`No results found for the selected filters. Try selecting different content types.`);
+        if (loadMoreContainer) loadMoreContainer.classList.add("hidden");
+      }
+    }
+
+    function createResultCard(data: any) {
+      if (!data) return null;
+
+      // Extract content type - now using Pagefind filters
+      let contentType = 'Page';
+      let contentTypeSlug = 'page';
+      
+      if (data.filters && data.filters.type) {
+        const type = data.filters.type[0];
+        if (type === 'project') {
+          contentType = 'Project';
+          contentTypeSlug = 'projects';
+        } else if (type === 'post') {
+          contentType = 'Blog Post';
+          contentTypeSlug = 'posts';
+        } else if (type === 'stay') {
+          contentType = 'Stay';
+          contentTypeSlug = 'stays';
+        }
+      } else {
+        // Fallback to URL-based detection
+        if (data.url.includes('/projects/')) {
+          contentType = 'Project';
+          contentTypeSlug = 'projects';
+        } else if (data.url.includes('/blog/')) {
+          contentType = 'Blog Post';
+          contentTypeSlug = 'posts';
+        } else if (data.url.includes('/stays/')) {
+          contentType = 'Stay';
+          contentTypeSlug = 'stays';
+        }
+      }
+
+      // Get image - try meta first, then look for first image in content
+      const image = data.meta?.image || data.meta?.thumbnail || '/giveback-guide-placeholder.jpg';
+      
+      // Get title - now using Pagefind meta
+      const title = data.meta?.title || data.title || 'Untitled';
+
+      // Get additional metadata
+      const organiser = data.meta?.organiser || '';
+      const locale = data.meta?.locale || '';
+      const countries = data.meta?.countries || '';
+      const categories = data.meta?.categories || '';
+
+      // Create countries/tags badges for projects, stays and posts
+      let badgesLine = '';
+      if (contentTypeSlug === 'projects' && countries) {
+        const countryArray = countries.split(',').map((c: string) => c.trim());
+        badgesLine = `<p>
+          ${countryArray.map((country: string) => 
+            `<span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2">
+              ${country}
+            </span>`
+          ).join('')}
+        </p>`;
+      } else if (contentTypeSlug === 'stays' && countries) {
+        const countryArray = countries.split(',').map((c: string) => c.trim());
+        badgesLine = `<p>
+          ${countryArray.map((country: string) => 
+            `<span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2">
+              ${country}
+            </span>`
+          ).join('')}
+        </p>`;
+      } else if (contentTypeSlug === 'posts' && categories) {
+        // For blog posts, extract categories from the captured text (split only on commas to preserve multi-word categories)
+        const categoryArray = categories.split(',').map((cat: string) => cat.trim()).filter((cat: string) => cat.length > 0);
+        badgesLine = `<p>
+          ${categoryArray.map((category: string) => 
+            `<span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2">
+              ${category}
+            </span>`
+          ).join('')}
+        </p>`;
+      }
+
+      // Create metadata line based on content type (matching the original card styles)
+      let metadataLine = '';
+      if (contentTypeSlug === 'projects' && organiser && locale) {
+        metadataLine = `<p class="mt-2 text-sm font-normal text-gray-400 dark:text-gray-400 px-4">
+          By <span class="text-gray-800 dark:text-gray-200">${organiser}</span> in <span class="text-gray-900 dark:text-gray-100">${locale}</span>
+        </p>`;
+      } else if (contentTypeSlug === 'stays' && organiser && locale) {
+        metadataLine = `<p class="mt-2 text-sm font-normal text-gray-400 dark:text-gray-400 px-4">
+          <span class="text-gray-800 dark:text-gray-200">${organiser}</span> is a stay in <span class="text-gray-900 dark:text-gray-100">${locale}</span>
+        </p>`;
+      }
+
+      return `
+        <article class="rounded-lg">
+          <div class="relative">
+            <a href="${data.url}">
+              <img 
+                class="w-full rounded-lg h-64 object-cover" 
+                src="${image}" 
+                alt="${title}"
+                loading="lazy"
+                onerror="this.src='/giveback-guide-placeholder.jpg'"
+              />
+            </a>
+            <span class="absolute top-2 left-2 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-blue-300 bg-blue-50 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+              ${contentType}
+            </span>
+          </div>
+          ${badgesLine}
+          <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
+            <a href="${data.url}">
+              ${title}
+            </a>
+          </h2>
+          ${metadataLine}
+        </article>
+      `;
+    }
+  });
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Filter button styles */
+  .filter-btn {
+    color: rgb(75 85 99);
+    background-color: rgb(255 255 255);
+    border-color: rgb(209 213 219);
+  }
+
+  .filter-btn:hover {
+    background-color: rgb(249 250 251);
+    border-color: rgb(156 163 175);
+  }
+
+  .filter-btn.filter-active {
+    color: rgb(255 255 255);
+    background-color: rgb(29 78 216);
+    border-color: rgb(29 78 216);
+  }
+
+  .filter-btn.filter-active:hover {
+    background-color: rgb(30 64 175);
+    border-color: rgb(30 64 175);
+  }
+
+  .filter-btn.filter-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .filter-btn.filter-disabled:hover {
+    color: rgb(107 114 128);
+    background-color: rgb(229 231 235);
+    border-color: rgb(156 163 175);
+  }
+
+  /* Dark mode styles */
+  @media (prefers-color-scheme: dark) {
+    .filter-btn {
+      color: rgb(156 163 175);
+      background-color: rgb(31 41 55);
+      border-color: rgb(75 85 99);
+    }
+
+    .filter-btn:hover {
+      color: rgb(255 255 255);
+      background-color: rgb(55 65 81);
+      border-color: rgb(107 114 128);
+    }
+
+    .filter-btn.filter-active {
+      color: rgb(255 255 255);
+      background-color: rgb(37 99 235);
+      border-color: rgb(37 99 235);
+    }
+
+    .filter-btn.filter-active:hover {
+      background-color: rgb(29 78 216);
+      border-color: rgb(29 78 216);
+    }
+
+    .filter-btn.filter-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .filter-btn.filter-disabled:hover {
+      color: rgb(156 163 175);
+      background-color: rgb(31 41 55);
+      border-color: rgb(75 85 99);
+    }
+  }
+</style>
