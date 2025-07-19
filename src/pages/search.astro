@@ -5,126 +5,185 @@ import { SITE_TITLE } from "../consts";
 
 <MainLayout title={`Search ${SITE_TITLE}`}>
   <main>
-    <section class="max-w-screen-xl mx-auto py-16 px-4 lg:py-24 lg:px-6">
-      <div class="max-w-screen-md mx-auto text-center mb-8">
-        <h1 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">
-          Search
-        </h1>
-        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          Find projects, blog posts, and stays that matter to you
-        </p>
-      </div>
+    <section class="bg-white dark:bg-gray-900">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="max-w-screen-md mb-8 lg:mb-16">
+          <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+            Search
+          </h1>
+          <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+            Find projects, blog posts, and stays that matter to you
+          </p>
+        </div>
 
-      <!-- Search Input -->
-      <div class="max-w-screen-md mx-auto mb-8">
-        <form class="flex items-center" action="/search" method="get">
-          <label for="search-input" class="sr-only">Search</label>
-          <div class="relative w-full">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-              </svg>
+        <!-- Search Input -->
+        <div class="max-w-screen-md mx-auto mb-8">
+          <form class="flex items-center" action="/search" method="get">
+            <label for="search-input" class="sr-only">Search</label>
+            <div class="relative w-full">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+              </div>
+              <input 
+                type="text" 
+                id="search-input" 
+                name="q"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-16 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                placeholder="Search for projects, posts, or stays..." 
+                autocomplete="off"
+              />
+              <button 
+                type="button" 
+                id="clear-search" 
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 cursor-pointer hidden"
+                aria-label="Clear search"
+              >
+                Clear
+              </button>
             </div>
-            <input 
-              type="search" 
-              id="search-input" 
-              name="q"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-              placeholder="Search for projects, posts, or stays..." 
-              autocomplete="off"
-            />
-          </div>
-        </form>
-        
-        <!-- Desktop-only search instruction -->
-        <div class="hidden md:flex justify-center items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-          <span class="mr-2">Press</span>
-          <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Enter</kbd>
-          <span class="ml-2">to search</span>
-        </div>
-      </div>
-
-      <!-- Filters and Status Section -->
-      <div class="max-w-screen-xl mx-auto mb-8">
-        <!-- Responsive layout: desktop side-by-side, mobile stacked -->
-        <div id="filters-and-status" class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 hidden">
-          <!-- Status text: centered on mobile, left-aligned on desktop -->
-          <div id="search-status" class="text-center md:text-left text-gray-500 dark:text-gray-400 mb-4 md:mb-0">
-            <p id="status-text">Enter a search term to get started</p>
-          </div>
+          </form>
           
-          <!-- Filter buttons: centered on mobile, right-aligned on desktop -->
-          <div class="flex flex-wrap justify-center md:justify-end gap-2">
-            <button 
-              type="button" 
-              id="filter-all" 
-              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer"
-              data-filter="all"
-              aria-pressed="true"
-            >
-              All <span id="count-all" class="ml-1 opacity-75"></span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-projects" 
-              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
-              data-filter="projects"
-              aria-pressed="false"
-            >
-              Projects <span id="count-projects" class="ml-1 opacity-75"></span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-posts" 
-              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
-              data-filter="posts"
-              aria-pressed="false"
-            >
-              Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-stays" 
-              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
-              data-filter="stays"
-              aria-pressed="false"
-            >
-              Stays <span id="count-stays" class="ml-1 opacity-75"></span>
-            </button>
+          <!-- Desktop-only search instruction -->
+          <div class="hidden md:flex justify-center items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <span class="mr-2">Press</span>
+            <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Enter</kbd>
+            <span class="ml-2">to search</span>
           </div>
         </div>
-      </div>
 
-      <!-- Search Results -->
+        <!-- Filters and Status Section -->
+        <div class="mb-6">
+          <!-- Responsive layout: mobile stacked, desktop side-by-side -->
+          <div id="filters-and-status" class="hidden">
+          
+          <!-- Desktop: filters and status on same line -->
+          <div class="hidden md:flex md:justify-between md:items-center mb-6">
+            <!-- Status text: left-aligned on desktop -->
+            <div id="search-status" class="text-left">
+              <p id="status-text" class="text-sm font-normal text-gray-500 dark:text-gray-400">Enter a search term to get started</p>
+            </div>
+            
+            <!-- Filter buttons: right-aligned on desktop -->
+            <div class="flex gap-2">
+              <button 
+                type="button" 
+                id="filter-all" 
+                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap"
+                data-filter="all"
+                aria-pressed="true"
+              >
+                All <span id="count-all" class="ml-1 opacity-75"></span>
+              </button>
+              <button 
+                type="button" 
+                id="filter-projects" 
+                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                data-filter="projects"
+                aria-pressed="false"
+              >
+                Projects <span id="count-projects" class="ml-1 opacity-75"></span>
+              </button>
+              <button 
+                type="button" 
+                id="filter-stays" 
+                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                data-filter="stays"
+                aria-pressed="false"
+              >
+                Stays <span id="count-stays" class="ml-1 opacity-75"></span>
+              </button>
+              <button 
+                type="button" 
+                id="filter-posts" 
+                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                data-filter="posts"
+                aria-pressed="false"
+              >
+                Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
+              </button>
+            </div>
+          </div>
 
-      <div id="search-results" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <!-- Results will be populated here -->
-      </div>
-
-      <!-- Load More Button -->
-      <div id="load-more-container" class="hidden text-center mt-8">
-        <button 
-          id="load-more-btn" 
-          type="button"
-          class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 cursor-pointer"
-        >
-          Load More Results
-          <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14l-4-4m4 4 4-4"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Loading indicator -->
-      <div id="loading" class="hidden text-center py-8">
-        <div role="status">
-          <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-          </svg>
-          <span class="sr-only">Loading...</span>
+          <!-- Mobile: stacked layout with horizontal scrolling filters -->
+          <div class="md:hidden">
+            <!-- Filter buttons: horizontal scroll on mobile -->
+            <div class="mb-4">
+              <div class="overflow-x-auto scrollbar-hide">
+                <div class="flex gap-2 min-w-max">
+                  <button 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap"
+                    data-filter="all"
+                    aria-pressed="true"
+                  >
+                    All <span class="ml-1 opacity-75"></span>
+                  </button>
+                  <button 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                    data-filter="projects"
+                    aria-pressed="false"
+                  >
+                    Projects <span class="ml-1 opacity-75"></span>
+                  </button>
+                  <button 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                    data-filter="stays"
+                    aria-pressed="false"
+                  >
+                    Stays <span class="ml-1 opacity-75"></span>
+                  </button>
+                  <button 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                    data-filter="posts"
+                    aria-pressed="false"
+                  >
+                    Blog Posts <span class="ml-1 opacity-75"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Status text: left-aligned on mobile -->
+            <div class="text-left mb-6">
+              <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Enter a search term to get started</p>
+            </div>
         </div>
-        <p class="mt-2 text-gray-500 dark:text-gray-400">Searching...</p>
+
+        <!-- Search Results -->
+        <div id="search-results" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <!-- Results will be populated here -->
+        </div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="hidden text-center mt-8">
+          <button 
+            id="load-more-btn" 
+            type="button"
+            class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 cursor-pointer"
+          >
+            Load More Results
+            <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14l-4-4m4 4 4-4"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Loading indicator -->
+        <div id="loading" class="hidden text-center py-8">
+          <div role="status">
+            <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+              <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+            </svg>
+            <span class="sr-only">Loading...</span>
+          </div>
+          <p class="mt-2 text-gray-500 dark:text-gray-400">Searching...</p>
+        </div>
       </div>
     </section>
   </main>
@@ -149,6 +208,7 @@ import { SITE_TITLE } from "../consts";
     const searchForm = searchInput?.closest("form");
     const allFilterButtons = document.querySelectorAll('[data-filter]');
     const filtersAndStatus = document.getElementById("filters-and-status");
+    const clearButton = document.getElementById("clear-search");
 
     // Initialize Pagefind (works in dev mode if search index exists)
     try {
@@ -189,6 +249,10 @@ import { SITE_TITLE } from "../consts";
     
     if (initialQuery && searchInput) {
       searchInput.value = initialQuery;
+      // Show clear button if there's an initial query
+      if (clearButton && initialQuery.trim().length > 0) {
+        clearButton.classList.remove("hidden");
+      }
       performSearch(initialQuery);
     } else {
       // Don't show status initially - keep filters and status hidden
@@ -201,17 +265,30 @@ import { SITE_TITLE } from "../consts";
         e.preventDefault();
         const query = searchInput?.value?.trim();
         if (query) {
+          // Hide virtual keyboard on mobile after search
+          if (searchInput) {
+            searchInput.blur();
+          }
           updateURL(query);
           performSearch(query);
         }
       });
     }
 
-    // Handle input changes - only for clearing results when empty
+    // Handle input changes - show/hide clear button and clear results when empty
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
         const target = e.target as HTMLInputElement;
         const query = target?.value?.trim() || '';
+        
+        // Show/hide clear button based on input content
+        if (clearButton) {
+          if (query.length > 0) {
+            clearButton.classList.remove("hidden");
+          } else {
+            clearButton.classList.add("hidden");
+          }
+        }
         
         if (query.length === 0) {
           clearResults();
@@ -219,6 +296,21 @@ import { SITE_TITLE } from "../consts";
           currentQuery = ''; // Clear current query when input is empty
           updateURL("");
           return;
+        }
+      });
+    }
+
+    // Handle clear button click
+    if (clearButton) {
+      clearButton.addEventListener("click", () => {
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus(); // Keep focus on input for better UX
+          clearButton.classList.add("hidden");
+          clearResults();
+          hideFiltersAndStatus();
+          currentQuery = '';
+          updateURL("");
         }
       });
     }
@@ -275,7 +367,7 @@ import { SITE_TITLE } from "../consts";
     }
 
     function updateFilterButtons() {
-      // Update all filter buttons (both desktop and mobile) with a single loop
+      // Update all filter buttons with a single loop
       const allButtons = document.querySelectorAll('[data-filter]') as NodeListOf<HTMLButtonElement>;
       allButtons.forEach(button => {
         const filterType = button.getAttribute('data-filter');
@@ -293,11 +385,11 @@ import { SITE_TITLE } from "../consts";
         
         if (isActive) {
           // Active state: black background
-          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer';
+          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap';
           button.setAttribute('aria-pressed', 'true');
         } else {
           // Inactive state: gray background
-          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer';
+          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap';
           button.setAttribute('aria-pressed', 'false');
         }
 
@@ -353,7 +445,21 @@ import { SITE_TITLE } from "../consts";
     }
 
     function showStatus(message: string) {
-      if (statusText) statusText.textContent = message;
+      // Format message with proper styling to match projects page
+      const formattedMessage = message.replace(/(\d+)/g, '<span class="font-semibold text-gray-900 dark:text-white">$1</span>');
+      
+      if (statusText) {
+        statusText.className = "text-sm font-normal text-gray-500 dark:text-gray-400";
+        statusText.innerHTML = formattedMessage;
+      }
+      
+      // Update mobile status text as well
+      const mobileStatusText = document.querySelector('#filters-and-status .md\\:hidden p');
+      if (mobileStatusText) {
+        mobileStatusText.className = "text-sm font-normal text-gray-500 dark:text-gray-400";
+        mobileStatusText.innerHTML = formattedMessage;
+      }
+      
       if (searchStatus) searchStatus.classList.remove("hidden");
       showFiltersAndStatus(); // Show the entire section when showing status
       hideLoading();
@@ -665,5 +771,17 @@ import { SITE_TITLE } from "../consts";
     }
   });
 </script>
+
+<style>
+  /* Hide scrollbar for mobile filter buttons while maintaining scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+</style>
 
 
