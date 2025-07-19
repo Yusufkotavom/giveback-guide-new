@@ -28,69 +28,73 @@ import { SITE_TITLE } from "../consts";
             <input 
               type="search" 
               id="search-input" 
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
               placeholder="Search for projects, posts, or stays..." 
               autocomplete="off"
             />
           </div>
         </form>
+        
+        <!-- Desktop-only search instruction -->
+        <div class="hidden md:flex justify-center items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
+          <span class="mr-2">Press</span>
+          <kbd class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Enter</kbd>
+          <span class="ml-2">to search</span>
+        </div>
       </div>
 
-      <!-- Filter Buttons -->
-      <div class="max-w-screen-md mx-auto mb-8">
-        <div class="flex flex-wrap justify-center gap-2">
-          <button 
-            type="button" 
-            id="filter-all" 
-            class="filter-btn filter-active px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
-            data-filter="all"
-            aria-pressed="true"
-          >
-            All <span id="count-all" class="ml-1 opacity-75"></span>
-          </button>
-          <button 
-            type="button" 
-            id="filter-projects" 
-            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
-            data-filter="projects"
-            aria-pressed="false"
-          >
-            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.333 6.764a3 3 0 1 1 3.141-5.023M2.5 16H1v-2a4 4 0 0 1 4-4m7.379-8.121a3 3 0 1 1 2.976 5M15 10a4 4 0 0 1 4 4v2h-1.761M13 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 14a4 4 0 0 1 8 0v2H0v-2a4 4 0 0 1 8 0Z"/>
-            </svg>
-            Projects <span id="count-projects" class="ml-1 opacity-75"></span>
-          </button>
-          <button 
-            type="button" 
-            id="filter-posts" 
-            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
-            data-filter="posts"
-            aria-pressed="false"
-          >
-            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17v1a.97.97 0 0 1-.933 1H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2v4M6 1v4a1 1 0 0 1-1 1H1m13.14.45a2.025 2.025 0 0 1 0 2.86L7.58 15.87a.5.5 0 0 1-.34.13H3.74a.5.5 0 0 1-.5-.5v-3.5a.5.5 0 0 1 .14-.35L10.94 4.1a2.025 2.025 0 0 1 2.86 0l1.34 1.35Z"/>
-            </svg>
-            Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
-          </button>
-          <button 
-            type="button" 
-            id="filter-stays" 
-            class="filter-btn px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800"
-            data-filter="stays"
-            aria-pressed="false"
-          >
-            <svg class="w-4 h-4 mr-2 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h1m14 0h1M4 14h1m14 0h1M4 18h1m14 0h1M9 7h1m4 0h1"/>
-            </svg>
-            Stays <span id="count-stays" class="ml-1 opacity-75"></span>
-          </button>
+      <!-- Filters and Status Section -->
+      <div class="max-w-screen-xl mx-auto mb-8">
+        <!-- Responsive layout: desktop side-by-side, mobile stacked -->
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
+          <!-- Status text: centered on mobile, left-aligned on desktop -->
+          <div id="search-status" class="text-center md:text-left text-gray-500 dark:text-gray-400 hidden mb-4 md:mb-0">
+            <p id="status-text">Enter a search term to get started</p>
+          </div>
+          
+          <!-- Filter buttons: centered on mobile, right-aligned on desktop -->
+          <div class="flex flex-wrap justify-center md:justify-end gap-2">
+            <button 
+              type="button" 
+              id="filter-all" 
+              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer"
+              data-filter="all"
+              aria-pressed="true"
+            >
+              All <span id="count-all" class="ml-1 opacity-75"></span>
+            </button>
+            <button 
+              type="button" 
+              id="filter-projects" 
+              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
+              data-filter="projects"
+              aria-pressed="false"
+            >
+              Projects <span id="count-projects" class="ml-1 opacity-75"></span>
+            </button>
+            <button 
+              type="button" 
+              id="filter-posts" 
+              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
+              data-filter="posts"
+              aria-pressed="false"
+            >
+              Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
+            </button>
+            <button 
+              type="button" 
+              id="filter-stays" 
+              class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer"
+              data-filter="stays"
+              aria-pressed="false"
+            >
+              Stays <span id="count-stays" class="ml-1 opacity-75"></span>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Search Results -->
-      <div id="search-status" class="text-center text-gray-500 dark:text-gray-400 mb-8 hidden">
-        <p id="status-text">Enter a search term to get started</p>
-      </div>
 
       <div id="search-results" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <!-- Results will be populated here -->
@@ -101,7 +105,7 @@ import { SITE_TITLE } from "../consts";
         <button 
           id="load-more-btn" 
           type="button"
-          class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+          class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 cursor-pointer"
         >
           Load More Results
           <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -142,7 +146,7 @@ import { SITE_TITLE } from "../consts";
     const loadMoreContainer = document.getElementById("load-more-container");
     const loadMoreBtn = document.getElementById("load-more-btn");
     const searchForm = searchInput?.closest("form");
-    const filterButtons = document.querySelectorAll('.filter-btn');
+    const allFilterButtons = document.querySelectorAll('[data-filter]');
 
     // Initialize Pagefind (works in dev mode if search index exists)
     try {
@@ -167,6 +171,18 @@ import { SITE_TITLE } from "../consts";
     // Get search query from URL
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q');
+    const initialFilters = urlParams.get('filters');
+    
+    // Initialize filters from URL if present
+    if (initialFilters) {
+      const filterArray = initialFilters.split(',').filter(f => f.length > 0);
+      if (filterArray.length > 0) {
+        activeFilters.clear();
+        filterArray.forEach(filter => activeFilters.add(filter));
+        updateFilterButtons();
+      }
+    }
+    
     if (initialQuery && searchInput) {
       searchInput.value = initialQuery;
       performSearch(initialQuery);
@@ -186,13 +202,11 @@ import { SITE_TITLE } from "../consts";
       });
     }
 
-    // Handle input changes with debouncing
-    let searchTimeout: ReturnType<typeof setTimeout>;
+    // Handle input changes - only for clearing results when empty
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
         const target = e.target as HTMLInputElement;
         const query = target?.value?.trim() || '';
-        clearTimeout(searchTimeout);
         
         if (query.length === 0) {
           clearResults();
@@ -200,21 +214,11 @@ import { SITE_TITLE } from "../consts";
           updateURL("");
           return;
         }
-
-        if (query.length < 2) {
-          showStatus("Type at least 2 characters to search");
-          return;
-        }
-
-        searchTimeout = setTimeout(() => {
-          updateURL(query);
-          performSearch(query);
-        }, 300);
       });
     }
 
-    // Setup filter buttons
-    filterButtons.forEach(button => {
+    // Setup filter buttons - single event listener for all filter buttons
+    allFilterButtons.forEach(button => {
       button.addEventListener('click', handleFilterClick);
     });
 
@@ -255,6 +259,9 @@ import { SITE_TITLE } from "../consts";
         updateFilterButtons();
       }
 
+      // Update URL with current query and filters
+      updateURL(currentQuery);
+
       // Re-filter and display current results
       if (allResults.length > 0) {
         displayFilteredResults();
@@ -262,8 +269,9 @@ import { SITE_TITLE } from "../consts";
     }
 
     function updateFilterButtons() {
-      filterButtons.forEach(buttonElement => {
-        const button = buttonElement as HTMLButtonElement;
+      // Update all filter buttons (both desktop and mobile) with a single loop
+      const allButtons = document.querySelectorAll('[data-filter]') as NodeListOf<HTMLButtonElement>;
+      allButtons.forEach(button => {
         const filterType = button.getAttribute('data-filter');
         const isActive = activeFilters.has(filterType || '');
         
@@ -278,20 +286,24 @@ import { SITE_TITLE } from "../consts";
         }
         
         if (isActive) {
-          button.classList.add('filter-active');
+          // Active state: black background
+          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer';
           button.setAttribute('aria-pressed', 'true');
         } else {
-          button.classList.remove('filter-active');
+          // Inactive state: gray background
+          button.className = 'px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer';
           button.setAttribute('aria-pressed', 'false');
         }
 
         // Disable button if no results for this type
         if (!hasResults && filterType !== 'all') {
           button.disabled = true;
-          button.classList.add('filter-disabled');
+          // Add disabled styling
+          button.className = button.className + ' opacity-50 cursor-not-allowed';
         } else {
           button.disabled = false;
-          button.classList.remove('filter-disabled');
+          // Remove disabled styling if it was added
+          button.className = button.className.replace(' opacity-50 cursor-not-allowed', '');
         }
       });
     }
@@ -303,6 +315,17 @@ import { SITE_TITLE } from "../consts";
       } else {
         newUrl.searchParams.delete('q');
       }
+      
+      // Add active filters to URL (excluding 'all' as it's the default)
+      const filtersArray = Array.from(activeFilters);
+      if (filtersArray.length === 1 && filtersArray[0] === 'all') {
+        // Remove filters param when only 'all' is selected (default state)
+        newUrl.searchParams.delete('filters');
+      } else {
+        // Add filters param when specific filters are selected
+        newUrl.searchParams.set('filters', filtersArray.join(','));
+      }
+      
       window.history.replaceState(null, '', newUrl.toString());
     }
 
@@ -444,10 +467,15 @@ import { SITE_TITLE } from "../consts";
       const countPosts = document.getElementById('count-posts');
       const countStays = document.getElementById('count-stays');
       
-      if (countAll) countAll.textContent = `(${total})`;
-      if (countProjects) countProjects.textContent = counts.projects > 0 ? `(${counts.projects})` : '';
-      if (countPosts) countPosts.textContent = counts.posts > 0 ? `(${counts.posts})` : '';
-      if (countStays) countStays.textContent = counts.stays > 0 ? `(${counts.stays})` : '';
+      const totalText = `(${total})`;
+      const projectsText = counts.projects > 0 ? `(${counts.projects})` : '';
+      const postsText = counts.posts > 0 ? `(${counts.posts})` : '';
+      const staysText = counts.stays > 0 ? `(${counts.stays})` : '';
+      
+      if (countAll) countAll.textContent = totalText;
+      if (countProjects) countProjects.textContent = projectsText;
+      if (countPosts) countPosts.textContent = postsText;
+      if (countStays) countStays.textContent = staysText;
     }
 
     function displayFilteredResults(replace: boolean = true) {
@@ -622,89 +650,4 @@ import { SITE_TITLE } from "../consts";
   });
 </script>
 
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
 
-  /* Filter button styles */
-  .filter-btn {
-    color: rgb(75 85 99);
-    background-color: rgb(255 255 255);
-    border-color: rgb(209 213 219);
-  }
-
-  .filter-btn:hover {
-    background-color: rgb(249 250 251);
-    border-color: rgb(156 163 175);
-  }
-
-  .filter-btn.filter-active {
-    color: rgb(255 255 255);
-    background-color: rgb(29 78 216);
-    border-color: rgb(29 78 216);
-  }
-
-  .filter-btn.filter-active:hover {
-    background-color: rgb(30 64 175);
-    border-color: rgb(30 64 175);
-  }
-
-  .filter-btn.filter-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .filter-btn.filter-disabled:hover {
-    color: rgb(107 114 128);
-    background-color: rgb(229 231 235);
-    border-color: rgb(156 163 175);
-  }
-
-  /* Dark mode styles */
-  @media (prefers-color-scheme: dark) {
-    .filter-btn {
-      color: rgb(156 163 175);
-      background-color: rgb(31 41 55);
-      border-color: rgb(75 85 99);
-    }
-
-    .filter-btn:hover {
-      color: rgb(255 255 255);
-      background-color: rgb(55 65 81);
-      border-color: rgb(107 114 128);
-    }
-
-    .filter-btn.filter-active {
-      color: rgb(255 255 255);
-      background-color: rgb(37 99 235);
-      border-color: rgb(37 99 235);
-    }
-
-    .filter-btn.filter-active:hover {
-      background-color: rgb(29 78 216);
-      border-color: rgb(29 78 216);
-    }
-
-    .filter-btn.filter-disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .filter-btn.filter-disabled:hover {
-      color: rgb(156 163 175);
-      background-color: rgb(31 41 55);
-      border-color: rgb(75 85 99);
-    }
-  }
-</style>
