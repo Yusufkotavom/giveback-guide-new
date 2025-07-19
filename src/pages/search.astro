@@ -12,7 +12,7 @@ import { SITE_TITLE } from "../consts";
             Search
           </h1>
           <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-            Find projects, blog posts, and stays that matter to you
+            Find projects, stays and blog posts.
           </p>
         </div>
 
@@ -55,103 +55,63 @@ import { SITE_TITLE } from "../consts";
 
         <!-- Filters and Status Section -->
         <div class="mb-6">
-          <!-- Responsive layout: mobile stacked, desktop side-by-side -->
           <div id="filters-and-status" class="hidden">
-          
-          <!-- Desktop: filters and status on same line -->
-          <div class="hidden md:flex md:justify-between md:items-center mb-6">
-            <!-- Status text: left-aligned on desktop -->
-            <div id="search-status" class="text-left">
-              <p id="status-text" class="text-sm font-normal text-gray-500 dark:text-gray-400">Enter a search term to get started</p>
-            </div>
             
-            <!-- Filter buttons: right-aligned on desktop -->
-            <div class="flex gap-2">
-              <button 
-                type="button" 
-                id="filter-all" 
-                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap"
-                data-filter="all"
-                aria-pressed="true"
-              >
-                All <span id="count-all" class="ml-1 opacity-75"></span>
-              </button>
-              <button 
-                type="button" 
-                id="filter-projects" 
-                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                data-filter="projects"
-                aria-pressed="false"
-              >
-                Projects <span id="count-projects" class="ml-1 opacity-75"></span>
-              </button>
-              <button 
-                type="button" 
-                id="filter-stays" 
-                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                data-filter="stays"
-                aria-pressed="false"
-              >
-                Stays <span id="count-stays" class="ml-1 opacity-75"></span>
-              </button>
-              <button 
-                type="button" 
-                id="filter-posts" 
-                class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                data-filter="posts"
-                aria-pressed="false"
-              >
-                Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Mobile: stacked layout with horizontal scrolling filters -->
-          <div class="md:hidden">
-            <!-- Filter buttons: horizontal scroll on mobile -->
-            <div class="mb-4">
-              <div class="overflow-x-auto scrollbar-hide">
-                <div class="flex gap-2 min-w-max">
-                  <button 
-                    type="button" 
-                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap"
-                    data-filter="all"
-                    aria-pressed="true"
-                  >
-                    All <span class="ml-1 opacity-75"></span>
-                  </button>
-                  <button 
-                    type="button" 
-                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                    data-filter="projects"
-                    aria-pressed="false"
-                  >
-                    Projects <span class="ml-1 opacity-75"></span>
-                  </button>
-                  <button 
-                    type="button" 
-                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                    data-filter="stays"
-                    aria-pressed="false"
-                  >
-                    Stays <span class="ml-1 opacity-75"></span>
-                  </button>
-                  <button 
-                    type="button" 
-                    class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
-                    data-filter="posts"
-                    aria-pressed="false"
-                  >
-                    Blog Posts <span class="ml-1 opacity-75"></span>
-                  </button>
+            <!-- Responsive Layout: Mobile stacked, Desktop side-by-side -->
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6 mb-6">
+              
+              <!-- Filter buttons: top on mobile, right on desktop -->
+              <div class="order-1 md:order-2">
+                <div class="overflow-x-auto scrollbar-hide md:overflow-x-visible">
+                  <div class="flex gap-2 min-w-max md:min-w-0">
+                    <button 
+                      type="button" 
+                      id="filter-all" 
+                      class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 text-white bg-gray-900 border-gray-900 hover:bg-black hover:border-black dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-600 dark:hover:border-gray-600 cursor-pointer whitespace-nowrap"
+                      data-filter="all"
+                      aria-pressed="true"
+                    >
+                      All <span id="count-all" class="ml-1 opacity-75"></span>
+                    </button>
+                    <button 
+                      type="button" 
+                      id="filter-projects" 
+                      class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                      data-filter="projects"
+                      aria-pressed="false"
+                    >
+                      Projects <span id="count-projects" class="ml-1 opacity-75"></span>
+                    </button>
+                    <button 
+                      type="button" 
+                      id="filter-stays" 
+                      class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                      data-filter="stays"
+                      aria-pressed="false"
+                    >
+                      Stays <span id="count-stays" class="ml-1 opacity-75"></span>
+                    </button>
+                    <button 
+                      type="button" 
+                      id="filter-posts" 
+                      class="px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:z-10 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800 text-gray-600 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500 cursor-pointer whitespace-nowrap"
+                      data-filter="posts"
+                      aria-pressed="false"
+                    >
+                      Blog Posts <span id="count-posts" class="ml-1 opacity-75"></span>
+                    </button>
+                  </div>
                 </div>
               </div>
+
+              <!-- Status text: bottom on mobile, left on desktop -->
+              <div class="order-2 md:order-1 text-left">
+                <p id="status-text" class="text-sm font-normal text-gray-500 dark:text-gray-400">Enter a search term to get started</p>
+              </div>
+              
             </div>
-            
-            <!-- Status text: left-aligned on mobile -->
-            <div class="text-left mb-6">
-              <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Enter a search term to get started</p>
-            </div>
+
+          </div>
         </div>
 
         <!-- Search Results -->
@@ -200,7 +160,6 @@ import { SITE_TITLE } from "../consts";
   document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
     const searchResults = document.getElementById("search-results");
-    const searchStatus = document.getElementById("search-status");
     const statusText = document.getElementById("status-text");
     const loading = document.getElementById("loading");
     const loadMoreContainer = document.getElementById("load-more-container");
@@ -429,7 +388,6 @@ import { SITE_TITLE } from "../consts";
 
     function showLoading() {
       if (loading) loading.classList.remove("hidden");
-      if (searchStatus) searchStatus.classList.add("hidden");
     }
 
     function hideLoading() {
@@ -453,14 +411,6 @@ import { SITE_TITLE } from "../consts";
         statusText.innerHTML = formattedMessage;
       }
       
-      // Update mobile status text as well
-      const mobileStatusText = document.querySelector('#filters-and-status .md\\:hidden p');
-      if (mobileStatusText) {
-        mobileStatusText.className = "text-sm font-normal text-gray-500 dark:text-gray-400";
-        mobileStatusText.innerHTML = formattedMessage;
-      }
-      
-      if (searchStatus) searchStatus.classList.remove("hidden");
       showFiltersAndStatus(); // Show the entire section when showing status
       hideLoading();
     }
