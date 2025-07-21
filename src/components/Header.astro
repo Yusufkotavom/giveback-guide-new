@@ -12,12 +12,13 @@ import Search from "astro-pagefind/components/Search";
     <div
       class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
     >
-      <a href="/" class="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
+      <a href="/" class="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer">
   <Image src={Avatar} class="w-12 h-12 fill-gbgblue" alt="Giveback Guide" />
 </a>
       <div class="flex items-center lg:order-2">
   <!-- Search Modal Trigger -->
   <button
+    id="search-button"
     data-modal-target="search-modal"
     data-modal-toggle="search-modal"
     type="button"
@@ -37,7 +38,13 @@ import Search from "astro-pagefind/components/Search";
         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path>
     </svg>
     <span class="block lg:hidden">Search</span>
-    <span class="hidden lg:block">Search</span>
+    <span class="hidden lg:flex lg:items-center lg:space-x-2">
+      <span>Search</span>
+      <div class="flex items-center space-x-1 ml-2 text-xs text-gray-400">
+        <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">⌘</kbd>
+        <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">K</kbd>
+      </div>
+    </span>
   </button>
 
   <!-- Join Community Link (styled as button) -->
@@ -112,28 +119,28 @@ import Search from "astro-pagefind/components/Search";
         <li>
           <a
             href="/projects"
-            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
             >Projects</a
           >
         </li>
           <li>
             <a
               href="/blog"
-              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
               >Blog</a
             >
           </li>
           <li>
             <a
               href="/concierge"
-              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
               >Concierge</a
             >
           </li>
           <li>
             <a
               href="/submit"
-              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+              class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
               >Submit a project</a
             >
           </li>
@@ -143,7 +150,7 @@ import Search from "astro-pagefind/components/Search";
   </nav>
 </header>
 
-<!-- Search modal -->
+<!-- Simple Search Modal -->
 <div
   id="search-modal"
   role="dialog"
@@ -152,71 +159,176 @@ import Search from "astro-pagefind/components/Search";
   data-modal-placement="top-center"
   tabindex="-1"
   aria-hidden="true"
-  class="hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full"
+  class="hidden fixed inset-0 z-50 overflow-y-auto overflow-x-hidden backdrop-blur-sm bg-gray-900/50 dark:bg-gray-900/80"
 >
-  <div class="relative p-4 w-full max-w-2xl max-h-[75vh]">
+  <!-- Modal backdrop -->
+  <div class="flex items-start justify-center min-h-full p-4 sm:p-6 lg:p-8 pt-[15vh]">
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 flex flex-col max-h-[85vh]">
-      <!-- Modal header -->
-      <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
-        <svg class="w-5 h-5 mr-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-        </svg>        
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          Search Giveback
-        </h3>
-  
-        <button
-          data-modal-hide="search-modal"
-          type="button"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <svg
-            class="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-      <!-- Modal body -->
-      <div class="hide-scrollbar p-4 md:p-5 space-y-4 overflow-y-auto flex-1">
-        <Search
-          id="search"
-          className="pagefind-ui"
-          uiOptions={{
-            translations: {
-              placeholder: "Search the database",
-              zero_results: "No results were found for [SEARCH_TERM]. Please try again or use our free Concierge service to have personalised suggestions sent to your inbox."
-            },
-            showImages: true,
-            autofocus: true,
-          }}
-        />
-      </div>
-      <!-- Fixed bar at the bottom -->
-      <div class="p-4 bg-white text-center dark:bg-gray-800 border-t-1 border-t-gray-200 text-sm text-gray-600 dark:text-gray-300 rounded-b-lg">
-        <a href="/submit"><button type="button" class="cursor-pointer text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-          <svg class="w-4 h-4 mr-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-        </svg>
-        Submit a project</button></a>
-        <a href="/concierge"><button type="button" class="cursor-pointer text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-          <svg class="w-4 h-4 mr-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-          </svg>
-          
-          Free Concierge</button></a>
+    <div class="relative w-full max-w-2xl mx-auto bg-white rounded-xl shadow-2xl dark:bg-gray-800 transform transition-all">
+      
+      <!-- Search Form -->
+      <form id="modal-search-form" action="/search" method="get" class="p-6">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0">
+            <svg class="w-6 h-6 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <input
+              type="search"
+              name="q"
+              id="modal-search-input"
+              placeholder="Search our database"
+              class="w-full text-lg bg-transparent border-0 outline-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-0"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div class="flex-shrink-0">
+            <button
+              data-modal-hide="search-modal"
+              type="button"
+              class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              aria-label="Close search"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search suggestions -->
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Popular searches</h4>
+              <div class="space-y-2">
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="wildlife conservation">
+                  Wildlife conservation
+                </button>
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="community cafes">
+                  Community cafes
+                </button>
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="sustainable travel">
+                  Sustainable travel
+                </button>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Browse by location</h4>
+              <div class="space-y-2">
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="USA">
+                  USA
+                </button>
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="United Kingdom">
+                  United Kingdom
+                </button>
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="Thailand">
+                  Thailand
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between px-6 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+          <div class="flex items-center space-x-1">
+            <kbd class="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">↵</kbd>
+            <span>to search</span>
+          </div>
+          <div class="flex items-center space-x-1">
+            <kbd class="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">esc</kbd>
+            <span>to close</span>
+          </div>
+        </div>
+        <div class="flex space-x-2">
+          <a href="/submit" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors cursor-pointer">
+            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            Submit Project
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchModal = document.getElementById("search-modal");
+    const modalSearchInput = document.getElementById("modal-search-input") as HTMLInputElement;
+    const modalSearchForm = document.getElementById("modal-search-form") as HTMLFormElement;
+    const searchSuggestions = document.querySelectorAll(".search-suggestion");
+    const searchButton = document.getElementById("search-button");
+
+    // Detect OS and update keyboard shortcut display
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const searchButtonDesktop = searchButton?.querySelector('.hidden.lg\\:flex');
+    
+    if (searchButtonDesktop && !isMac) {
+      // Replace ⌘ with Ctrl for Windows/Linux
+      const cmdKey = searchButtonDesktop.querySelector('kbd');
+      if (cmdKey && cmdKey.textContent === '⌘') {
+        cmdKey.textContent = 'Ctrl';
+        cmdKey.classList.add('px-2'); // Slightly more padding for "Ctrl"
+        cmdKey.classList.remove('px-1.5');
+      }
+    }
+
+    // Handle global keyboard shortcut
+    document.addEventListener("keydown", (e) => {
+      // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+      if ((isMac && e.metaKey && e.key === 'k') || (!isMac && e.ctrlKey && e.key === 'k')) {
+        e.preventDefault();
+        // Trigger the search modal
+        searchButton?.click();
+        return;
+      }
+
+      // Handle escape key to close modal
+      if (e.key === "Escape" && searchModal && !searchModal.classList.contains("hidden")) {
+        const closeButton = searchModal.querySelector("[data-modal-hide]") as HTMLButtonElement;
+        closeButton?.click();
+      }
+    });
+
+    // Handle form submission
+    if (modalSearchForm) {
+      modalSearchForm.addEventListener("submit", (e) => {
+        const query = modalSearchInput?.value?.trim();
+        if (!query) {
+          e.preventDefault();
+          return;
+        }
+        // Form will naturally submit to /search?q=query
+      });
+    }
+
+    // Handle search suggestions
+    searchSuggestions.forEach(button => {
+      button.addEventListener("click", () => {
+        const query = button.getAttribute("data-query");
+        if (query && modalSearchInput) {
+          modalSearchInput.value = query;
+          modalSearchForm?.submit();
+        }
+      });
+    });
+
+    // Focus input when modal opens
+    if (searchButton) {
+      searchButton.addEventListener("click", () => {
+        // Small delay to ensure modal is fully opened
+        setTimeout(() => {
+          modalSearchInput?.focus();
+        }, 100);
+      });
+    }
+  });
+</script>
