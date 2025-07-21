@@ -689,6 +689,23 @@ const images = [
               data-pagefind-filter="type:stay"
             >
               <slot />
+              <!-- Hidden searchable metadata for improved search indexing -->
+              <div style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+                {properties.sCountry && (
+                  <span>
+                    {Array.isArray(properties.sCountry) 
+                      ? properties.sCountry.join(" ") 
+                      : properties.sCountry}
+                  </span>
+                )}
+                {properties.sLocale && (
+                  <span>
+                    {Array.isArray(properties.sLocale) 
+                      ? properties.sLocale.join(" ") 
+                      : properties.sLocale}
+                  </span>
+                )}
+              </div>
             </article>
         </section>
 

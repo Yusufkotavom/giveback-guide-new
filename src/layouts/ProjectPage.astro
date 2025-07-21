@@ -447,6 +447,23 @@ const relatedProjects = allProjects
             data-pagefind-filter="type:project"
           >
             <slot />
+            <!-- Hidden searchable metadata for improved search indexing -->
+            <div style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+              {properties.pCountry && (
+                <span>
+                  {Array.isArray(properties.pCountry) 
+                    ? properties.pCountry.join(" ") 
+                    : properties.pCountry}
+                </span>
+              )}
+              {properties.pLocale && (
+                <span>
+                  {Array.isArray(properties.pLocale) 
+                    ? properties.pLocale.join(" ") 
+                    : properties.pLocale}
+                </span>
+              )}
+            </div>
           </article>
         </section>
 
