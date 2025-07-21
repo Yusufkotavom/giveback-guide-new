@@ -343,94 +343,124 @@ const relatedProjects = allProjects
           </div>
         </section>
 
-        <!-- Get Involved Section -->
-        <section class="py-6 px-4">
-          <h2
-            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-          >
-            How to get involved
-          </h2>
-          <div class="mb-3 text-gray-500 dark:text-gray-400">
-            <span
-              >Cost: <span class="font-medium text-gray-900 dark:text-white"
-                >{
-                  Array.isArray(properties.pCost)
-                    ? properties.pCost.map((cost, index) => (
-                        <>
-                          {cost}
-                          {index < properties.pCost.length - 1 && ", "}
-                        </>
-                      ))
-                    : properties.pCost
-                }</span
-              ></span
-            >
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        <!-- Get Involved Card (mobile only) -->
+        <section class="py-6 px-4 lg:hidden">
+          <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                How to Get Involved
+              </h3>
+            </div>
+            
+            <div class="mb-4">
+              <span class="text-sm text-gray-600 dark:text-gray-400">
+                Cost: <span class="font-medium text-gray-900 dark:text-white">
+                  {
+                    Array.isArray(properties.pCost)
+                      ? properties.pCost.map((cost, index) => (
+                          <>
+                            {cost}
+                            {index < properties.pCost.length - 1 && ", "}
+                          </>
+                        ))
+                      : properties.pCost
+                  }
+                </span>
+              </span>
+            </div>
+            
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
               {
                 properties.pGetInvolved && properties.pGetInvolved.trim() !== ""
                   ? properties.pGetInvolved
                   : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."
               }
             </p>
-            <div class="flex items-center gap-2 w-full">
-              <a
-                href={properties.pURL}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center px-3 py-2 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Visit website
-                <svg
-                  class="w-5 h-5 text-white ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                  ></path>
-                </svg>
-              </a>
-              {properties.pMapsURL && (
-              <a
-                href={properties.pMapsURL}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center px-3 py-2 text-lg font-medium text-center bg-white border border-solid border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  class="w-6 h-6 text-black dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
-                  ></path>
-                </svg>
-              </a>
-              )}
+            
+            <div class="space-y-3">
+              {
+                properties.pURL && (
+                  <a
+                    href={properties.pURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Visit Website
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pMapsURL && (
+                  <a
+                    href={properties.pMapsURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    View on Google Maps
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
             </div>
+            
+            {
+              !properties.pURL && (
+                <div class="text-center py-8">
+                  <svg
+                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                    ></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Involvement information coming soon
+                  </p>
+                </div>
+              )
+            }
           </div>
         </section>
 
@@ -573,7 +603,126 @@ const relatedProjects = allProjects
 
       <!-- Aside column (desktop only) -->
       <aside class="hidden lg:block pt-16">
-        <div class="sticky top-24 mb-10">
+        <div class="sticky top-24 space-y-6">
+          <!-- Get Involved Card (desktop only) -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                How to Get Involved
+              </h3>
+            </div>
+            
+            <div class="mb-4">
+              <span class="text-sm text-gray-600 dark:text-gray-400">
+                Cost: <span class="font-medium text-gray-900 dark:text-white">
+                  {
+                    Array.isArray(properties.pCost)
+                      ? properties.pCost.map((cost, index) => (
+                          <>
+                            {cost}
+                            {index < properties.pCost.length - 1 && ", "}
+                          </>
+                        ))
+                      : properties.pCost
+                  }
+                </span>
+              </span>
+            </div>
+            
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              {
+                properties.pGetInvolved && properties.pGetInvolved.trim() !== ""
+                  ? properties.pGetInvolved
+                  : "The button below will take you to the relevant website for this project, where you'll find all the details you'll need to get involved."
+              }
+            </p>
+            
+            <div class="space-y-3">
+              {
+                properties.pURL && (
+                  <a
+                    href={properties.pURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Visit Website
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pMapsURL && (
+                  <a
+                    href={properties.pMapsURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    View on Google Maps
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+            </div>
+            
+            {
+              !properties.pURL && (
+                <div class="text-center py-8">
+                  <svg
+                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                    ></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Involvement information coming soon
+                  </p>
+                </div>
+              )
+            }
+          </div>
+          
           <AdBox />
         </div>
       </aside>
