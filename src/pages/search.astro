@@ -403,8 +403,20 @@ import { SITE_TITLE } from "../consts";
     }
 
     function showStatus(message: string) {
-      // Format message with proper styling to match projects page
-      const formattedMessage = message.replace(/(\d+)/g, '<span class="font-semibold text-gray-900 dark:text-white">$1</span>');
+      // Format message with proper styling - only highlight result counts, not numbers in search terms
+      let formattedMessage = message;
+      
+      // Pattern 1: "Found X result(s) for" - highlight the count
+      formattedMessage = formattedMessage.replace(
+        /Found (\d+) result/g, 
+        'Found <span class="font-semibold text-gray-900 dark:text-white">$1</span> result'
+      );
+      
+      // Pattern 2: "Showing X of Y results for" - highlight both counts
+      formattedMessage = formattedMessage.replace(
+        /Showing (\d+) of (\d+) results/g, 
+        'Showing <span class="font-semibold text-gray-900 dark:text-white">$1</span> of <span class="font-semibold text-gray-900 dark:text-white">$2</span> results'
+      );
       
       if (statusText) {
         statusText.className = "text-sm font-normal text-gray-500 dark:text-gray-400";
