@@ -255,6 +255,16 @@ if (images.length === 0) {
               </svg>
               <div class="flex items-center flex-wrap gap-2">
                 <span>Locale(s):</span>
+                <span 
+                  class="hidden"
+                  data-pagefind-meta="locale"
+                >
+                  {
+                    Array.isArray(properties.sLocale)
+                      ? properties.sLocale.join(", ")
+                      : properties.sLocale
+                  }
+                </span>
                 {
                   Array.isArray(properties.sLocale)
                     ? properties.sLocale.map((locale) => (
@@ -297,6 +307,16 @@ if (images.length === 0) {
               </svg>
               <div class="flex items-center flex-wrap gap-2">
                 <span>Nation(s):</span>
+                <span 
+                  class="hidden"
+                  data-pagefind-meta="countries"
+                >
+                  {
+                    Array.isArray(properties.sCountry)
+                      ? properties.sCountry.join(", ")
+                      : properties.sCountry
+                  }
+                </span>
                 {
                   Array.isArray(properties.sCountry)
                     ? properties.sCountry.map((country) => (
