@@ -179,6 +179,15 @@ import { SITE_TITLE } from "../consts";
 </MainLayout>
 
 <script>
+  // PostHog type declarations
+  declare global {
+    interface Window {
+      posthog?: {
+        capture: (event: string, properties?: Record<string, any>) => void;
+      };
+    }
+  }
+
   let pagefind: any = null;
   let currentQuery = '';
   let allResults: any[] = [];
@@ -255,6 +264,15 @@ import { SITE_TITLE } from "../consts";
         e.preventDefault();
         const query = searchInput?.value?.trim();
         if (query) {
+          // Track search event in PostHog
+          if (typeof window !== 'undefined' && window.posthog) {
+            window.posthog.capture('search_performed', {
+              query: query,
+              active_filters: Array.from(activeFilters),
+              has_filters: !activeFilters.has('all') || activeFilters.size > 1
+            });
+          }
+          
           // Hide virtual keyboard on mobile after search
           if (searchInput) {
             searchInput.blur();
@@ -294,6 +312,15 @@ import { SITE_TITLE } from "../consts";
     if (clearButton) {
       clearButton.addEventListener("click", () => {
         if (searchInput) {
+          // Track search clear event
+          if (typeof window !== 'undefined' && window.posthog) {
+            window.posthog.capture('search_cleared', {
+              previous_query: currentQuery,
+              active_filters: Array.from(activeFilters),
+              had_results: allResults.length > 0
+            });
+          }
+          
           searchInput.value = '';
           searchInput.focus(); // Keep focus on input for better UX
           clearButton.classList.add("hidden");
@@ -315,11 +342,23 @@ import { SITE_TITLE } from "../consts";
       loadMoreBtn.addEventListener('click', loadMoreResults);
     }
 
+    // Track URL changes for browser navigation
+    window.addEventListener('popstate', () => {
+      if (typeof window !== 'undefined' && window.posthog) {
+        window.posthog.capture('search_navigation', {
+          type: 'browser_navigation',
+          url: window.location.href
+        });
+      }
+    });
+
     function handleFilterClick(event: Event) {
       const button = event.currentTarget as HTMLButtonElement;
       const filterType = button.getAttribute('data-filter');
       
       if (!filterType || button.disabled) return; // Don't process clicks on disabled buttons
+
+      const previousFilters = new Set(activeFilters);
 
       if (filterType === 'all') {
         // If "All" is clicked, clear other filters and activate only "All"
@@ -345,6 +384,17 @@ import { SITE_TITLE } from "../consts";
         }
 
         updateFilterButtons();
+      }
+
+      // Track filter change in PostHog
+      if (typeof window !== 'undefined' && window.posthog) {
+        window.posthog.capture('filter_applied', {
+          filter_clicked: filterType,
+          active_filters: Array.from(activeFilters),
+          previous_filters: Array.from(previousFilters),
+          current_query: currentQuery || null,
+          total_results: allResults.length
+        });
       }
 
       // Update URL with current query and filters
@@ -479,6 +529,16 @@ import { SITE_TITLE } from "../consts";
     }
 
     function loadMoreResults() {
+      // Track load more event
+      if (typeof window !== 'undefined' && window.posthog) {
+        window.posthog.capture('search_load_more', {
+          query: currentQuery,
+          active_filters: Array.from(activeFilters),
+          current_displayed: displayedResults,
+          total_available: allResults.length
+        });
+      }
+      
       displayFilteredResults(false); // false means append, not replace
     }
 
@@ -499,6 +559,15 @@ import { SITE_TITLE } from "../consts";
         if (search.results.length === 0) {
           allResults = [];
           updateFilterButtons(); // Update button states when no results
+          
+          // Track no results event
+          if (typeof window !== 'undefined' && window.posthog) {
+            window.posthog.capture('search_no_results', {
+              query: query,
+              active_filters: Array.from(activeFilters)
+            });
+          }
+          
           showNoResults(query);
           return;
         }
@@ -530,6 +599,23 @@ import { SITE_TITLE } from "../consts";
         
         // Update filter button states
         updateFilterButtons();
+        
+        // Track successful search results
+        if (typeof window !== 'undefined' && window.posthog) {
+          const resultsByType = {
+            projects: allResults.filter(r => r.contentType === 'projects').length,
+            posts: allResults.filter(r => r.contentType === 'posts').length,
+            stays: allResults.filter(r => r.contentType === 'stays').length,
+            pages: allResults.filter(r => r.contentType === 'page').length
+          };
+          
+          window.posthog.capture('search_results_displayed', {
+            query: query,
+            total_results: allResults.length,
+            results_by_type: resultsByType,
+            active_filters: Array.from(activeFilters)
+          });
+        }
         
         // Display filtered results
         displayFilteredResults();
