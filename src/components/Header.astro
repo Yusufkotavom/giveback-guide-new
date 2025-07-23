@@ -281,13 +281,28 @@ import Search from "astro-pagefind/components/Search";
       }
     }
 
-    // Handle global keyboard shortcut
+    // Function to focus input with mobile compatibility
+    function focusSearchInput() {
+      if (modalSearchInput) {
+        // Focus immediately - critical for mobile keyboard
+        modalSearchInput.focus();
+        
+        // Additional focus attempt after a short delay for better cross-device compatibility
+        setTimeout(() => {
+          modalSearchInput.focus();
+        }, 50);
+      }
+    }
+
+    // Handle global keyboard shortcut and escape key
     document.addEventListener("keydown", (e) => {
       // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
       if ((isMac && e.metaKey && e.key === 'k') || (!isMac && e.ctrlKey && e.key === 'k')) {
         e.preventDefault();
         // Trigger the search modal
         searchButton?.click();
+        // Focus input immediately after triggering modal
+        setTimeout(focusSearchInput, 10);
         return;
       }
 
@@ -321,14 +336,9 @@ import Search from "astro-pagefind/components/Search";
       });
     });
 
-    // Focus input when modal opens
+    // Focus input when modal opens via button click
     if (searchButton) {
-      searchButton.addEventListener("click", () => {
-        // Small delay to ensure modal is fully opened
-        setTimeout(() => {
-          modalSearchInput?.focus();
-        }, 100);
-      });
+      searchButton.addEventListener("click", focusSearchInput);
     }
   });
 </script>
