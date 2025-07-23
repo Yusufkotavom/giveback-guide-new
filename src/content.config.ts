@@ -99,6 +99,7 @@ const posts = defineCollection({
 		  sBookingURL: transformedPropertySchema.url,
 		  sHotelsURL: transformedPropertySchema.url,
 		  sAgodaURL: transformedPropertySchema.url,
+		  sMapsURL: transformedPropertySchema.url,
 		  sVerify: transformedPropertySchema.select,
 		  sImageURL1: transformedPropertySchema.url,
 		  sImageURL2: transformedPropertySchema.url,
