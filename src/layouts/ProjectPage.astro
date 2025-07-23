@@ -407,6 +407,37 @@ const relatedProjects = allProjects
               }
               
               {
+                properties.pGYGURL && (
+                  <a
+                    href={properties.pGYGURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                    style="background-color: #ff5533;"
+                    onmouseover="this.style.backgroundColor='#e04a2d'"
+                    onmouseout="this.style.backgroundColor='#ff5533'"
+                  >
+                    Book on GetYourGuide
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
                 properties.pMapsURL && (
                   <a
                     href={properties.pMapsURL}
@@ -438,7 +469,15 @@ const relatedProjects = allProjects
             </div>
             
             {
-              !properties.pURL && (
+              properties.pGYGURL && (
+                <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+                  We may earn a commission if you book through these links. This helps support our platform at no extra cost to you.
+                </p>
+              )
+            }
+            
+            {
+              !properties.pURL && !properties.pGYGURL && (
                 <div class="text-center py-8">
                   <svg
                     class="w-12 h-12 text-gray-400 mx-auto mb-4"
@@ -667,6 +706,37 @@ const relatedProjects = allProjects
               }
               
               {
+                properties.pGYGURL && (
+                  <a
+                    href={properties.pGYGURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                    style="background-color: #ff5533;"
+                    onmouseover="this.style.backgroundColor='#e04a2d'"
+                    onmouseout="this.style.backgroundColor='#ff5533'"
+                  >
+                    Book on GetYourGuide
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
                 properties.pMapsURL && (
                   <a
                     href={properties.pMapsURL}
@@ -698,7 +768,15 @@ const relatedProjects = allProjects
             </div>
             
             {
-              !properties.pURL && (
+              properties.pGYGURL && (
+                <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+                  We may earn a commission if you book through these links. This helps support our platform at no extra cost to you.
+                </p>
+              )
+            }
+            
+            {
+              !properties.pURL && !properties.pGYGURL && (
                 <div class="text-center py-8">
                   <svg
                     class="w-12 h-12 text-gray-400 mx-auto mb-4"
