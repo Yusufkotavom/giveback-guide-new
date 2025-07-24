@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import Avatar from "../assets/giveback-guide-avatar.svg";
-import Search from "astro-pagefind/components/Search";
 ---
 
 <a href="#main-content" class="sr-only focus:not-sr-only absolute left-2 top-2 bg-white text-black p-2 z-50 rounded">
@@ -19,8 +18,6 @@ import Search from "astro-pagefind/components/Search";
   <!-- Search Modal Trigger -->
   <button
     id="search-button"
-    data-modal-target="search-modal"
-    data-modal-toggle="search-modal"
     type="button"
     class="cursor-pointer text-gray-600 bg-white border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
   >
@@ -164,7 +161,7 @@ import Search from "astro-pagefind/components/Search";
   <!-- Modal backdrop -->
   <div class="flex items-start justify-center min-h-full p-4 sm:p-6 lg:p-8 pt-4 sm:pt-[15vh]">
     <!-- Modal content -->
-    <div class="relative w-full max-w-2xl mx-auto bg-white rounded-xl shadow-2xl dark:bg-gray-800 transform transition-all">
+    <div class="relative w-full max-w-4xl mx-auto bg-white rounded-xl shadow-2xl dark:bg-gray-800 transform transition-all">
       
       <!-- Search Form -->
       <form id="modal-search-form" action="/search" method="get" class="p-6">
@@ -187,7 +184,7 @@ import Search from "astro-pagefind/components/Search";
           </div>
           <div class="flex-shrink-0">
             <button
-              data-modal-hide="search-modal"
+              id="close-search-modal"
               type="button"
               class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               aria-label="Close search"
@@ -281,17 +278,52 @@ import Search from "astro-pagefind/components/Search";
       }
     }
 
-    // Function to focus input with mobile compatibility
-    function focusSearchInput() {
-      if (modalSearchInput) {
-        // Focus immediately - critical for mobile keyboard
-        modalSearchInput.focus();
-        
-        // Additional focus attempt after a short delay for better cross-device compatibility
-        setTimeout(() => {
+    // Custom modal show/hide functions to ensure proper focus handling
+    function showModal() {
+      if (searchModal) {
+        searchModal.classList.remove('hidden');
+        searchModal.setAttribute('aria-hidden', 'false');
+        // Focus input immediately in the same event cycle
+        if (modalSearchInput) {
           modalSearchInput.focus();
-        }, 50);
+          // Force click on input for iOS keyboard (sometimes needed)
+          modalSearchInput.click();
+        }
       }
+    }
+
+    function hideModal() {
+      if (searchModal) {
+        searchModal.classList.add('hidden');
+        searchModal.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    // Handle search button click
+    if (searchButton) {
+      searchButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        showModal();
+      });
+    }
+
+    // Handle close button clicks
+    const closeButton = document.getElementById("close-search-modal");
+    if (closeButton) {
+      closeButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideModal();
+      });
+    }
+
+    // Handle backdrop clicks
+    if (searchModal) {
+      searchModal.addEventListener("click", (e) => {
+        // Only close if clicking the backdrop (not the modal content)
+        if (e.target === searchModal) {
+          hideModal();
+        }
+      });
     }
 
     // Handle global keyboard shortcut and escape key
@@ -299,17 +331,13 @@ import Search from "astro-pagefind/components/Search";
       // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
       if ((isMac && e.metaKey && e.key === 'k') || (!isMac && e.ctrlKey && e.key === 'k')) {
         e.preventDefault();
-        // Trigger the search modal
-        searchButton?.click();
-        // Focus input immediately after triggering modal
-        setTimeout(focusSearchInput, 10);
+        showModal();
         return;
       }
 
       // Handle escape key to close modal
       if (e.key === "Escape" && searchModal && !searchModal.classList.contains("hidden")) {
-        const closeButton = searchModal.querySelector("[data-modal-hide]") as HTMLButtonElement;
-        closeButton?.click();
+        hideModal();
       }
     });
 
@@ -335,10 +363,5 @@ import Search from "astro-pagefind/components/Search";
         }
       });
     });
-
-    // Focus input when modal opens via button click
-    if (searchButton) {
-      searchButton.addEventListener("click", focusSearchInput);
-    }
   });
 </script>
