@@ -37,9 +37,8 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
     <span class="block lg:hidden">Search</span>
     <span class="hidden lg:flex lg:items-center lg:space-x-2">
       <span>Search</span>
-      <div class="flex items-center space-x-1 ml-2 text-xs text-gray-400">
-        <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">⌘</kbd>
-        <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">K</kbd>
+      <div class="flex items-center ml-2 text-xs text-gray-400">
+        <kbd id="search-kbd" class="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">⌘K</kbd>
       </div>
     </span>
   </button>
@@ -266,16 +265,11 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
 
     // Detect OS and update keyboard shortcut display
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    const searchButtonDesktop = searchButton?.querySelector('.hidden.lg\\:flex');
+    const searchKbd = document.getElementById('search-kbd');
     
-    if (searchButtonDesktop && !isMac) {
-      // Replace ⌘ with Ctrl for Windows/Linux
-      const cmdKey = searchButtonDesktop.querySelector('kbd');
-      if (cmdKey && cmdKey.textContent === '⌘') {
-        cmdKey.textContent = 'Ctrl';
-        cmdKey.classList.add('px-2'); // Slightly more padding for "Ctrl"
-        cmdKey.classList.remove('px-1.5');
-      }
+    if (searchKbd && !isMac) {
+      // Replace ⌘K with Ctrl+K for Windows/Linux
+      searchKbd.textContent = 'Ctrl+K';
     }
 
     // Custom modal show/hide functions to ensure proper focus handling
