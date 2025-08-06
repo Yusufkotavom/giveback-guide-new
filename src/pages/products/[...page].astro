@@ -21,6 +21,8 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     notionProducts = await getCollection("products");
   } catch (e) {
     console.warn("Products collection not available:", e.message);
+    // Return empty pagination if Notion is not available
+    return paginate([], { pageSize: 12 });
   }
   
   try {
@@ -126,6 +128,20 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     });
   }
 
+  // Helper function to calculate priority score for sorting
+  function getPriorityScore(priority: string, isSponsored: boolean): number {
+    if (isSponsored) return 100;
+    
+    const priorityScores = {
+      'featured': 90,
+      'bestseller': 80,
+      'sale': 70,
+      'new': 60,
+    };
+    
+    return priorityScores[priority?.toLowerCase()] || 0;
+  }
+
   // Sort products by priority and date for better affiliate conversion
   const sortedEntries = allProducts.sort((a, b) => {
     // First, prioritize sponsored/featured products
@@ -153,20 +169,6 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   return paginate(sortedEntries, {
     pageSize: 12, // Increased from 9 for better conversion
   });
-}
-
-// Helper function to calculate priority score for sorting
-function getPriorityScore(priority: string, isSponsored: boolean): number {
-  if (isSponsored) return 100;
-  
-  const priorityScores = {
-    'featured': 90,
-    'bestseller': 80,
-    'sale': 70,
-    'new': 60,
-  };
-  
-  return priorityScores[priority?.toLowerCase()] || 0;
 }
 
 const { page } = Astro.props;
