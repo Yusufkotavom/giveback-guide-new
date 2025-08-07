@@ -2,6 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import HomeHero from "../components/Homepage/HomeHero.astro";
 import LatestProjects from "../components/Homepage/LatestProjects.astro";
+import LatestStays from "../components/Homepage/LatestStays.astro";
 import LatestPosts from "../components/Homepage/LatestPosts.astro";
 import { SITE_TITLE } from "../consts";
 ---
@@ -13,6 +14,7 @@ import { SITE_TITLE } from "../consts";
   <HomeHero />
   <main>
     <LatestProjects limit={6} />
+    <LatestStays limit={6} />
     <section class="bg-gray-50 dark:bg-gray-900">
       <div
         class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6"
