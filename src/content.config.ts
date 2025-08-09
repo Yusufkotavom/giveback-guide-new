@@ -152,4 +152,33 @@ const posts = defineCollection({
 		  }),
   });
 
-export const collections = { posts, projects, stays, products };
+  const services = defineCollection({
+    loader: notionLoader({
+      auth: getEnvVar('SERVICES_NOTION_TOKEN'),
+      database_id: getEnvVar('SERVICES_NOTION_DATABASE_ID'),
+      filter: { property: 'Status', select: { "equals": "Published" } },
+    }),
+    schema: notionPageSchema({
+      properties: z.object({
+        svTitle: transformedPropertySchema.title,
+        svCategory: transformedPropertySchema.multi_select.transform((v) => Array.isArray(v) ? v : [v]),
+        svSlug: transformedPropertySchema.rich_text,
+        svImageURL1: transformedPropertySchema.url,
+        svPublished: transformedPropertySchema.date,
+
+        svWilayah: transformedPropertySchema.multi_select.transform((v) => Array.isArray(v) ? v : [v]).optional(),
+        svProvider: transformedPropertySchema.rich_text.optional(),
+        svType: transformedPropertySchema.multi_select.optional(),
+        svPrice: transformedPropertySchema.rich_text.optional(),
+        svURL: transformedPropertySchema.url.optional(),
+        svWhatsAppURL: transformedPropertySchema.url.optional(),
+        svMapsURL: transformedPropertySchema.url.optional(),
+        svVerify: transformedPropertySchema.select.optional(),
+        svImageURL2: transformedPropertySchema.url.optional(),
+        svImageURL3: transformedPropertySchema.url.optional(),
+        svReview: transformedPropertySchema.rich_text.optional(),
+      }),
+    }),
+  });
+
+export const collections = { posts, projects, stays, products, services };
