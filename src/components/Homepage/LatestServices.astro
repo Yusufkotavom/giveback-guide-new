@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import ServiceCard from "../ServiceCard.astro";
+
+interface Props { limit: number }
+const { limit } = Astro.props;
+
+function parseDate(dateStr: string): Date {
+  const [day, month, year] = dateStr.split("/");
+  return new Date(`${year}-${month}-${day}`);
+}
+
+const entries = await getCollection("services");
+
+const sorted = entries
+  .map((entry) => ({
+    ...entry,
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+        svImageURL1: entry.data.properties.svImageURL1 || "",
+      },
+    },
+  }))
+  .sort((a, b) => {
+    const dateA = a.data.properties.svPublished?.start 
+      ? (typeof a.data.properties.svPublished.start === 'string' 
+          ? parseDate(a.data.properties.svPublished.start) 
+          : a.data.properties.svPublished.start) 
+      : new Date(0);
+    const dateB = b.data.properties.svPublished?.start 
+      ? (typeof b.data.properties.svPublished.start === 'string' 
+          ? parseDate(b.data.properties.svPublished.start) 
+          : b.data.properties.svPublished.start) 
+      : new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+const limitedEntries = sorted.slice(0, limit);
+---
+
+<section class="bg-white dark:bg-gray-900">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    <div class="mb-8">
+      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Layanan Terbaru</h2>
+      <p class="text-gray-500 sm:text-xl dark:text-gray-400">Temukan layanan pilihan terbaru. Hubungi kami via WhatsApp untuk detail cepat.</p>
+    </div>
+    <div class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12">
+      {limitedEntries.map((service) => (
+        <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink"><ServiceCard service={service} /></div>
+      ))}
+    </div>
+  </div>
+</section>
