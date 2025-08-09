@@ -29,8 +29,9 @@ const sortedEntries = entries
       ...entry.data,
       properties: {
         ...entry.data.properties,
-        pImageURL1: entry.data.properties.pImageURL1 || "", // Ensure pImageURL1 is a string
-        pVerify: entry.data.properties.pVerify || "", // Ensure pVerify is a string
+        pImageURL1: entry.data.properties.pImageURL1 || "",
+        pVerify: entry.data.properties.pVerify || "",
+        pPrice: (entry.data.properties as any).pPrice || "",
       },
     },
   }))

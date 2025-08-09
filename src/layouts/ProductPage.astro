@@ -7,6 +7,7 @@ import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
 import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 import ResponsiveImage from "../components/ResponsiveImage.astro";
+import { getAvailableMarketplaces, getRandomPrimaryMarketplace, getSecondaryMarketplaces, getMarketplaceIcon, formatPrice } from "../utils/marketplaceUtils";
 
 type Props = CollectionEntry<"products">["data"];
 
@@ -24,6 +25,12 @@ const localeString = Array.isArray(properties.pLocale)
 const description = `Discover amazing products from ${localeString} by engaging with ${properties.pName} on your next shopping experience.`;
 
 const allProducts = await getCollection("products");
+
+// Marketplace and price helpers
+const formattedPrice = formatPrice((properties as any).pPrice);
+const availableMarketplaces = getAvailableMarketplaces(properties as any);
+const primaryMarketplace = getRandomPrimaryMarketplace(availableMarketplaces);
+const secondaryMarketplaces = getSecondaryMarketplaces(availableMarketplaces, primaryMarketplace);
 
 // Filter related products
 const relatedProducts = allProducts
@@ -203,11 +210,14 @@ if (images.length === 0) {
           }
           
           <h1
-            class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            class="mb-1 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
             data-pagefind-meta="title"
           >
             {properties.pTitle}
           </h1>
+          {formattedPrice && (
+            <p class="mb-4 text-3xl font-bold text-green-600">{formattedPrice}</p>
+          )}
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
             <!-- Name -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -423,147 +433,37 @@ if (images.length === 0) {
                   </a>
                 )
               }
-              
-              {
-                properties.pTokopediaURL && (
-                  <a
-                    href={properties.pTokopediaURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                  >
-                    Beli di Tokopedia
-                    <svg
-                      class="w-4 h-4 ml-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
+
+              {availableMarketplaces.length > 0 && (
+                <div class="space-y-3">
+                  {primaryMarketplace && (
+                    <a
+                      href={primaryMarketplace.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={`w-full ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color} font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center`}
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                      ></path>
-                    </svg>
-                  </a>
-                )
-              }
-              
-              {
-                properties.pShopeeURL && (
-                  <a
-                    href={properties.pShopeeURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                  >
-                    Beli di Shopee
-                    <svg
-                      class="w-4 h-4 ml-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                      ></path>
-                    </svg>
-                  </a>
-                )
-              }
-              
-              {
-                properties.pBlibliURL && (
-                  <a
-                    href={properties.pBlibliURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                  >
-                    Beli di Blibli
-                    <svg
-                      class="w-4 h-4 ml-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                      ></path>
-                    </svg>
-                  </a>
-                )
-              }
-              
-              {
-                properties.pBukalapakURL && (
-                  <a
-                    href={properties.pBukalapakURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                  >
-                    Beli di Bukalapak
-                    <svg
-                      class="w-4 h-4 ml-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                      ></path>
-                    </svg>
-                  </a>
-                )
-              }
-              
-              {
-                properties.pLazadaURL && (
-                  <a
-                    href={properties.pLazadaURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                  >
-                    Beli di Lazada
-                    <svg
-                      class="w-4 h-4 ml-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                      ></path>
-                    </svg>
-                  </a>
-                )
-              }
-              
+                      <span set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
+                      <span class="ml-2">{primaryMarketplace.ctaText}</span>
+                    </a>
+                  )}
+                  <div class="flex items-center gap-2">
+                    {secondaryMarketplaces.map((m) => (
+                      <a
+                        href={m.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+                        aria-label={m.name}
+                        title={m.name}
+                      >
+                        <span set:html={getMarketplaceIcon(m.icon)} />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {
                 properties.pOtherURL && (
                   <a
@@ -591,7 +491,7 @@ if (images.length === 0) {
                   </a>
                 )
               }
-              
+
               {
                 properties.pMapsURL && (
                   <a

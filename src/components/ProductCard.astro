@@ -1,5 +1,6 @@
 ---
 import ResponsiveImage from './ResponsiveImage.astro';
+import { getAvailableMarketplaces, getRandomPrimaryMarketplace, getSecondaryMarketplaces, getMarketplaceIcon, formatPrice } from '../utils/marketplaceUtils';
 
 interface Props {
   product: {
@@ -7,18 +8,29 @@ interface Props {
       properties: {
         pSlug: string;
         pImageURL1: string;
-        pVerify: string;
+        pVerify?: string;
         pCountry: string | string[];
         pLocale: string | string[];
         pTitle: string;
         pName: string;
         pType: string;
+        pPrice?: string | number;
+        pTokopediaURL?: string;
+        pShopeeURL?: string;
+        pBlibliURL?: string;
+        pBukalapakURL?: string;
+        pLazadaURL?: string;
       };
     };
   };
 }
 
 const { product } = Astro.props;
+const properties = product.data.properties as any;
+const formattedPrice = formatPrice(properties.pPrice);
+const availableMarketplaces = getAvailableMarketplaces(properties);
+const primaryMarketplace = getRandomPrimaryMarketplace(availableMarketplaces);
+const secondaryMarketplaces = getSecondaryMarketplaces(availableMarketplaces, primaryMarketplace);
 ---
 
 <article class="rounded-lg">
@@ -70,11 +82,41 @@ const { product } = Astro.props;
         ))
       : product.data.properties.pCountry}
   </p>
-  <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
+  <h2 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
     <a href={`/products/${product.data.properties.pSlug}/`}>
       {product.data.properties.pTitle}
     </a>
   </h2>
+  {formattedPrice && (
+    <p class="px-4 mb-2 text-lg font-semibold text-green-600">{formattedPrice}</p>
+  )}
+  {availableMarketplaces.length > 0 && (
+    <div class="flex items-center gap-2 px-4 mb-3">
+      {primaryMarketplace && (
+        <a
+          href={primaryMarketplace.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color}`}
+        >
+          <span set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
+          <span>{primaryMarketplace.ctaText}</span>
+        </a>
+      )}
+      {secondaryMarketplaces.map((m) => (
+        <a
+          href={m.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+          aria-label={m.name}
+          title={m.name}
+        >
+          <span set:html={getMarketplaceIcon(m.icon)} />
+        </a>
+      ))}
+    </div>
+  )}
   <p class="mt-2 text-sm font-normal text-gray-400 dark:text-gray-400 px-4">
            <span class="text-gray-800">{product.data.properties.pName}</span> adalah <span class="text-gray-900">{product.data.properties.pType}</span> dari <span class="text-gray-900">{
             Array.isArray(product.data.properties.pLocale)
