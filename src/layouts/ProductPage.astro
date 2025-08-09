@@ -1,0 +1,1183 @@
+---
+import type { CollectionEntry } from "astro:content";
+import MainLayout from "./MainLayout.astro";
+import AdBox from "../components/Ads/AdBox.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { getCollection } from "astro:content";
+import SupportBox from "../components/Projects/SupportBox.astro";
+import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
+import ResponsiveImage from "../components/ResponsiveImage.astro";
+
+type Props = CollectionEntry<"products">["data"];
+
+const { properties } = Astro.props;
+const title =
+  (properties.pTitle || "Default Title") + " - Products on Giveback Guide";
+const image = properties.pImageURL1 || "/giveback-guide-placeholder.jpg"; // Fallback image
+
+// Format pLocale as a comma-separated string
+const localeString = Array.isArray(properties.pLocale)
+  ? properties.pLocale.join(", ")
+  : properties.pLocale || "";
+
+// Generate the description
+const description = `Discover amazing products from ${localeString} by engaging with ${properties.pName} on your next shopping experience.`;
+
+const allProducts = await getCollection("products");
+
+// Filter related products
+const relatedProducts = allProducts
+  .filter((product) => {
+    // Exclude the current product
+    if (product.data.properties.pTitle === properties.pTitle) return false;
+
+    // Match by locale first
+    if (
+      Array.isArray(product.data.properties.pLocale) &&
+      Array.isArray(properties.pLocale) &&
+      product.data.properties.pLocale.some((product) =>
+        properties.pLocale.includes(product)
+      )
+    ) {
+      return true;
+    }
+
+    // Match by country if no locale match
+    if (
+      Array.isArray(product.data.properties.pCountry) &&
+      Array.isArray(properties.pCountry) &&
+      product.data.properties.pCountry.some((product) =>
+        properties.pCountry.includes(product)
+      )
+    ) {
+      return true;
+    }
+
+    return false;
+  })
+  .slice(0, 3); // Limit to 3 products
+
+// Split features into two columns
+let featuresLeft: string[] = [];
+let featuresRight: string[] = [];
+if (
+  Array.isArray(properties.pFeatures) &&
+  properties.pFeatures.length > 0
+) {
+  const mid = Math.ceil(properties.pFeatures.length / 2);
+  featuresLeft = properties.pFeatures.slice(0, mid);
+  featuresRight = properties.pFeatures.slice(mid);
+}
+
+const fallbackImage = "/giveback-guide-placeholder.jpg";
+const images = [
+  properties.pImageURL1,
+  properties.pImageURL2,
+  properties.pImageURL3,
+].filter((img): img is string => Boolean(img)); // Remove undefined/null and type guard
+
+// Ensure we always have at least one image
+if (images.length === 0) {
+  images.push(fallbackImage);
+}
+---
+
+<MainLayout title={title} description={description} image={image}>
+  <div class="bg-white dark:bg-gray-900">
+    <div
+      class="mx-auto max-w-screen-xl grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 px-0 lg:px-6"
+    >
+      <!-- Main column -->
+      <main class="w-full">
+        <!-- Breadcrumbs (now always visible) -->
+        <section class="pt-6 px-4">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol
+              class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
+            >
+              <li class="inline-flex items-center">
+                <a
+                  href="/"
+                  class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                >
+                  <svg
+                    class="w-3 h-3 me-2.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+                    ></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <svg
+                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"></path>
+                  </svg>
+                  <a
+                    href="/products/"
+                    class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                    >Products</a
+                  >
+                </div>
+              </li>
+              <li aria-current="page">
+                <div class="flex items-center">
+                  <svg
+                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"></path>
+                  </svg>
+                  <span
+                    class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400"
+                    >{properties.pName}</span
+                  >
+                </div>
+              </li>
+            </ol>
+          </nav>
+        </section>
+
+        <!-- Featured Image -->
+        <section class="py-6 px-4">
+          <ResponsiveImage
+            data-pagefind-meta="image[src], image_alt[alt]"
+            class="w-full drop-shadow-xl rounded-lg"
+            src={images[0]}
+            alt={properties.pName}
+            fetchpriority="high"
+            loading="eager"
+            preset="hero"
+          />
+        </section>
+
+        <!-- Title and Key Information Cards -->
+        <section class="py-6 px-4">
+          {
+            properties.pVerify && (
+              <div class="inline-flex bg-gbgpink bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 items-center gap-1 mb-2">
+                <svg
+                  class="h-5 w-5 text-black"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <p class="text-sm font-medium text-black">
+                  {properties.pVerify}
+                </p>
+              </div>
+            )
+          }
+          
+          <h1
+            class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            data-pagefind-meta="title"
+          >
+            {properties.pTitle}
+          </h1>
+          <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+            <!-- Name -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                ></path>
+              </svg>
+              <span>
+                Product name: <span
+                  class="font-medium text-gray-900 dark:text-white"
+                  data-pagefind-meta="organiser"
+                  >{properties.pName}</span
+                >
+              </span>
+            </li>
+            <!-- Locale(s) -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 0v6M9.5 9A2.5 2.5 0 0 1 12 6.5"
+                ></path>
+              </svg>
+              <div class="flex items-center flex-wrap gap-2">
+                <span>Locale(s):</span>
+                <span 
+                  class="hidden"
+                  data-pagefind-meta="locale"
+                >
+                  {
+                    Array.isArray(properties.pLocale)
+                      ? properties.pLocale.join(", ")
+                      : properties.pLocale
+                  }
+                </span>
+                {
+                  Array.isArray(properties.pLocale)
+                    ? properties.pLocale.map((locale) => (
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                          {locale}
+                        </span>
+                      ))
+                    : properties.pLocale && (
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                          {properties.pLocale}
+                        </span>
+                      )
+                }
+              </div>
+            </li>
+            <!-- Nation(s) -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
+                ></path>
+              </svg>
+              <div class="flex items-center flex-wrap gap-2">
+                <span>Nation(s):</span>
+                <span 
+                  class="hidden"
+                  data-pagefind-meta="countries"
+                >
+                  {
+                    Array.isArray(properties.pCountry)
+                      ? properties.pCountry.join(", ")
+                      : properties.pCountry
+                  }
+                </span>
+                {
+                  Array.isArray(properties.pCountry)
+                    ? properties.pCountry.map((country) => (
+                        <a
+                          href={`/products/${country.toLowerCase().replace(/\s+/g, "-")}`}
+                          class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                        >
+                          {country}
+                        </a>
+                      ))
+                    : properties.pCountry && (
+                        <a
+                          href={`/products/${(properties.pCountry as string).toLowerCase().replace(/\s+/g, "-")}`}
+                          class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                        >
+                          {properties.pCountry}
+                        </a>
+                      )
+                }
+              </div>
+            </li>
+            <!-- Categories -->
+            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+              <svg
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"
+                ></path>
+              </svg>
+              <div class="flex items-center flex-wrap gap-2">
+                <span>Categories:</span>
+                {
+                  Array.isArray(properties.pCategory)
+                    ? properties.pCategory.map((category) => (
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                          {category}
+                        </span>
+                      ))
+                    : properties.pCategory && (
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                          {properties.pCategory}
+                        </span>
+                      )
+                }
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- AdBox (mobile only) -->
+        <section class="py-6 px-4 md:hidden">
+          <div class="mx-auto w-full max-w-2xl">
+            <AdBox />
+          </div>
+        </section>
+
+        <!-- Shopping Card (mobile only) -->
+        <section class="py-6 px-4 lg:hidden">
+          <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Beli Produk Ini
+              </h3>
+            </div>
+            
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Dapatkan {properties.pName} melalui platform marketplace terpercaya Indonesia:
+            </p>
+            
+            <div class="space-y-3">
+              {
+                properties.pURL && (
+                  <a
+                    href={properties.pURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Website Resmi
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pTokopediaURL && (
+                  <a
+                    href={properties.pTokopediaURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Tokopedia
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pShopeeURL && (
+                  <a
+                    href={properties.pShopeeURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Shopee
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pBlibliURL && (
+                  <a
+                    href={properties.pBlibliURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Blibli
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pBukalapakURL && (
+                  <a
+                    href={properties.pBukalapakURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Bukalapak
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pLazadaURL && (
+                  <a
+                    href={properties.pLazadaURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Lazada
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pOtherURL && (
+                  <a
+                    href={properties.pOtherURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    Platform Lainnya
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pMapsURL && (
+                  <a
+                    href={properties.pMapsURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    Lihat di Google Maps
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+            </div>
+            
+            <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+              Kami mungkin mendapat komisi jika Anda berbelanja melalui link ini. Ini membantu mendukung platform kami tanpa biaya tambahan untuk Anda.
+            </p>
+            
+            {
+              !properties.pURL && !properties.pTokopediaURL && !properties.pShopeeURL && !properties.pBlibliURL && !properties.pBukalapakURL && !properties.pLazadaURL && !properties.pOtherURL && !properties.pMapsURL && (
+                <div class="text-center py-8">
+                  <svg
+                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                    ></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Informasi pembelian akan segera tersedia
+                  </p>
+                </div>
+              )
+            }
+          </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-6 px-4">
+            <h2
+              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              Fitur dan Keunggulan
+            </h2>
+            
+            {
+              featuresLeft.length > 0 || featuresRight.length > 0 ? (
+                <div class="flex flex-wrap gap-2">
+                  {featuresLeft.map((feature) => (
+                    <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1.5 rounded-lg dark:bg-green-900 dark:text-green-300">
+                      {feature}
+                    </span>
+                  ))}
+                  {featuresRight.map((feature) => (
+                    <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1.5 rounded-lg dark:bg-green-900 dark:text-green-300">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p class="text-gray-500 dark:text-gray-400">
+                  Informasi fitur saat ini tidak tersedia
+                </p>
+              )
+            }
+        </section>
+
+        <!-- About Section -->
+        <section class="py-6 px-4">
+            <h2
+              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              Tentang produk ini
+            </h2>
+            <article
+              class="format format-sm sm:format-base lg:format-lg format-teal dark:format-invert"
+              data-pagefind-body
+              data-pagefind-filter="type:product"
+            >
+              <slot />
+              <!-- Hidden searchable metadata for improved search indexing -->
+              <div style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+                {properties.pCountry && (
+                  <span>
+                    {Array.isArray(properties.pCountry) 
+                      ? properties.pCountry.join(" ") 
+                      : properties.pCountry}
+                  </span>
+                )}
+                {properties.pLocale && (
+                  <span>
+                    {Array.isArray(properties.pLocale) 
+                      ? properties.pLocale.join(" ") 
+                      : properties.pLocale}
+                  </span>
+                )}
+              </div>
+            </article>
+        </section>
+
+        <!-- Verification Section -->
+        {
+          properties.pVerify && (
+            <div class="py-4 px-4">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  Produk ini {properties.pVerify}
+                </h5>
+                <a
+                  href="/about/verification"
+                  class="inline-flex items-center text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors self-start sm:self-auto"
+                >
+                  Bagaimana cara kerja verifikasi?
+                  <svg
+                    class="ml-1 w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                </a>
+              </div>
+              
+              {properties.pReview && properties.pReview.trim() !== "" ? (
+                <!-- Review Speech Bubble Style -->
+                <div class="relative bg-gray-50 rounded-lg p-6 my-4 dark:bg-gray-800 before:content-[''] before:absolute before:bottom-0 before:left-8 before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-t-[15px] before:border-t-gray-50 dark:before:border-t-gray-800 before:transform before:translate-y-full">
+                  <div class="flex">
+                    <div class="flex-shrink-0">
+                      <svg class="h-6 w-6 text-black dark:text-gray-300" fill="currentColor" viewBox="0 0 32 32">
+                        <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/>
+                      </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                      <blockquote class="text-lg italic font-medium text-gray-900 dark:text-white mb-4">
+                        {properties.pReview}
+                      </blockquote>
+                      <cite class="flex items-center">
+                        <div class="flex-shrink-0">
+                          <div class="h-10 w-10 rounded-full bg-black dark:bg-gray-300 flex items-center justify-center">
+                            <svg class="h-6 w-6 text-white dark:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm text-gray-500 dark:text-gray-400">
+                            Diverifikasi oleh
+                          </div>
+                          <div class="text-sm font-medium text-gray-900 dark:text-white">
+                            Tim Giveback Guide
+                          </div>
+                        </div>
+                      </cite>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <!-- Standard verification design when no review -->
+                <div>
+                  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Kami ingin Anda merasa yakin ketika berinteraksi dengan produk seperti ini. Itulah mengapa kami memiliki sistem verifikasi. Produk dapat diverifikasi oleh anggota tim kami atau oleh anggota komunitas Giveback.
+                  </p>
+                  <a
+                    href="/about/verification"
+                    class="inline-flex font-medium items-center text-gray-500 hover:underline"
+                  >
+                    Pelajari lebih lanjut tentang verifikasi
+                    <svg
+                      class="ml-2 -mr-1 w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          )
+        }        <SupportBox />
+
+        <!-- Verify/Report Buttons -->
+        <section class="pt-6 pb-8">
+          <div
+            class="mx-auto w-full max-w-2xl flex justify-center items-center"
+          >
+            <a href="/verify">
+              <button
+                type="button"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 22"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                  ></path>
+                </svg>
+                Verifikasi produk ini
+              </button>
+            </a>
+            <a href="/report">
+              <button
+                type="button"
+                class="cursor-pointer text-black bg-gray-100 hover:bg-gray-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  class="w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 22 22"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  ></path>
+                </svg>
+                Laporkan masalah
+              </button>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <!-- Aside column (desktop only) -->
+      <aside class="hidden lg:block pt-16">
+        <div class="sticky top-24 space-y-6">
+          <!-- Shopping Card -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Beli Produk Ini
+              </h3>
+            </div>
+            
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Dapatkan {properties.pName} melalui platform marketplace terpercaya Indonesia:
+            </p>
+            
+            <div class="space-y-3">
+              {
+                properties.pURL && (
+                  <a
+                    href={properties.pURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Website Resmi
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pTokopediaURL && (
+                  <a
+                    href={properties.pTokopediaURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Tokopedia
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pShopeeURL && (
+                  <a
+                    href={properties.pShopeeURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Shopee
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pBlibliURL && (
+                  <a
+                    href={properties.pBlibliURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Blibli
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pBukalapakURL && (
+                  <a
+                    href={properties.pBukalapakURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Bukalapak
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pLazadaURL && (
+                  <a
+                    href={properties.pLazadaURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    Beli di Lazada
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pOtherURL && (
+                  <a
+                    href={properties.pOtherURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    Platform Lainnya
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+              
+              {
+                properties.pMapsURL && (
+                  <a
+                    href={properties.pMapsURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+                  >
+                    Lihat di Google Maps
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                      ></path>
+                    </svg>
+                  </a>
+                )
+              }
+            </div>
+            
+            <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+              Kami mungkin mendapat komisi jika Anda berbelanja melalui link ini. Ini membantu mendukung platform kami tanpa biaya tambahan untuk Anda.
+            </p>
+            
+            {
+              !properties.pURL && !properties.pTokopediaURL && !properties.pShopeeURL && !properties.pBlibliURL && !properties.pBukalapakURL && !properties.pLazadaURL && !properties.pOtherURL && !properties.pMapsURL && (
+                <div class="text-center py-8">
+                  <svg
+                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                    ></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Informasi pembelian akan segera tersedia
+                  </p>
+                </div>
+              )
+            }
+          </div>
+
+          <AdBox />
+        </div>
+      </aside>
+    </div>
+  </div>
+  <!-- Related Products -->
+        <section class="py-10 px-4 bg-gray-50 dark:bg-gray-900">
+          <div class="mx-auto w-full max-w-screen-xl">
+            <h2
+              class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              Anda mungkin juga menyukai...
+            </h2>
+            <div
+              class="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0"
+            >
+              {
+                relatedProducts.length > 0 ? (
+                  relatedProducts.map((product) => <ProductCard product={product as any} />)
+                ) : (
+                  <p class="text-gray-500 dark:text-gray-400">
+                    Tidak ada produk terkait saat ini. Jika Anda mengetahui
+                    produk yang akan terlihat menakjubkan di sini,{" "}
+                    <a class="text-black underline" href="/submit">
+                      tolong beritahu kami!
+                    </a>
+                  </p>
+                )
+              }
+            </div>
+          </div>
+        </section>
+
+<script is:inline>
+  (function (s, t, a, y, twenty, two) {
+    s.Stay22 = s.Stay22 || {};
+    s.Stay22.params = { lmaID: '687e5d36ef7975cf766937be' };
+    twenty = t.createElement(a);
+    two = t.getElementsByTagName(a)[0];
+    twenty.async = 1;
+    twenty.src = y;
+    two.parentNode.insertBefore(twenty, two);
+  })(window, document, 'script', 'https://scripts.stay22.com/letmeallez.js');
+</script>
+
+</MainLayout>

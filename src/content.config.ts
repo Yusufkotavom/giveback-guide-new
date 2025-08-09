@@ -110,4 +110,45 @@ const posts = defineCollection({
 	  }),
   });
 
-export const collections = { posts, projects, stays };
+  const products = defineCollection({
+	loader: notionLoader({
+		auth: getEnvVar('PRODUCTS_NOTION_TOKEN'),
+    database_id: getEnvVar('PRODUCTS_NOTION_DATABASE_ID'),
+	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
+	  // Default value is 'assets/images/notion'
+	  // imageSavePath: 'assets/images/notion',
+	  // Use Notion sorting and filtering with the same options like notionhq client
+	  filter: {
+		property: 'Status',
+		select: { "equals": "Published" },
+	  },
+	}),
+	schema: notionPageSchema({
+		properties: z.object({
+		  pTitle: transformedPropertySchema.title,
+		  pCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pFeatures: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pName: transformedPropertySchema.rich_text,
+		  pType: transformedPropertySchema.multi_select,
+		  pSlug: transformedPropertySchema.rich_text,
+		  pURL: transformedPropertySchema.url,
+		  pOtherURL: transformedPropertySchema.url,
+		  pTokopediaURL: transformedPropertySchema.url,
+		  pShopeeURL: transformedPropertySchema.url,
+		  pBlibliURL: transformedPropertySchema.url,
+		  pBukalapakURL: transformedPropertySchema.url,
+		  pLazadaURL: transformedPropertySchema.url,
+		  pMapsURL: transformedPropertySchema.url,
+		  pVerify: transformedPropertySchema.select,
+		  pImageURL1: transformedPropertySchema.url,
+		  pImageURL2: transformedPropertySchema.url,
+		  pImageURL3: transformedPropertySchema.url,
+		  pPublished: transformedPropertySchema.date,
+		  pReview: transformedPropertySchema.rich_text,
+		}),
+	  }),
+  });
+
+export const collections = { posts, projects, stays, products };
