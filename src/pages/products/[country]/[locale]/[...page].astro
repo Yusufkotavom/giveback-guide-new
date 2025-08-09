@@ -1,0 +1,154 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import ProductCard from "../../../../components/ProductCard.astro";
+import PCountryDropdown from "../../../../components/PCountryDropdown.astro";
+import PLocaleDropdown from "../../../../components/PLocaleDropdown.astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Fetch all products
+  const products = await getCollection("products");
+
+  // Extract unique countries and locales from all products
+  const countryLocaleMap = new Map();
+
+  products.forEach((product) => {
+    const countries = Array.isArray(product.data.properties.pCountry)
+      ? product.data.properties.pCountry
+      : [product.data.properties.pCountry];
+
+    const locales = Array.isArray(product.data.properties.pLocale)
+      ? product.data.properties.pLocale
+      : [product.data.properties.pLocale];
+
+    countries.forEach((country) => {
+      const countrySlug = country.toLowerCase().replace(/\s+/g, "-");
+      if (!countryLocaleMap.has(countrySlug)) {
+        countryLocaleMap.set(countrySlug, new Set());
+      }
+      locales.forEach((locale) => {
+        const localeSlug = locale.toLowerCase().replace(/\s+/g, "-");
+        countryLocaleMap.get(countrySlug).add(localeSlug);
+      });
+    });
+  });
+
+  // Generate paginated paths for each country and locale
+  const paths = [];
+
+  for (const [country, locales] of countryLocaleMap.entries()) {
+    for (const locale of locales) {
+      const localeProducts = products.filter((product) => {
+        const productCountries = Array.isArray(product.data.properties.pCountry)
+          ? product.data.properties.pCountry.map((c) =>
+              c.toLowerCase().replace(/\s+/g, "-")
+            )
+          : [product.data.properties.pCountry.toLowerCase().replace(/\s+/g, "-")];
+
+        const productLocales = Array.isArray(product.data.properties.pLocale)
+          ? product.data.properties.pLocale.map((l) =>
+              l.toLowerCase().replace(/\s+/g, "-")
+            )
+          : [product.data.properties.pLocale.toLowerCase().replace(/\s+/g, "-")];
+
+        return (
+          productCountries.includes(country) &&
+          productLocales.includes(locale)
+        );
+      });
+
+      const localePaginatedPaths = paginate(localeProducts, {
+        pageSize: 9, // Number of products per page
+        params: { country, locale },
+        props: { country, locale }, // Pass country and locale as props
+      });
+
+      paths.push(...localePaginatedPaths);
+    }
+  }
+
+  return paths;
+}
+
+const { country, locale } = Astro.params; // Get the current country and locale from the URL
+const { page } = Astro.props; // Get the paginated data
+
+// Convert the country and locale slugs back to readable formats
+const readableCountry = country
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
+const readableLocale = locale
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+---
+
+<MainLayout title={`Produk di ${readableLocale}, ${readableCountry} - Halaman ${page.currentPage} dari ${page.lastPage}`}>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Produk di {readableLocale}, {readableCountry}
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          Daftar produk yang berlokasi di {readableLocale}, {readableCountry}.
+        </p>
+      </div>
+      
+      <div class="flex flex-col md:flex-row mb-5">
+        <!-- Div 1 (Showing products) -->
+        <div id="1" class="w-full md:w-1/2 p-2 order-3 md:order-1">
+          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            Menampilkan <span class="font-semibold text-gray-900 dark:text-white">
+              {page.start + 1}-{page.end + 1}
+            </span> dari <span class="font-semibold text-gray-900 dark:text-white">
+              {page.total}
+            </span> produk
+          </span>
+        </div>
+      
+        <!-- Div 2 (Country Dropdown) -->
+        <div id="2" class="w-full md:w-1/4 p-2 order-1 md:order-2">
+          <PCountryDropdown />
+        </div>
+      
+        <!-- Div 3 (Locale Dropdown) -->
+        <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
+          <PLocaleDropdown />
+        </div>
+      </div>
+
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+      >
+        {page.data.map((product) => (
+          <ProductCard product={product} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="flex justify-center items-center">
+        <!-- Previous Button -->
+        {page.url.prev ? (
+          <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Sebelumnya
+          </a>
+        ) : null}
+        {page.url.next ? (
+          <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Selanjutnya
+          </a>
+        ) : null}
+      </div>
+    </div>
+  </section>
+</MainLayout>

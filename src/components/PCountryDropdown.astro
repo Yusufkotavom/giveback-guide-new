@@ -7,13 +7,13 @@ const currentCountryPromise = (async () => {
   const potentialCountry = pathSegments[2]; // Extract the country slug from the URL
 
   // Validate if the extracted segment matches a known country slug
-  const projects = await getCollection("projects");
-  const validCountries = projects.reduce((acc: Set<string>, project) => {
-    const countries = Array.isArray(project.data.properties.pCountry)
-      ? project.data.properties.pCountry.map((c) =>
+  const products = await getCollection("products");
+  const validCountries = products.reduce((acc: Set<string>, product) => {
+    const countries = Array.isArray(product.data.properties.pCountry)
+      ? product.data.properties.pCountry.map((c) =>
           c.toLowerCase().replace(/\s+/g, "-")
         )
-      : [String(project.data.properties.pCountry).toLowerCase().replace(/\s+/g, "-")];
+      : [String(product.data.properties.pCountry).toLowerCase().replace(/\s+/g, "-")];
     countries.forEach((country) => acc.add(country));
     return acc;
   }, new Set<string>());
@@ -22,13 +22,13 @@ const currentCountryPromise = (async () => {
 })();
 const currentCountry = await currentCountryPromise;
 
-const projects = await getCollection("projects");
+const products = await getCollection("products");
 
-// Count the number of projects for each country
-const countryCounts = projects.reduce((acc: Record<string, number>, project) => {
-  const countries = Array.isArray(project.data.properties.pCountry)
-    ? project.data.properties.pCountry
-    : [project.data.properties.pCountry];
+// Count the number of products for each country
+const countryCounts = products.reduce((acc: Record<string, number>, product) => {
+  const countries = Array.isArray(product.data.properties.pCountry)
+    ? product.data.properties.pCountry
+    : [product.data.properties.pCountry];
 
   countries.forEach((country) => {
     if (country) {
@@ -48,12 +48,12 @@ const uniqueCountries = Object.keys(countryCounts).sort();
     class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     onchange="if (this.value) window.location.href = this.value"
   >
-    <option disabled selected={!currentCountry}>Countries</option>
+    <option disabled selected={!currentCountry}>Negara</option>
     {uniqueCountries.map((country) => {
       const countrySlug = country.toLowerCase().replace(/\s+/g, "-");
       return (
         <option
-          value={`/projects/${countrySlug}`}
+          value={`/products/${countrySlug}`}
           selected={currentCountry === countrySlug}
         >
           {country} ({countryCounts[country]})
