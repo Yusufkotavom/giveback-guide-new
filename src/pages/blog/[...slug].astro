@@ -1,16 +1,16 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import { render } from 'astro:content';
+import { getAllPosts, type UnifiedPost } from '../../utils/contentHelpers';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
+	const posts = await getAllPosts();
 	return posts.map((post) => ({
-		params: { slug: post.data.properties.bSlug },
+		params: { slug: post.slug },
 		props: post,
 	}));
 }
-type Props = CollectionEntry<'posts'>;
+type Props = UnifiedPost;
 
 const post = Astro.props;
 const { Content } = await render(post);

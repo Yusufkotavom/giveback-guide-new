@@ -1,33 +1,12 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import PostCard from "../../components/PostCard.astro";
 import BTagsDropdown from "../../components/BTagsDropdown.astro";
-
-// Helper function to parse dates in dd/mm/yyyy format
-function parseDate(dateStr: string): Date {
-  const [day, month, year] = dateStr.split('/');
-  return new Date(`${year}-${month}-${day}`);
-}
+import { getAllPosts } from "../../utils/contentHelpers";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const entries = await getCollection("posts");
-
-  // Sort projects by pPublished date (descending order)
-  const sortedEntries = entries.sort((a, b) => {
-    const dateA = a.data.properties.bPublished?.start 
-      ? (typeof a.data.properties.bPublished.start === 'string' 
-          ? parseDate(a.data.properties.bPublished.start) 
-          : a.data.properties.bPublished.start) 
-      : new Date(0);
-    const dateB = b.data.properties.bPublished?.start 
-      ? (typeof b.data.properties.bPublished.start === 'string' 
-          ? parseDate(b.data.properties.bPublished.start) 
-          : b.data.properties.bPublished.start) 
-      : new Date(0);
-    return dateB.getTime() - dateA.getTime(); // Most recent first
-  });
+  const sortedEntries = await getAllPosts();
 
   return paginate(sortedEntries, {
     pageSize: 9, // Number of entries per page
