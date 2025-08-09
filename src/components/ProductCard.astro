@@ -90,33 +90,35 @@ const secondaryMarketplaces = getSecondaryMarketplaces(availableMarketplaces, pr
   {formattedPrice && (
     <p class="px-4 mb-2 text-lg font-semibold text-green-600">{formattedPrice}</p>
   )}
-  {availableMarketplaces.length > 0 && (
-    <div class="flex items-center gap-2 px-4 mb-3">
-      {primaryMarketplace && (
-        <a
-          href={primaryMarketplace.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color}`}
-        >
-          <span set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
-          <span>{primaryMarketplace.ctaText}</span>
-        </a>
-      )}
-      {secondaryMarketplaces.map((m) => (
-        <a
-          href={m.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
-          aria-label={m.name}
-          title={m.name}
-        >
-          <span set:html={getMarketplaceIcon(m.icon)} />
-        </a>
-      ))}
-    </div>
-  )}
+     {availableMarketplaces.length > 0 && (
+     <div class="flex items-center gap-1.5 px-4 mb-3">
+       {primaryMarketplace && (
+         <a
+           href={primaryMarketplace.url}
+           target="_blank"
+           rel="noopener noreferrer"
+           class={`inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color}`}
+           title={primaryMarketplace.name}
+         >
+           <span class="inline-flex items-center justify-center w-4 h-4" set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
+           <span class="uppercase tracking-wide">{primaryMarketplace.abbr}</span>
+         </a>
+       )}
+       {secondaryMarketplaces.map((m) => (
+         <a
+           href={m.url}
+           target="_blank"
+           rel="noopener noreferrer"
+           class="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+           aria-label={m.name}
+           title={m.name}
+         >
+           <span class="inline-flex items-center justify-center w-4 h-4" set:html={getMarketplaceIcon(m.icon)} />
+           <span class="uppercase tracking-wide">{m.abbr}</span>
+         </a>
+       ))}
+     </div>
+   )}
   <p class="mt-2 text-sm font-normal text-gray-400 dark:text-gray-400 px-4">
            <span class="text-gray-800">{product.data.properties.pName}</span> adalah <span class="text-gray-900">{product.data.properties.pType}</span> dari <span class="text-gray-900">{
             Array.isArray(product.data.properties.pLocale)
