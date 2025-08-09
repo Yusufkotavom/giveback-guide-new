@@ -1,16 +1,17 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import ServicePage from '../../layouts/ServicePage.astro';
+import { getAllServices, type UnifiedService } from '../../utils/contentHelpers';
 
 export async function getStaticPaths() {
-  const services = await getCollection('services');
+  const services = await getAllServices();
   return services.map((service) => ({
-    params: { slug: service.data.properties.svSlug },
+    params: { slug: service.slug },
     props: service,
   }));
 }
 
-type Props = CollectionEntry<'services'>;
+type Props = UnifiedService;
 
 const service = Astro.props;
 const { Content } = await render(service);

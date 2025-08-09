@@ -1,14 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import StayCard from "../../../components/StayCard.astro";
 import SCountryDropdown from "../../../components/SCountryDropdown.astro";
 import SLocaleDropdown from "../../../components/SLocaleDropdown.astro";
+import { getAllStays } from "../../../utils/contentHelpers";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   // Fetch all stays
-  const stays = await getCollection("stays");
+  const stays = await getAllStays();
 
   // Extract unique countries
   const countries = Array.from(

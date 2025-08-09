@@ -1,16 +1,16 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import ProjectPage from '../../layouts/ProjectPage.astro';
 import { render } from 'astro:content';
+import { getAllProjects, type UnifiedProject } from '../../utils/contentHelpers';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
+	const projects = await getAllProjects();
 	return projects.map((project) => ({
-		params: { slug: project.data.properties.pSlug },
+		params: { slug: project.slug },
 		props: project,
 	}));
 }
-type Props = CollectionEntry<'projects'>;
+type Props = UnifiedProject;
 
 const project = Astro.props;
 const { Content } = await render(project);

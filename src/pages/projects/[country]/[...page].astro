@@ -1,14 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProjectCard from "../../../components/ProjectCard.astro";
 import PCountryDropdown from "../../../components/PCountryDropdown.astro";
 import PLocaleDropdown from "../../../components/PLocaleDropdown.astro";
+import { getAllProjects } from "../../../utils/contentHelpers";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   // Fetch all projects
-  const projects = await getCollection("projects");
+  const projects = await getAllProjects();
 
   // Extract unique countries
   const countries = Array.from(

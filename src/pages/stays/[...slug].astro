@@ -1,16 +1,16 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import StayPage from '../../layouts/StayPage.astro';
 import { render } from 'astro:content';
+import { getAllStays, type UnifiedStay } from '../../utils/contentHelpers';
 
 export async function getStaticPaths() {
-	const stays = await getCollection('stays');
+	const stays = await getAllStays();
 	return stays.map((stay) => ({
-		params: { slug: stay.data.properties.sSlug },
+		params: { slug: stay.slug },
 		props: stay,
 	}));
 }
-type Props = CollectionEntry<'stays'>;
+type Props = UnifiedStay;
 
 const stay = Astro.props;
 const { Content } = await render(stay);

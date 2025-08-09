@@ -1,16 +1,16 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import ProductPage from '../../layouts/ProductPage.astro';
 import { render } from 'astro:content';
+import { getAllProducts, type UnifiedProduct } from '../../utils/contentHelpers';
 
 export async function getStaticPaths() {
-	const products = await getCollection('products');
+	const products = await getAllProducts();
 	return products.map((product) => ({
-		params: { slug: product.data.properties.pSlug },
+		params: { slug: product.slug },
 		props: product,
 	}));
 }
-type Props = CollectionEntry<'products'>;
+type Props = UnifiedProduct;
 
 const product = Astro.props;
 const { Content } = await render(product);

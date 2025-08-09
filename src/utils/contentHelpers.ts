@@ -372,8 +372,8 @@ export async function getAllPosts(): Promise<UnifiedPost[]> {
 
   return [...transformedNotionPosts, ...transformedMdxPosts]
     .sort((a, b) => {
-      const dateA = a.data.properties.bPublished?.start || new Date(0);
-      const dateB = b.data.properties.bPublished?.start || new Date(0);
+      const dateA = (a.data.properties.bPublished && a.data.properties.bPublished.start) || new Date(0);
+      const dateB = (b.data.properties.bPublished && b.data.properties.bPublished.start) || new Date(0);
       return dateB.getTime() - dateA.getTime();
     });
 }
@@ -392,8 +392,8 @@ export async function getAllProjects(): Promise<UnifiedProject[]> {
 
   return [...transformedNotionProjects, ...transformedMdxProjects]
     .sort((a, b) => {
-      const dateA = a.data.properties.pPublished?.start || new Date(0);
-      const dateB = b.data.properties.pPublished?.start || new Date(0);
+      const dateA = (a.data.properties.pPublished && a.data.properties.pPublished.start) || new Date(0);
+      const dateB = (b.data.properties.pPublished && b.data.properties.pPublished.start) || new Date(0);
       return dateB.getTime() - dateA.getTime();
     });
 }
@@ -412,8 +412,8 @@ export async function getAllStays(): Promise<UnifiedStay[]> {
 
   return [...transformedNotionStays, ...transformedMdxStays]
     .sort((a, b) => {
-      const dateA = a.data.properties.sPublished?.start || new Date(0);
-      const dateB = b.data.properties.sPublished?.start || new Date(0);
+      const dateA = (a.data.properties.sPublished && a.data.properties.sPublished.start) || new Date(0);
+      const dateB = (b.data.properties.sPublished && b.data.properties.sPublished.start) || new Date(0);
       return dateB.getTime() - dateA.getTime();
     });
 }
@@ -432,8 +432,8 @@ export async function getAllProducts(): Promise<UnifiedProduct[]> {
 
   return [...transformedNotionProducts, ...transformedMdxProducts]
     .sort((a, b) => {
-      const dateA = a.data.properties.pPublished?.start || new Date(0);
-      const dateB = b.data.properties.pPublished?.start || new Date(0);
+      const dateA = (a.data.properties.pPublished && a.data.properties.pPublished.start) || new Date(0);
+      const dateB = (b.data.properties.pPublished && b.data.properties.pPublished.start) || new Date(0);
       return dateB.getTime() - dateA.getTime();
     });
 }
@@ -452,8 +452,8 @@ export async function getAllServices(): Promise<UnifiedService[]> {
 
   return [...transformedNotionServices, ...transformedMdxServices]
     .sort((a, b) => {
-      const dateA = a.data.properties.svPublished?.start || new Date(0);
-      const dateB = b.data.properties.svPublished?.start || new Date(0);
+      const dateA = (a.data.properties.svPublished && a.data.properties.svPublished.start) || new Date(0);
+      const dateB = (b.data.properties.svPublished && b.data.properties.svPublished.start) || new Date(0);
       return dateB.getTime() - dateA.getTime();
     });
 }

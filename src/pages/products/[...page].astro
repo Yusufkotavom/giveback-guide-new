@@ -1,35 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProductCard from "../../components/ProductCard.astro";
 import PCountryDropdown from "../../components/PCountryDropdown.astro";
-
-// Helper function to parse dates in dd/mm/yyyy format
-function parseDate(dateStr: string): Date {
-  const [day, month, year] = dateStr.split('/');
-  return new Date(`${year}-${month}-${day}`);
-}
+import { getAllProducts } from "../../utils/contentHelpers";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const entries = await getCollection("products");
+  const products = await getAllProducts();
 
-  // Sort products by pPublished date (descending order)
-  const sortedEntries = entries.sort((a, b) => {
-    const dateA = a.data.properties.pPublished?.start 
-      ? (typeof a.data.properties.pPublished.start === 'string' 
-          ? parseDate(a.data.properties.pPublished.start) 
-          : a.data.properties.pPublished.start) 
-      : new Date(0);
-    const dateB = b.data.properties.pPublished?.start 
-      ? (typeof b.data.properties.pPublished.start === 'string' 
-          ? parseDate(b.data.properties.pPublished.start) 
-          : b.data.properties.pPublished.start) 
-      : new Date(0);
-    return dateB.getTime() - dateA.getTime(); // Most recent first
-  });
-
-  return paginate(sortedEntries, {
+  return paginate(products, {
     pageSize: 9, // Number of entries per page
   });
 }
