@@ -6,9 +6,11 @@ import { glob } from 'astro/loaders';
 // Safely access environment variables with fallbacks for type generation
 function getEnvVar(name: string): string {
 	try {
-	  return import.meta.env[name] || 'placeholder-during-type-generation';
+	  const value = import.meta.env[name] || 'placeholder-during-type-generation';
+	  // Return a valid placeholder that won't cause API calls
+	  return value === 'placeholder-during-type-generation' ? 'test_token_placeholder' : value;
 	} catch (e) {
-	  return 'placeholder-during-type-generation';
+	  return 'test_token_placeholder';
 	}
 }
 

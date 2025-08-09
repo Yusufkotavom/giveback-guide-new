@@ -245,7 +245,7 @@ function transformMdxStay(stay: CollectionEntry<'mdxStays'>): UnifiedStay {
         sImageURL1: stay.data.imageUrl1,
         sImageURL2: stay.data.imageUrl2,
         sImageURL3: stay.data.imageUrl3,
-        sPublished: { start: stay.data.published },
+        sPublished: { start: stay.data.published || new Date() },
         sReview: stay.data.review,
       }
     },
@@ -295,7 +295,7 @@ function transformMdxProduct(product: CollectionEntry<'mdxProducts'>): UnifiedPr
         pImageURL1: product.data.imageUrl1,
         pImageURL2: product.data.imageUrl2,
         pImageURL3: product.data.imageUrl3,
-        pPublished: { start: product.data.published },
+        pPublished: { start: product.data.published || new Date() },
         pReview: product.data.review,
       }
     },
@@ -328,7 +328,7 @@ function transformMdxService(service: CollectionEntry<'mdxServices'>): UnifiedSe
         svCategory: service.data.category,
         svSlug: service.data.slug,
         svImageURL1: service.data.imageUrl1,
-        svPublished: { start: service.data.published },
+        svPublished: { start: service.data.published || new Date() },
         svWilayah: service.data.wilayah,
         svProvider: service.data.provider,
         svType: service.data.type,
