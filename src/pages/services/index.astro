@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
+import ServicesToolbar from '../../components/ServicesToolbar.astro';
 
 const entries = await getCollection('services');
 const url = new URL(Astro.request.url);
@@ -29,11 +30,8 @@ const filtered = activeCategory
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="mb-8">
         <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Layanan</h1>
-        <div class="flex flex-wrap gap-2 items-center">
-          <a href="/services" class="px-3 py-1.5 rounded-full text-sm font-medium border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 {activeCategory ? '' : 'bg-gray-900 text-white dark:bg-gray-200 dark:text-gray-900'}">Semua</a>
-          {categories.map((c) => (
-            <a href={`?category=${encodeURIComponent(c)}`} class={`px-3 py-1.5 rounded-full text-sm font-medium border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 ${activeCategory === c ? 'bg-gray-900 text-white dark:bg-gray-200 dark:text-gray-900' : ''}`}>{c}</a>
-          ))}
+        <div class="mb-4">
+          <ServicesToolbar />
         </div>
       </div>
       <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
