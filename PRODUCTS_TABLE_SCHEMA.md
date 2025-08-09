@@ -9,6 +9,7 @@ Tabel **Products** dirancang khusus untuk marketplace Indonesia dengan integrasi
 | Column Name | Data Type | Required | Description | Example |
 |-------------|-----------|----------|-------------|---------|
 | `pTitle` | String | ✅ | Judul/nama produk utama | "Batik Tulis Premium Jogja" |
+| `pPrice` | Rich Text | ⚪ | Harga produk (angka saja atau dengan format) | "850000" atau "850.000" |
 | `pCountry` | Multi-Select | ✅ | Negara asal produk | "Indonesia" |
 | `pLocale` | Multi-Select | ✅ | Kota/daerah asal produk | "Yogyakarta" |
 | `pCategory` | Multi-Select | ✅ | Kategori produk | "Fashion;Kerajinan" |
@@ -47,7 +48,7 @@ Tabel **Products** dirancang khusus untuk marketplace Indonesia dengan integrasi
 
 ### Header Row (Wajib):
 ```csv
-pTitle,pCountry,pLocale,pCategory,pFeatures,pName,pType,pSlug,pURL,pOtherURL,pTokopediaURL,pShopeeURL,pBlibliURL,pBukalapakURL,pLazadaURL,pMapsURL,pVerify,pImageURL1,pImageURL2,pImageURL3,pPublished,pReview
+pTitle,pPrice,pCountry,pLocale,pCategory,pFeatures,pName,pType,pSlug,pURL,pOtherURL,pTokopediaURL,pShopeeURL,pBlibliURL,pBukalapakURL,pLazadaURL,pMapsURL,pVerify,pImageURL1,pImageURL2,pImageURL3,pPublished,pReview
 ```
 
 ### Multi-Select Fields Format:

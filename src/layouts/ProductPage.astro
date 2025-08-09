@@ -7,6 +7,7 @@ import { getCollection } from "astro:content";
 import SupportBox from "../components/Projects/SupportBox.astro";
 import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 import ResponsiveImage from "../components/ResponsiveImage.astro";
+import { getAvailableMarketplaces, getRandomPrimaryMarketplace, getSecondaryMarketplaces, getMarketplaceIcon, formatPrice } from "../utils/marketplaceUtils";
 
 type Props = CollectionEntry<"products">["data"];
 
@@ -24,6 +25,12 @@ const localeString = Array.isArray(properties.pLocale)
 const description = `Discover amazing products from ${localeString} by engaging with ${properties.pName} on your next shopping experience.`;
 
 const allProducts = await getCollection("products");
+
+// Marketplace and price helpers
+const formattedPrice = formatPrice((properties as any).pPrice);
+const availableMarketplaces = getAvailableMarketplaces(properties as any);
+const primaryMarketplace = getRandomPrimaryMarketplace(availableMarketplaces);
+const secondaryMarketplaces = getSecondaryMarketplaces(availableMarketplaces, primaryMarketplace);
 
 // Filter related products
 const relatedProducts = allProducts
@@ -203,11 +210,27 @@ if (images.length === 0) {
           }
           
           <h1
-            class="mb-4 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+            class="mb-1 mt-2 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
             data-pagefind-meta="title"
           >
             {properties.pTitle}
           </h1>
+          {formattedPrice && (
+            <p class="mb-2 text-3xl font-bold text-green-600">{formattedPrice}</p>
+          )}
+          {primaryMarketplace && (
+            <div class="mb-4">
+              <a
+                href={primaryMarketplace.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color}`}
+              >
+                <span set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
+                <span>{primaryMarketplace.ctaText}</span>
+              </a>
+            </div>
+          )}
           <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
             <!-- Name -->
             <li class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -423,7 +446,7 @@ if (images.length === 0) {
                   </a>
                 )
               }
-              
+
               {
                 properties.pTokopediaURL && (
                   <a
@@ -563,7 +586,7 @@ if (images.length === 0) {
                   </a>
                 )
               }
-              
+
               {
                 properties.pOtherURL && (
                   <a
@@ -591,7 +614,7 @@ if (images.length === 0) {
                   </a>
                 )
               }
-              
+
               {
                 properties.pMapsURL && (
                   <a
