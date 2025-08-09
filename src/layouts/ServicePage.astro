@@ -13,7 +13,7 @@ const image = properties.svImageURL1 || "/giveback-guide-placeholder.jpg";
 const formattedPrice = formatPrice(properties.svPrice);
 
 const fallbackImage = "/giveback-guide-placeholder.jpg";
-oneSec: string[] = [properties.svImageURL1, properties.svImageURL2, properties.svImageURL3].filter((i: string) => !!i);
+const oneSec: string[] = [properties.svImageURL1, properties.svImageURL2, properties.svImageURL3].filter((i: string) => !!i);
 const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
 
 const DEFAULT_WA_NUMBER = '085799520350';
