@@ -156,8 +156,8 @@ function transformMdxPost(post: CollectionEntry<'mdxPosts'>): UnifiedPost {
         bTags: post.data.tags,
         bSlug: post.data.slug,
         bCoverImage: post.data.coverImage,
-        bPublished: { start: post.data.published },
-        bLastUpdated: post.data.lastUpdated ? { start: post.data.lastUpdated } : undefined,
+        bPublished: { start: post.data.published || new Date() },
+        bLastUpdated: post.data.lastUpdated ? { start: post.data.lastUpdated } : { start: new Date() },
       }
     },
     render: post.render
@@ -197,7 +197,7 @@ function transformMdxProject(project: CollectionEntry<'mdxProjects'>): UnifiedPr
         pMapsURL: project.data.mapsUrl,
         pVerify: project.data.verify,
         pImageURL: project.data.imageUrl,
-        pPublished: { start: project.data.published },
+        pPublished: { start: project.data.published || new Date() },
         pReview: project.data.review,
         pGetInvolved: project.data.getInvolved,
       }
@@ -371,7 +371,11 @@ export async function getAllPosts(): Promise<UnifiedPost[]> {
     .map(transformMdxPost);
 
   return [...transformedNotionPosts, ...transformedMdxPosts]
-    .sort((a, b) => b.data.properties.bPublished.start.getTime() - a.data.properties.bPublished.start.getTime());
+    .sort((a, b) => {
+      const dateA = a.data.properties.bPublished?.start || new Date(0);
+      const dateB = b.data.properties.bPublished?.start || new Date(0);
+      return dateB.getTime() - dateA.getTime();
+    });
 }
 
 // Get all projects (Notion + MDX)
@@ -387,7 +391,11 @@ export async function getAllProjects(): Promise<UnifiedProject[]> {
     .map(transformMdxProject);
 
   return [...transformedNotionProjects, ...transformedMdxProjects]
-    .sort((a, b) => b.data.properties.pPublished.start.getTime() - a.data.properties.pPublished.start.getTime());
+    .sort((a, b) => {
+      const dateA = a.data.properties.pPublished?.start || new Date(0);
+      const dateB = b.data.properties.pPublished?.start || new Date(0);
+      return dateB.getTime() - dateA.getTime();
+    });
 }
 
 // Get all stays (Notion + MDX)
@@ -403,7 +411,11 @@ export async function getAllStays(): Promise<UnifiedStay[]> {
     .map(transformMdxStay);
 
   return [...transformedNotionStays, ...transformedMdxStays]
-    .sort((a, b) => b.data.properties.sPublished.start.getTime() - a.data.properties.sPublished.start.getTime());
+    .sort((a, b) => {
+      const dateA = a.data.properties.sPublished?.start || new Date(0);
+      const dateB = b.data.properties.sPublished?.start || new Date(0);
+      return dateB.getTime() - dateA.getTime();
+    });
 }
 
 // Get all products (Notion + MDX)
@@ -419,7 +431,11 @@ export async function getAllProducts(): Promise<UnifiedProduct[]> {
     .map(transformMdxProduct);
 
   return [...transformedNotionProducts, ...transformedMdxProducts]
-    .sort((a, b) => b.data.properties.pPublished.start.getTime() - a.data.properties.pPublished.start.getTime());
+    .sort((a, b) => {
+      const dateA = a.data.properties.pPublished?.start || new Date(0);
+      const dateB = b.data.properties.pPublished?.start || new Date(0);
+      return dateB.getTime() - dateA.getTime();
+    });
 }
 
 // Get all services (Notion + MDX)
@@ -435,7 +451,11 @@ export async function getAllServices(): Promise<UnifiedService[]> {
     .map(transformMdxService);
 
   return [...transformedNotionServices, ...transformedMdxServices]
-    .sort((a, b) => b.data.properties.svPublished.start.getTime() - a.data.properties.svPublished.start.getTime());
+    .sort((a, b) => {
+      const dateA = a.data.properties.svPublished?.start || new Date(0);
+      const dateB = b.data.properties.svPublished?.start || new Date(0);
+      return dateB.getTime() - dateA.getTime();
+    });
 }
 
 // Get unified content by slug
