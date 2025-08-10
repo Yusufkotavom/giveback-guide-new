@@ -247,18 +247,17 @@ const staysMdx = defineCollection({
 	}),
 			schema: notionPageSchema({
 			properties: z.object({
-			  prTitle: transformedPropertySchema.title,
-			  prCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  prLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  prCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  prSlug: transformedPropertySchema.rich_text,
-			  prImageURL: transformedPropertySchema.url.optional(),
-			  prPublished: transformedPropertySchema.date,
-			  prPrice: transformedPropertySchema.rich_text.optional(),
-			  prDescription: transformedPropertySchema.rich_text.optional(),
+			  pTitle: transformedPropertySchema.title,
+			  pCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  pLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  pCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  pSlug: transformedPropertySchema.rich_text,
+			  pImageURL1: transformedPropertySchema.url.optional(),
+			  pPublished: transformedPropertySchema.date,
+			  pPrice: transformedPropertySchema.rich_text.optional(),
+			  pDescription: transformedPropertySchema.rich_text.optional(),
 			  pImageURL2: transformedPropertySchema.url.optional(),
 			  pImageURL3: transformedPropertySchema.url.optional(),
-			  pPublished: transformedPropertySchema.date,
 			  pReview: transformedPropertySchema.rich_text.optional(),
 			}),
 		  }),
@@ -311,19 +310,18 @@ const servicesMdx = defineCollection({
 });
 
 // Create an alias for 'blog' collection to maintain backward compatibility
-const blog = postsMdx; // Use MDX posts as blog for now
+const blog = posts; // Use Notion posts as primary blog source
 
 export const collections = { 
-  // Temporarily disable Notion collections for testing
-  // posts, 
+  posts, 
   postsMdx,
-  // projects, 
+  projects, 
   projectsMdx,
-  // stays, 
+  stays, 
   staysMdx,
-  // products, 
+  products, 
   productsMdx,
-  // services,
+  services,
   servicesMdx,
   // Add blog alias for RSS compatibility
   blog
