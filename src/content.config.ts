@@ -310,19 +310,18 @@ const servicesMdx = defineCollection({
 });
 
 // Create an alias for 'blog' collection to maintain backward compatibility
-const blog = postsMdx; // Use MDX posts for local testing
+const blog = posts; // Use Notion posts as primary blog source
 
 export const collections = { 
-  // Temporarily disable Notion collections for local testing
-  // posts, 
+  posts, 
   postsMdx,
-  // projects, 
+  projects, 
   projectsMdx,
-  // stays, 
+  stays, 
   staysMdx,
-  // products, 
+  products, 
   productsMdx,
-  // services,
+  services,
   servicesMdx,
   // Add blog alias for RSS compatibility
   blog
