@@ -1,0 +1,118 @@
+---
+// Real client testimonials from kotacom.id
+const testimonials = [
+  {
+    name: "Aldo",
+    title: "First-time Buyer – Downtown Lofts", 
+    rating: 5,
+    text: "Website baru dari KOTACOM benar-benar mengubah cara kami mendapatkan klien. Tampilannya profesional dan sangat cepat. Timnya juga sangat responsif. Luar biasa!",
+    avatar: "icn google cloud" // placeholder for now
+  },
+  {
+    name: "Rina Hartono", 
+    title: "Business Owner",
+    rating: 5,
+    text: "Masalah laptop kantor yang sering error sangat mengganggu produktivitas. Sejak pakai jasa maintenance KOTACOM, semua berjalan lancar. Problem solved!",
+    avatar: "icn google cloud"
+  },
+  {
+    name: "Budi Santoso",
+    title: "Company Director", 
+    rating: 5,
+    text: "Kualitas cetak brosur dan buku profil perusahaan kami sangat tajam dan warnanya akurat. Benar-benar meningkatkan citra perusahaan kami di mata klien. Terima kasih KOTACOM.",
+    avatar: "icn google cloud"
+  }
+];
+---
+
+<section class="bg-white dark:bg-gray-900">
+  <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    <div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        What Our Clients Say
+      </h2>
+      <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+        Ready to experience our award-winning service?
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {testimonials.map((testimonial) => (
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+          <!-- Rating Stars -->
+          <div class="flex items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            ))}
+          </div>
+          
+          <!-- Testimonial Text -->
+          <blockquote class="mb-6 text-gray-500 dark:text-gray-400">
+            <p class="text-lg font-medium italic">"{testimonial.text}"</p>
+          </blockquote>
+          
+          <!-- Client Info -->
+          <div class="flex items-center">
+            <div class="flex justify-center items-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 mr-4">
+              <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="text-lg font-bold text-gray-900 dark:text-white">
+                {testimonial.name}
+              </div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {testimonial.title}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- Statistics -->
+    <div class="mt-16 text-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+        <div class="text-center">
+          <div class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+            2000+
+          </div>
+          <div class="text-gray-600 dark:text-gray-300">
+            Happy Members
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
+            200+
+          </div>
+          <div class="text-gray-600 dark:text-gray-300">
+            5-Star Ratings
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="text-center mt-12">
+      <h3 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
+        Konsultasi Gratis Bersama Kami
+      </h3>
+      <p class="mb-8 text-lg text-gray-600 dark:text-gray-300">
+        Mari buat bisnis anda go online dengan berpartner bersama kami
+      </p>
+      <a
+        href="https://wa.me/085799520350"
+        class="inline-flex items-center px-8 py-4 text-lg font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+      >
+        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M7.978 4a2.553 2.553 0 0 0-1.926.877C4.233 6.7 3.699 8.751 4.153 10.814c.44 1.995 1.778 3.893 3.456 5.572 1.68 1.679 3.577 3.018 5.57 3.459 2.062.456 4.115-.073 5.94-1.885a2.556 2.556 0 0 0 .001-3.861l-1.21-1.21a2.689 2.689 0 0 0-3.802 0l-.617.618a.806.806 0 0 1-1.14 0l-1.854-1.855a.807.807 0 0 1 0-1.14l.618-.62a2.692 2.692 0 0 0 0-3.803l-1.21-1.211A2.555 2.555 0 0 0 7.978 4Z"></path>
+        </svg>
+        Mulai Konsultasi Gratis
+      </a>
+    </div>
+  </div>
+</section>
