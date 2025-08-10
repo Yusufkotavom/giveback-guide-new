@@ -1,54 +1,110 @@
 ---
+// filepath: /Users/matthewmorelli/Documents/Dev/giveback-guide/src/components/Homepage/LatestServices.astro
+
 import { getCollection } from "astro:content";
 import ServiceCard from "../ServiceCard.astro";
 
-interface Props { limit: number }
+// Props: limit specifies the number of services to display
+interface Props {
+  limit: number;
+}
+
 const { limit } = Astro.props;
 
+// Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
   const [day, month, year] = dateStr.split("/");
   return new Date(`${year}-${month}-${day}`);
 }
 
-const entries = await getCollection("services");
+// Fetch services from both Notion and MDX collections
+const notionServices = await getCollection("services");
+const mdxServices = await getCollection("servicesMdx");
 
-const sorted = entries
-  .map((entry) => ({
-    ...entry,
-    data: {
-      ...entry.data,
-      properties: {
-        ...entry.data.properties,
-        svImageURL1: entry.data.properties.svImageURL1 || "",
-      },
+// Normalize Notion services to match expected structure
+const normalizedNotionServices = notionServices.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+      svImageURL1: entry.data.properties.svImageURL1 || "",
+      svVerify: entry.data.properties.svVerify || "",
     },
-  }))
-  .sort((a, b) => {
-    const dateA = a.data.properties.svPublished?.start 
-      ? (typeof a.data.properties.svPublished.start === 'string' 
-          ? parseDate(a.data.properties.svPublished.start) 
-          : a.data.properties.svPublished.start) 
-      : new Date(0);
-    const dateB = b.data.properties.svPublished?.start 
-      ? (typeof b.data.properties.svPublished.start === 'string' 
-          ? parseDate(b.data.properties.svPublished.start) 
-          : b.data.properties.svPublished.start) 
-      : new Date(0);
-    return dateB.getTime() - dateA.getTime();
-  });
+  },
+}));
 
-const limitedEntries = sorted.slice(0, limit);
+// Normalize MDX services to match Notion structure
+const normalizedMdxServices = mdxServices.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      svTitle: entry.data.title,
+      svCategory: entry.data.category,
+      svSlug: entry.data.slug,
+      svImageURL1: entry.data.imageUrl1 || "",
+      svPublished: { start: entry.data.published },
+      svWilayah: entry.data.wilayah,
+      svProvider: entry.data.provider,
+      svType: entry.data.type,
+      svPrice: entry.data.price,
+      svURL: entry.data.url,
+      svWhatsAppURL: entry.data.whatsappUrl,
+      svMapsURL: entry.data.mapsUrl,
+      svVerify: entry.data.verify || "",
+      svImageURL2: entry.data.imageUrl2,
+      svImageURL3: entry.data.imageUrl3,
+      svReview: entry.data.review,
+    },
+  },
+}));
+
+// Combine both collections
+const allServices = [...normalizedNotionServices, ...normalizedMdxServices];
+
+// Sort services by svPublished date (descending order)
+const sortedEntries = allServices.sort((a, b) => {
+  const dateA = a.data.properties.svPublished?.start 
+    ? (typeof a.data.properties.svPublished.start === 'string' 
+        ? parseDate(a.data.properties.svPublished.start) 
+        : a.data.properties.svPublished.start) 
+    : new Date(0);
+  const dateB = b.data.properties.svPublished?.start 
+    ? (typeof b.data.properties.svPublished.start === 'string' 
+        ? parseDate(b.data.properties.svPublished.start) 
+        : b.data.properties.svPublished.start) 
+    : new Date(0);
+  return dateB.getTime() - dateA.getTime(); // Most recent first
+});
+
+// Limit the number of services based on the limit prop
+const limitedEntries = sortedEntries.slice(0, limit);
 ---
 
 <section class="bg-white dark:bg-gray-900">
   <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-    <div class="mb-8">
-      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Layanan Terbaru</h2>
-      <p class="text-gray-500 sm:text-xl dark:text-gray-400">Temukan layanan pilihan terbaru. Hubungi kami via WhatsApp untuk detail cepat.</p>
+    <div class="flex flex-col items-start justify-between p-2 space-y-3 md:flex-row md:space-y-0 mb-4">
+      <div class="max-w-screen-md">
+        <h2
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Latest Services
+        </h2>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          Find professional services that support local communities and sustainable practices.
+        </p>
+      </div>
     </div>
-    <div class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12">
+    <div
+      class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
+    >
       {limitedEntries.map((service) => (
-        <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink"><ServiceCard service={service} /></div>
+        <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
+          <ServiceCard post={service} />
+        </div>
       ))}
     </div>
   </div>
