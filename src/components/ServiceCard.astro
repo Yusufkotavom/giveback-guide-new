@@ -26,6 +26,10 @@ const formattedPrice = formatPrice(p.svPrice);
 // Default WA target if not provided in Notion
 const DEFAULT_WA_NUMBER = '085799520350';
 const waHref = p.svWhatsAppURL || `https://wa.me/62${DEFAULT_WA_NUMBER.replace(/^0/, '')}`;
+
+// Default image if not provided
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png';
+const imageUrl = p.svImageURL1 || DEFAULT_IMAGE;
 ---
 
 <article class="rounded-lg">
@@ -33,7 +37,7 @@ const waHref = p.svWhatsAppURL || `https://wa.me/62${DEFAULT_WA_NUMBER.replace(/
     <a href={`/services/${p.svSlug}/`}>
       <ResponsiveImage
         class="w-full rounded-lg h-64 object-cover"
-        src={p.svImageURL1}
+        src={imageUrl}
         alt={p.svTitle}
         preset="card"
         fallbackWidth={600}

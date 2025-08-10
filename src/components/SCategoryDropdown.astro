@@ -1,15 +1,76 @@
 ---
 import { getCollection } from "astro:content";
 
-// Get the current category from the URL query parameter
-const url = new URL(Astro.request.url);
-const currentCategory = url.searchParams.get('category');
+// Get the current category from the URL path (not query parameter)
+const currentCategoryPromise = (async () => {
+  const pathSegments = Astro.url.pathname.split("/");
+  const potentialCategory = pathSegments[2]; // Extract the category slug from the URL
+
+  // Validate if the extracted segment matches a known category slug
+  const notionServices = await getCollection('services');
+  const mdxServices = await getCollection('servicesMdx');
+
+  // Normalize services
+  const normalizedNotionServices = notionServices.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+        svImageURL1: entry.data.properties.svImageURL1 || "",
+        svVerify: entry.data.properties.svVerify || "",
+      },
+    },
+  }));
+
+  const normalizedMdxServices = mdxServices.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        svTitle: entry.data.title,
+        svCategory: entry.data.category,
+        svSlug: entry.data.slug,
+        svImageURL1: entry.data.imageUrl1 || "",
+        svPublished: { start: entry.data.published },
+        svWilayah: entry.data.wilayah,
+        svProvider: entry.data.provider,
+        svType: entry.data.type,
+        svPrice: entry.data.price,
+        svURL: entry.data.url,
+        svWhatsAppURL: entry.data.whatsappUrl,
+        svMapsURL: entry.data.mapsUrl,
+        svVerify: entry.data.verify || "",
+        svImageURL2: entry.data.imageUrl2,
+        svImageURL3: entry.data.imageUrl3,
+        svReview: entry.data.review,
+      },
+    },
+  }));
+
+  const allServices = [...normalizedNotionServices, ...normalizedMdxServices];
+  
+  const validCategories = allServices.reduce((acc: Set<string>, service) => {
+    const categories = Array.isArray(service.data.properties.svCategory)
+      ? service.data.properties.svCategory.map((c) =>
+          c.toLowerCase().replace(/\s+/g, "-")
+        )
+      : [String(service.data.properties.svCategory).toLowerCase().replace(/\s+/g, "-")];
+    categories.forEach((category) => acc.add(category));
+    return acc;
+  }, new Set<string>());
+
+  return validCategories.has(potentialCategory) ? potentialCategory : null;
+})();
+const currentCategory = await currentCategoryPromise;
 
 // Fetch services from both Notion and MDX collections
 const notionServices = await getCollection('services');
 const mdxServices = await getCollection('servicesMdx');
 
-// Normalize Notion services (existing format)
+// Normalize services (reuse the same logic)
 const normalizedNotionServices = notionServices.map((entry) => ({
   ...entry,
   source: 'notion',
@@ -23,7 +84,6 @@ const normalizedNotionServices = notionServices.map((entry) => ({
   },
 }));
 
-// Normalize MDX services to match Notion structure
 const normalizedMdxServices = mdxServices.map((entry) => ({
   ...entry,
   source: 'mdx',
@@ -70,9 +130,6 @@ const categoryCounts = allServices.reduce((acc: Record<string, number>, service)
 
 // Extract unique categories and sort alphabetically
 const uniqueCategories = Object.keys(categoryCounts).sort();
-
-// Get current page path for proper URL construction
-const currentPath = Astro.url.pathname;
 ---
 <form class="w-100%">
   <select
@@ -81,16 +138,17 @@ const currentPath = Astro.url.pathname;
     onchange="if (this.value) window.location.href = this.value"
   >
     <option 
-      value={currentPath}
+      value="/services/"
       selected={!currentCategory}
     >
       Semua Kategori
     </option>
     {uniqueCategories.map((category) => {
+      const categorySlug = category.toLowerCase().replace(/\s+/g, "-");
       return (
         <option
-          value={`${currentPath}?category=${encodeURIComponent(category)}`}
-          selected={currentCategory === category}
+          value={`/services/${categorySlug}/`}
+          selected={currentCategory === categorySlug}
         >
           {category} ({categoryCounts[category]})
         </option>

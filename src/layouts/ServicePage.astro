@@ -9,13 +9,15 @@ type Props = CollectionEntry<"services">["data"];
 const { properties } = Astro.props as any;
 const title = (properties.svTitle || "Service") + " - Services";
 const description = properties.svReview || '';
-const image = properties.svImageURL1 || "/giveback-guide-placeholder.jpg";
+
+// Default image for services
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png';
+const image = properties.svImageURL1 || DEFAULT_IMAGE;
 
 const formattedPrice = formatPrice(properties.svPrice);
 
-const fallbackImage = "/giveback-guide-placeholder.jpg";
 const oneSec: string[] = [properties.svImageURL1, properties.svImageURL2, properties.svImageURL3].filter((i: string) => !!i);
-const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
+const images: string[] = oneSec.length > 0 ? oneSec : [DEFAULT_IMAGE];
 
 const DEFAULT_WA_NUMBER = '085799520350';
 const waHref = properties.svWhatsAppURL || `https://wa.me/62${DEFAULT_WA_NUMBER.replace(/^0/, '')}`;
