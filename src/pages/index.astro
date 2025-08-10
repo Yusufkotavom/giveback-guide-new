@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import HomeHero from "../components/Homepage/HomeHero.astro";
+import ServicesHighlight from "../components/Homepage/ServicesHighlight.astro";
 import LatestProjects from "../components/Homepage/LatestProjects.astro";
 import LatestStays from "../components/Homepage/LatestStays.astro";
 import LatestProducts from "../components/Homepage/LatestProducts.astro";
@@ -14,6 +15,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   description={SITE_DESCRIPTION}
 >
   <HomeHero />
+  <ServicesHighlight />
   <main>
     <LatestServices limit={6} />
     <LatestProjects limit={6} />
