@@ -1,6 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { notionLoader, richTextToPlainText } from '@chlorinec-pkgs/notion-astro-loader';
 import { notionPageSchema, propertySchema, transformedPropertySchema } from '@chlorinec-pkgs/notion-astro-loader/schemas';
+import { glob } from 'astro/loaders';
 
 // Safely access environment variables with fallbacks for type generation
 function getEnvVar(name: string): string {
@@ -10,6 +11,107 @@ function getEnvVar(name: string): string {
 	  return 'placeholder-during-type-generation';
 	}
 }
+
+// MDX Schema for posts
+const postMdxSchema = z.object({
+  title: z.string(),
+  tags: z.array(z.string()).default([]),
+  slug: z.string(),
+  coverImage: z.string().optional(),
+  published: z.coerce.date(),
+  lastUpdated: z.coerce.date().optional(),
+  description: z.string(),
+});
+
+// MDX Schema for projects  
+const projectMdxSchema = z.object({
+  title: z.string(),
+  country: z.array(z.string()).default([]),
+  locale: z.array(z.string()).default([]),
+  category: z.array(z.string()).default([]),
+  organiser: z.string().optional(),
+  slug: z.string(),
+  cost: z.array(z.string()).default([]),
+  url: z.string().url().optional(),
+  gygUrl: z.string().url().optional(),
+  mapsUrl: z.string().url().optional(),
+  verify: z.string().optional(),
+  imageUrl: z.string().url().optional(),
+  published: z.coerce.date(),
+  review: z.string().optional(),
+  getInvolved: z.string().optional(),
+});
+
+// MDX Schema for stays
+const stayMdxSchema = z.object({
+  title: z.string(),
+  country: z.array(z.string()).default([]),
+  locale: z.array(z.string()).default([]),
+  category: z.array(z.string()).default([]),
+  facilities: z.array(z.string()).default([]),
+  name: z.string().optional(),
+  type: z.array(z.string()).default([]),
+  slug: z.string(),
+  url: z.string().url().optional(),
+  otherUrl: z.string().url().optional(),
+  bookingUrl: z.string().url().optional(),
+  hotelsUrl: z.string().url().optional(),
+  agodaUrl: z.string().url().optional(),
+  mapsUrl: z.string().url().optional(),
+  verify: z.string().optional(),
+  imageUrl1: z.string().url().optional(),
+  imageUrl2: z.string().url().optional(),
+  imageUrl3: z.string().url().optional(),
+  published: z.coerce.date(),
+  review: z.string().optional(),
+});
+
+// MDX Schema for products
+const productMdxSchema = z.object({
+  title: z.string(),
+  price: z.string().optional(),
+  country: z.array(z.string()).default([]),
+  locale: z.array(z.string()).default([]),
+  category: z.array(z.string()).default([]),
+  features: z.array(z.string()).default([]),
+  name: z.string().optional(),
+  type: z.array(z.string()).default([]),
+  slug: z.string(),
+  url: z.string().url().optional(),
+  otherUrl: z.string().url().optional(),
+  tokopediaUrl: z.string().url().optional(),
+  shopeeUrl: z.string().url().optional(),
+  blibliUrl: z.string().url().optional(),
+  bukalapakUrl: z.string().url().optional(),
+  lazadaUrl: z.string().url().optional(),
+  mapsUrl: z.string().url().optional(),
+  verify: z.string().optional(),
+  imageUrl1: z.string().url().optional(),
+  imageUrl2: z.string().url().optional(),
+  imageUrl3: z.string().url().optional(),
+  published: z.coerce.date(),
+  review: z.string().optional(),
+});
+
+// MDX Schema for services
+const serviceMdxSchema = z.object({
+  title: z.string(),
+  category: z.array(z.string()).default([]),
+  slug: z.string(),
+  imageUrl1: z.string().url().optional(),
+  published: z.coerce.date(),
+  wilayah: z.array(z.string()).default([]).optional(),
+  provider: z.string().optional(),
+  type: z.array(z.string()).default([]).optional(),
+  price: z.string().optional(),
+  url: z.string().url().optional(),
+  whatsappUrl: z.string().url().optional(),
+  mapsUrl: z.string().url().optional(),
+  verify: z.string().optional(),
+  imageUrl2: z.string().url().optional(),
+  imageUrl3: z.string().url().optional(),
+  review: z.string().optional(),
+});
 
 const posts = defineCollection({
 	loader: notionLoader({
@@ -36,6 +138,12 @@ const posts = defineCollection({
 		}),
 	  }),
   });
+
+// MDX Posts collection
+const postsMdx = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/posts' }),
+  schema: postMdxSchema,
+});
 
   const projects = defineCollection({
 	loader: notionLoader({
@@ -70,6 +178,12 @@ const posts = defineCollection({
 		}),
 	  }),
   });
+
+// MDX Projects collection
+const projectsMdx = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/projects' }),
+  schema: projectMdxSchema,
+});
 
   const stays = defineCollection({
 	loader: notionLoader({
@@ -109,6 +223,12 @@ const posts = defineCollection({
 		}),
 	  }),
   });
+
+// MDX Stays collection
+const staysMdx = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/stays' }),
+  schema: stayMdxSchema,
+});
 
   const products = defineCollection({
 	loader: notionLoader({
@@ -152,6 +272,12 @@ const posts = defineCollection({
 		  }),
   });
 
+// MDX Products collection
+const productsMdx = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/products' }),
+  schema: productMdxSchema,
+});
+
   const services = defineCollection({
     loader: notionLoader({
       auth: getEnvVar('SERVICES_NOTION_TOKEN'),
@@ -181,4 +307,21 @@ const posts = defineCollection({
     }),
   });
 
-export const collections = { posts, projects, stays, products, services };
+// MDX Services collection
+const servicesMdx = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/services' }),
+  schema: serviceMdxSchema,
+});
+
+export const collections = { 
+  posts, 
+  postsMdx,
+  projects, 
+  projectsMdx,
+  stays, 
+  staysMdx,
+  products, 
+  productsMdx,
+  services,
+  servicesMdx
+};

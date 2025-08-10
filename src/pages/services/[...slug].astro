@@ -3,19 +3,77 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import ServicePage from '../../layouts/ServicePage.astro';
 
 export async function getStaticPaths() {
-  const services = await getCollection('services');
-  return services.map((service) => ({
-    params: { slug: service.data.properties.svSlug },
-    props: service,
-  }));
+	// Get services from both Notion and MDX collections
+	const notionServices = await getCollection('services');
+	const mdxServices = await getCollection('servicesMdx');
+	
+	// Map Notion services (existing format)
+	const notionPaths = notionServices.map((service) => ({
+		params: { slug: service.data.properties.svSlug },
+		props: { service, source: 'notion' },
+	}));
+	
+	// Map MDX services (new format)
+	const mdxPaths = mdxServices.map((service) => ({
+		params: { slug: service.data.slug },
+		props: { service, source: 'mdx' },
+	}));
+	
+	return [...notionPaths, ...mdxPaths];
 }
 
-type Props = CollectionEntry<'services'>;
+type Props = {
+	service: CollectionEntry<'services'> | CollectionEntry<'servicesMdx'>;
+	source: 'notion' | 'mdx';
+};
 
-const service = Astro.props;
+const { service, source } = Astro.props;
 const { Content } = await render(service);
+
+// Normalize data structure for the layout
+const layoutData = source === 'notion' 
+	? {
+		...service.data,
+		title: service.data.properties.svTitle,
+		category: service.data.properties.svCategory,
+		slug: service.data.properties.svSlug,
+		imageUrl1: service.data.properties.svImageURL1,
+		published: service.data.properties.svPublished,
+		wilayah: service.data.properties.svWilayah,
+		provider: service.data.properties.svProvider,
+		type: service.data.properties.svType,
+		price: service.data.properties.svPrice,
+		url: service.data.properties.svURL,
+		whatsappUrl: service.data.properties.svWhatsAppURL,
+		mapsUrl: service.data.properties.svMapsURL,
+		verify: service.data.properties.svVerify,
+		imageUrl2: service.data.properties.svImageURL2,
+		imageUrl3: service.data.properties.svImageURL3,
+		review: service.data.properties.svReview,
+	}
+	: {
+		...service.data,
+		properties: {
+			svTitle: service.data.title,
+			svCategory: service.data.category,
+			svSlug: service.data.slug,
+			svImageURL1: service.data.imageUrl1,
+			svPublished: service.data.published,
+			svWilayah: service.data.wilayah,
+			svProvider: service.data.provider,
+			svType: service.data.type,
+			svPrice: service.data.price,
+			svURL: service.data.url,
+			svWhatsAppURL: service.data.whatsappUrl,
+			svMapsURL: service.data.mapsUrl,
+			svVerify: service.data.verify,
+			svImageURL2: service.data.imageUrl2,
+			svImageURL3: service.data.imageUrl3,
+			svReview: service.data.review,
+		}
+	};
 ---
 
-<ServicePage {...service.data}>
+<ServicePage {...layoutData}>
   <Content />
 </ServicePage>
