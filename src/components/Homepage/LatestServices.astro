@@ -103,7 +103,7 @@ const limitedEntries = sortedEntries.slice(0, limit);
     >
       {limitedEntries.map((service) => (
         <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
-          <ServiceCard post={service} />
+          <ServiceCard service={service} />
         </div>
       ))}
     </div>

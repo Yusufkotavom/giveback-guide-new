@@ -114,7 +114,7 @@ const limitedEntries = sortedEntries.slice(0, limit);
     >
       {limitedEntries.map((stay) => (
         <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
-          <StayCard post={stay} />
+          <StayCard stay={stay} />
         </div>
       ))}
     </div>

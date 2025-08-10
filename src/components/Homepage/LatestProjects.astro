@@ -105,7 +105,7 @@ const limitedEntries = sortedEntries.slice(0, limit);
     >
       {limitedEntries.map((project) => (
         <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
-          <ProjectCard post={project} />
+          <ProjectCard project={project} />
         </div>
       ))}
     </div>

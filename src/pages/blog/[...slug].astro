@@ -1,7 +1,6 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { render } from 'astro:content';
 
 export async function getStaticPaths() {
 	// Get posts from both Notion and MDX collections
