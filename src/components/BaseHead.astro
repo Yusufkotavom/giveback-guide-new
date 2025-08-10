@@ -12,35 +12,6 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png' } = Astro.props;
-
-// Schema markup for LocalBusiness
-const localBusinessSchema = {
-	"@context": "https://schema.org",
-	"@type": "LocalBusiness",
-	"name": COMPANY_NAME,
-	"description": SITE_DESCRIPTION,
-	"url": Astro.site,
-	"telephone": `+62${COMPANY_WHATSAPP}`,
-	"address": {
-		"@type": "PostalAddress",
-		"addressLocality": "Surabaya",
-		"addressRegion": "Jawa Timur", 
-		"addressCountry": "ID"
-	},
-	"geo": {
-		"@type": "GeoCoordinates",
-		"latitude": -7.2575,
-		"longitude": 112.7521
-	},
-	"openingHours": "Mo-Fr 09:00-17:00",
-	"priceRange": "$$",
-	"servedCuisine": "IT Services",
-	"areaServed": ["Surabaya", "Sidoarjo", "Jawa Timur"],
-	"serviceType": ["IT Support", "Website Development", "Software Development", "Digital Marketing"],
-	"sameAs": [
-		`https://wa.me/62${COMPANY_WHATSAPP}`
-	]
-};
 ---
 
 <!-- Global Metadata -->
@@ -87,9 +58,6 @@ const localBusinessSchema = {
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
-
-<!-- LocalBusiness Schema Markup -->
-<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
 
 <!-- Additional SEO Meta Tags -->
 <meta name="robots" content="index, follow" />

@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import MainLayout from "./MainLayout.astro";
 import ResponsiveImage from "../components/ResponsiveImage.astro";
+import SchemaMarkup from "../components/SchemaMarkup.astro";
 import { COMPANY_NAME } from "../consts";
 
 type Props = CollectionEntry<"posts">["data"] | CollectionEntry<"postsMdx">["data"];
@@ -48,70 +49,27 @@ const modifiedDate = postData.lastUpdated?.start
       : new Date(postData.lastUpdated.start).toISOString())
   : publishedDate;
 
-// Article Schema Markup
-const articleSchema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": postData.title,
-  "description": description,
-  "image": image,
-  "author": {
-    "@type": "Organization",
-    "name": COMPANY_NAME,
-    "url": Astro.site
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": COMPANY_NAME,
-    "url": Astro.site,
-    "logo": {
-      "@type": "ImageObject",
-      "url": new URL("/kotacom-favicon.png", Astro.site)
-    }
-  },
-  "datePublished": publishedDate,
-  "dateModified": modifiedDate,
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": Astro.url
-  },
-  "keywords": postData.tags?.join(", "),
-  "articleSection": "Technology",
-  "inLanguage": "id-ID"
-};
-
-// Breadcrumb Schema
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": Astro.site
-    },
-    {
-      "@type": "ListItem", 
-      "position": 2,
-      "name": "Blog",
-      "item": new URL("/blog", Astro.site)
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": postData.title,
-      "item": Astro.url
-    }
-  ]
-};
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog" },
+  { name: postData.title, url: Astro.url.toString() }
+];
 ---
 
 <MainLayout title={title} description={description} image={image}>
-  <!-- Article Schema Markup -->
-  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-  <!-- Breadcrumb Schema Markup -->
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <SchemaMarkup
+    type="article"
+    title={postData.title}
+    description={description}
+    image={image}
+    breadcrumbs={breadcrumbs}
+    author={COMPANY_NAME}
+    datePublished={publishedDate}
+    dateModified={modifiedDate}
+    tags={postData.tags}
+    category={postData.tags} // Use tags as categories for articles
+  />
 
   <!-- Breadcrumbs -->
   <section class="bg-gray-50 dark:bg-gray-800 py-4">

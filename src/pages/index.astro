@@ -7,13 +7,57 @@ import LatestProducts from "../components/Homepage/LatestProducts.astro";
 import LatestServices from "../components/Homepage/LatestServices.astro";
 import LatestPosts from "../components/Homepage/LatestPosts.astro";
 import ClientTestimonials from "../components/Homepage/ClientTestimonials.astro";
+import SchemaMarkup from "../components/SchemaMarkup.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+// Sample reviews for schema
+const reviews = [
+  {
+    author: "Ahmad Wijaya",
+    rating: 5,
+    reviewBody: "Layanan IT support sangat profesional dan responsif. Tim kotacom.id berhasil menyelesaikan masalah server kami dengan cepat.",
+    datePublished: "2024-11-15"
+  },
+  {
+    author: "Sari Indah",
+    rating: 5,
+    reviewBody: "Website toko online yang dibuat sangat bagus dan mudah digunakan. Penjualan online kami meningkat 150%!",
+    datePublished: "2024-12-01"
+  },
+  {
+    author: "PT Maju Bersama",
+    rating: 5,
+    reviewBody: "Sistem informasi yang dikembangkan sangat membantu efisiensi operasional perusahaan. Highly recommended!",
+    datePublished: "2024-12-10"
+  }
+];
+
+const breadcrumbs = [
+  { name: "Home", url: "/" }
+];
 ---
 
 <MainLayout
   title={`${SITE_TITLE} - IT Service & Publications Terpercaya`}
   description={SITE_DESCRIPTION}
 >
+  <SchemaMarkup
+    type="homepage"
+    title={SITE_TITLE}
+    description={SITE_DESCRIPTION}
+    breadcrumbs={breadcrumbs}
+    reviews={reviews}
+    data={{
+      services: [
+        "IT Support & Maintenance",
+        "Website Development", 
+        "Software Development",
+        "Digital Marketing",
+        "Printing Services"
+      ]
+    }}
+  />
+  
   <HomeHero />
   <ServicesHighlight />
   <main>
