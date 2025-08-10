@@ -1,0 +1,249 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import ServiceCard from "../../../components/ServiceCard.astro";
+
+// Helper function to parse dates in dd/mm/yyyy format
+function parseDate(dateStr: string): Date {
+  const [day, month, year] = dateStr.split('/');
+  return new Date(`${year}-${month}-${day}`);
+}
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Fetch services from both Notion and MDX collections
+  const notionServices = await getCollection('services');
+  const mdxServices = await getCollection('servicesMdx');
+
+  // Normalize Notion services (existing format)
+  const normalizedNotionServices = notionServices.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+        svImageURL1: entry.data.properties.svImageURL1 || "",
+        svVerify: entry.data.properties.svVerify || "",
+      },
+    },
+  }));
+
+  // Normalize MDX services to match Notion structure
+  const normalizedMdxServices = mdxServices.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        svTitle: entry.data.title,
+        svCategory: entry.data.category,
+        svSlug: entry.data.slug,
+        svImageURL1: entry.data.imageUrl1 || "",
+        svPublished: { start: entry.data.published },
+        svWilayah: entry.data.wilayah,
+        svProvider: entry.data.provider,
+        svType: entry.data.type,
+        svPrice: entry.data.price,
+        svURL: entry.data.url,
+        svWhatsAppURL: entry.data.whatsappUrl,
+        svMapsURL: entry.data.mapsUrl,
+        svVerify: entry.data.verify || "",
+        svImageURL2: entry.data.imageUrl2,
+        svImageURL3: entry.data.imageUrl3,
+        svReview: entry.data.review,
+      },
+    },
+  }));
+
+  // Combine both collections
+  const allServices = [...normalizedNotionServices, ...normalizedMdxServices];
+
+  // Get all unique categories
+  const allCategories = Array.from(
+    new Set(
+      allServices.flatMap((service) => {
+        const c = service.data.properties.svCategory as any;
+        return Array.isArray(c) ? c : (c ? [c] : []);
+      })
+    )
+  ).sort();
+
+  // Generate paths for each category
+  const categoryPaths = [];
+  
+  for (const category of allCategories) {
+    // Filter services by category
+    const categoryServices = allServices.filter((service) => {
+      const c = service.data.properties.svCategory as any;
+      return Array.isArray(c) ? c.includes(category) : c === category;
+    });
+
+    // Sort services by published date (descending order)
+    const sortedServices = categoryServices.sort((a, b) => {
+      const dateA = a.data.properties.svPublished?.start 
+        ? (typeof a.data.properties.svPublished.start === 'string' 
+            ? parseDate(a.data.properties.svPublished.start) 
+            : a.data.properties.svPublished.start) 
+        : new Date(0);
+      const dateB = b.data.properties.svPublished?.start 
+        ? (typeof b.data.properties.svPublished.start === 'string' 
+            ? parseDate(b.data.properties.svPublished.start) 
+            : b.data.properties.svPublished.start) 
+        : new Date(0);
+      return dateB.getTime() - dateA.getTime(); // Most recent first
+    });
+
+    // Create paginated paths for this category
+    const paginatedPaths = paginate(sortedServices, {
+      params: { category: category.toLowerCase().replace(/\s+/g, '-') },
+      pageSize: 9,
+    });
+
+    categoryPaths.push(...paginatedPaths);
+  }
+
+  return categoryPaths;
+}
+
+const { page } = Astro.props;
+const { category } = Astro.params;
+
+// Convert URL-friendly category back to display name
+const displayCategory = category
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
+// Get all categories for navigation
+const allCategories = Array.from(
+  new Set(
+    page.data.flatMap((service) => {
+      const c = service.data.properties.svCategory as any;
+      return Array.isArray(c) ? c : (c ? [c] : []);
+    })
+  )
+).sort();
+---
+
+<MainLayout
+  title={`${displayCategory} Services - Page ${page.currentPage} of ${page.lastPage}`}
+  description={`Temukan layanan ${displayCategory} profesional untuk kebutuhan bisnis Anda. Solusi terpercaya dari Kotacom.id.`}
+>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="max-w-screen-md mb-8 lg:mb-16">
+        <h1
+          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Layanan {displayCategory}
+        </h1>
+        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+          Solusi {displayCategory.toLowerCase()} profesional untuk UMKM dan bisnis. Dapatkan layanan berkualitas tinggi dengan harga terjangkau.
+        </p>
+      </div>
+      
+      <div class="flex flex-col md:flex-row mb-8 gap-4">
+        <!-- Showing count -->
+        <div class="flex-1">
+          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            Menampilkan <span class="font-semibold text-gray-900 dark:text-white">
+              {page.start + 1}-{page.end + 1}
+            </span> dari <span class="font-semibold text-gray-900 dark:text-white">
+              {page.total}
+            </span> layanan <span class="font-semibold text-blue-600 dark:text-blue-400">{displayCategory}</span>
+          </span>
+        </div>
+        
+        <!-- Category Navigation -->
+        <div class="flex flex-wrap gap-2 items-center">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Kategori:</span>
+          <a 
+            href="/services/" 
+            class="px-3 py-1.5 rounded-full text-sm font-medium border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+          >
+            Semua
+          </a>
+          {allCategories.map((cat) => (
+            <a 
+              href={`/services/${cat.toLowerCase().replace(/\s+/g, '-')}/`}
+              class={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                cat === displayCategory
+                  ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+                  : 'border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+      >
+        {page.data.map((service) => (
+          <ServiceCard service={service} />
+        ))}
+      </div>
+
+      {page.data.length === 0 && (
+        <div class="text-center py-12">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Tidak ada layanan ditemukan</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Belum ada layanan dalam kategori "{displayCategory}".
+          </p>
+          <div class="mt-6">
+            <a
+              href="/services/"
+              class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Lihat Semua Layanan
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <nav class="flex justify-center items-center space-x-1">
+        {page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+          >
+            Previous
+          </a>
+        )}
+        
+        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
+          <a
+            href={pageNum === 1 ? `/services/${category}/` : `/services/${category}/${pageNum}/`}
+            class={`flex items-center justify-center px-3 h-8 leading-tight border transition-colors ${
+              pageNum === page.currentPage
+                ? 'text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+            }`}
+          >
+            {pageNum}
+          </a>
+        ))}
+        
+        {page.url.next && (
+          <a
+            href={page.url.next}
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+          >
+            Next
+          </a>
+        )}
+      </nav>
+    </div>
+  </section>
+</MainLayout>
