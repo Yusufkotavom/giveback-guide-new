@@ -40,6 +40,39 @@ const projectMdxSchema = z.object({
   published: z.coerce.date(),
   review: z.string().optional(),
   getInvolved: z.string().optional(),
+  // Case Study Fields
+  client: z.string().optional(),
+  clientIndustry: z.string().optional(),
+  projectDuration: z.string().optional(),
+  teamSize: z.string().optional(),
+  technologies: z.array(z.string()).default([]),
+  challenges: z.string().optional(),
+  solutions: z.string().optional(),
+  results: z.string().optional(),
+  // Before/After Metrics
+  beforeMetrics: z.object({
+    traffic: z.string().optional(),
+    conversions: z.string().optional(),
+    revenue: z.string().optional(),
+    performance: z.string().optional(),
+    other: z.string().optional(),
+  }).optional(),
+  afterMetrics: z.object({
+    traffic: z.string().optional(),
+    conversions: z.string().optional(),
+    revenue: z.string().optional(),
+    performance: z.string().optional(),
+    other: z.string().optional(),
+  }).optional(),
+  // ROI & Testimonial
+  roiPercentage: z.string().optional(),
+  clientTestimonial: z.string().optional(),
+  clientName: z.string().optional(),
+  clientPosition: z.string().optional(),
+  // Additional Images
+  beforeImage: z.string().url().optional(),
+  afterImage: z.string().url().optional(),
+  additionalImages: z.array(z.string().url()).default([]),
 });
 
 // MDX Schema for stays

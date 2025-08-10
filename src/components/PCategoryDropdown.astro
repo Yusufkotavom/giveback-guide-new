@@ -1,65 +1,154 @@
 ---
 import { getCollection } from "astro:content";
 
-const projects = await getCollection("projects");
+// Get the current category from the URL path
+const currentCategoryPromise = (async () => {
+  const pathSegments = Astro.url.pathname.split("/");
+  const potentialCategory = pathSegments[2]; // Extract the category slug from the URL
 
-// Count the number of projects for each country
-const countryCounts = projects.reduce((acc: Record<string, number>, project) => {
-  const countries = Array.isArray(project.data.properties.pCountry)
-    ? project.data.properties.pCountry
-    : [project.data.properties.pCountry];
+  // Validate if the extracted segment matches a known category slug
+  const notionProjects = await getCollection('projects');
+  const mdxProjects = await getCollection('projectsMdx');
 
-  countries.forEach((country) => {
-    if (country) {
-      acc[country] = (acc[country] || 0) + 1;
+  // Normalize projects
+  const normalizedNotionProjects = notionProjects.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+      },
+    },
+  }));
+
+  const normalizedMdxProjects = mdxProjects.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        pTitle: entry.data.title,
+        pCategory: entry.data.category,
+        pSlug: entry.data.slug,
+        pImageURL: entry.data.imageUrl || "",
+        pPublished: { start: entry.data.published },
+        pCountry: entry.data.country,
+        pLocale: entry.data.locale,
+        pOrganiser: entry.data.organiser,
+        pCost: entry.data.cost,
+        pURL: entry.data.url,
+        pGYGURL: entry.data.gygUrl,
+        pMapsURL: entry.data.mapsUrl,
+        pVerify: entry.data.verify || "",
+        pReview: entry.data.review,
+        pGetInvolved: entry.data.getInvolved,
+      },
+    },
+  }));
+
+  const allProjects = [...normalizedNotionProjects, ...normalizedMdxProjects];
+  
+  const validCategories = allProjects.reduce((acc: Set<string>, project) => {
+    const categories = Array.isArray(project.data.properties.pCategory)
+      ? project.data.properties.pCategory.map((c) =>
+          c.toLowerCase().replace(/\s+/g, "-")
+        )
+      : [String(project.data.properties.pCategory || "").toLowerCase().replace(/\s+/g, "-")];
+    categories.forEach((category) => {
+      if (category && category !== "") acc.add(category);
+    });
+    return acc;
+  }, new Set<string>());
+
+  return validCategories.has(potentialCategory) ? potentialCategory : null;
+})();
+const currentCategory = await currentCategoryPromise;
+
+// Fetch projects from both Notion and MDX collections
+const notionProjects = await getCollection('projects');
+const mdxProjects = await getCollection('projectsMdx');
+
+// Normalize projects (reuse the same logic)
+const normalizedNotionProjects = notionProjects.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+    },
+  },
+}));
+
+const normalizedMdxProjects = mdxProjects.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      pTitle: entry.data.title,
+      pCategory: entry.data.category,
+      pSlug: entry.data.slug,
+      pImageURL: entry.data.imageUrl || "",
+      pPublished: { start: entry.data.published },
+      pCountry: entry.data.country,
+      pLocale: entry.data.locale,
+      pOrganiser: entry.data.organiser,
+      pCost: entry.data.cost,
+      pURL: entry.data.url,
+      pGYGURL: entry.data.gygUrl,
+      pMapsURL: entry.data.mapsUrl,
+      pVerify: entry.data.verify || "",
+      pReview: entry.data.review,
+      pGetInvolved: entry.data.getInvolved,
+    },
+  },
+}));
+
+// Combine both collections
+const allProjects = [...normalizedNotionProjects, ...normalizedMdxProjects];
+
+// Count the number of projects for each category
+const categoryCounts = allProjects.reduce((acc: Record<string, number>, project) => {
+  const categories = Array.isArray(project.data.properties.pCategory)
+    ? project.data.properties.pCategory
+    : [project.data.properties.pCategory];
+
+  categories.forEach((category) => {
+    if (category && category.trim() !== "") {
+      acc[category] = (acc[category] || 0) + 1;
     }
   });
 
   return acc;
 }, {});
 
-// Extract unique countries and sort alphabetically
-const uniqueCountries = Object.keys(countryCounts).sort();
+// Extract unique categories and sort alphabetically
+const uniqueCategories = Object.keys(categoryCounts).sort();
 ---
-<button
-  id="dropdownDefaultButton"
-  data-dropdown-toggle="dropdown"
-  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-  type="button"
-  >Countries <svg
-    class="w-2.5 h-2.5 ms-3"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 10 6"
+<form class="w-100%">
+  <select
+    id="categories"
+    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    onchange="if (this.value) window.location.href = this.value"
   >
-    <path
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="m1 1 4 4 4-4"></path>
-  </svg>
-</button>
-
-<!-- Dropdown menu -->
-<div
-  id="dropdown"
-  class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700"
->
-  <ul
-    class="h-60 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
-    aria-labelledby="dropdownDefaultButton"
-  >
-  {uniqueCountries.map((country) => (
-    <li>
-      <a
-          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-          href={`/projects/${country.toLowerCase().replace(/\s+/g, "-")}`}
+    <option 
+      value="/projects/"
+      selected={!currentCategory}
+    >
+      Semua Kategori
+    </option>
+    {uniqueCategories.map((category) => {
+      const categorySlug = category.toLowerCase().replace(/\s+/g, "-");
+      return (
+        <option
+          value={`/projects/${categorySlug}/`}
+          selected={currentCategory === categorySlug}
         >
-          {country} ({countryCounts[country]})
-        </a>
-    </li>
-  ))}
-  </ul>
-</div>
+          {category} ({categoryCounts[category]})
+        </option>
+      );
+    })}
+  </select>
+</form>
