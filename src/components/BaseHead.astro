@@ -4,14 +4,15 @@ import { SITE_TITLE } from '../consts';
 import Analytics from './Analytics.astro';
 
 interface Props {
-	title?: string; // Make title optional
-	description?: string; // Make title optional
+	title?: string;
+	description?: string;
 	image?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.props;
+const siteUrl = String(Astro.site || 'https://giveback.guide');
 ---
 
 <!-- Global Metadata -->
@@ -28,6 +29,9 @@ const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.
 />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Performance hints -->
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
@@ -43,6 +47,8 @@ const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content="Giveback Guide" />
+<meta property="og:locale" content="id_ID" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -50,3 +56,33 @@ const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:site" content="@givebackguide" />
+
+<!-- JSON-LD: WebSite -->
+<script type="application/ld+json" is:inline>
+{JSON.stringify({
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "url": siteUrl,
+  "name": "Giveback Guide",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${siteUrl}search?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  }
+})}
+</script>
+
+<!-- JSON-LD: Organization -->
+<script type="application/ld+json" is:inline>
+{JSON.stringify({
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "url": siteUrl,
+  "name": "Giveback Guide",
+  "logo": new URL('/favicon.png', siteUrl),
+  "sameAs": [
+    "https://www.instagram.com/givebackguide"
+  ]
+})}
+</script>

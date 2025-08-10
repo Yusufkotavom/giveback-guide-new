@@ -167,6 +167,19 @@ if (images.length === 0) {
               </li>
             </ol>
           </nav>
+
+          <!-- JSON-LD Breadcrumbs -->
+          <script type="application/ld+json" is:inline>
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {"@type":"ListItem","position":1,"name":"Home","item": String(new URL('/', Astro.site))},
+                {"@type":"ListItem","position":2,"name":"Products","item": String(new URL('/products/', Astro.site))},
+                {"@type":"ListItem","position":3,"name": properties.pTitle, "item": String(Astro.url)}
+              ]
+            })}
+          </script>
         </section>
 
         <!-- Featured Image -->
