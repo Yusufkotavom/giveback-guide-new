@@ -81,49 +81,24 @@ const stayMdxSchema = z.object({
   country: z.array(z.string()).default([]),
   locale: z.array(z.string()).default([]),
   category: z.array(z.string()).default([]),
-  facilities: z.array(z.string()).default([]),
-  name: z.string().optional(),
-  type: z.array(z.string()).default([]),
   slug: z.string(),
-  url: z.string().url().optional(),
-  otherUrl: z.string().url().optional(),
-  bookingUrl: z.string().url().optional(),
-  hotelsUrl: z.string().url().optional(),
-  agodaUrl: z.string().url().optional(),
-  mapsUrl: z.string().url().optional(),
-  verify: z.string().optional(),
-  imageUrl1: z.string().url().optional(),
-  imageUrl2: z.string().url().optional(),
-  imageUrl3: z.string().url().optional(),
+  imageUrl: z.string().url().optional(),
   published: z.coerce.date(),
-  review: z.string().optional(),
+  price: z.string().optional(),
+  description: z.string().optional(),
 });
 
 // MDX Schema for products
 const productMdxSchema = z.object({
   title: z.string(),
-  price: z.string().optional(),
   country: z.array(z.string()).default([]),
   locale: z.array(z.string()).default([]),
   category: z.array(z.string()).default([]),
-  features: z.array(z.string()).default([]),
-  name: z.string().optional(),
-  type: z.array(z.string()).default([]),
   slug: z.string(),
-  url: z.string().url().optional(),
-  otherUrl: z.string().url().optional(),
-  tokopediaUrl: z.string().url().optional(),
-  shopeeUrl: z.string().url().optional(),
-  blibliUrl: z.string().url().optional(),
-  bukalapakUrl: z.string().url().optional(),
-  lazadaUrl: z.string().url().optional(),
-  mapsUrl: z.string().url().optional(),
-  verify: z.string().optional(),
-  imageUrl1: z.string().url().optional(),
-  imageUrl2: z.string().url().optional(),
-  imageUrl3: z.string().url().optional(),
+  imageUrl: z.string().url().optional(),
   published: z.coerce.date(),
-  review: z.string().optional(),
+  price: z.string().optional(),
+  description: z.string().optional(),
 });
 
 // MDX Schema for services
@@ -133,9 +108,9 @@ const serviceMdxSchema = z.object({
   slug: z.string(),
   imageUrl1: z.string().url().optional(),
   published: z.coerce.date(),
-  wilayah: z.array(z.string()).default([]).optional(),
+  wilayah: z.array(z.string()).default([]),
   provider: z.string().optional(),
-  type: z.array(z.string()).default([]).optional(),
+  type: z.array(z.string()).default([]),
   price: z.string().optional(),
   url: z.string().url().optional(),
   whatsappUrl: z.string().url().optional(),
@@ -146,7 +121,7 @@ const serviceMdxSchema = z.object({
   review: z.string().optional(),
 });
 
-const posts = defineCollection({
+  const posts = defineCollection({
 	loader: notionLoader({
 		auth: getEnvVar('BLOG_NOTION_TOKEN'),
     database_id: getEnvVar('BLOG_NOTION_DATABASE_ID'),
@@ -231,35 +206,29 @@ const projectsMdx = defineCollection({
 		select: { "equals": "Published" },
 	  },
 	}),
-	schema: notionPageSchema({
-		properties: z.object({
-		  sTitle: transformedPropertySchema.title,
-		  sCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-		  sLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-		  sCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-		  sFacilities: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-		  sName: transformedPropertySchema.rich_text,
-		  sType: transformedPropertySchema.multi_select,
-		  sSlug: transformedPropertySchema.rich_text,
-		  sURL: transformedPropertySchema.url,
-		  sOtherURL: transformedPropertySchema.url,
-		  sBookingURL: transformedPropertySchema.url,
-		  sHotelsURL: transformedPropertySchema.url,
-		  sAgodaURL: transformedPropertySchema.url,
-		  sMapsURL: transformedPropertySchema.url,
-		  sVerify: transformedPropertySchema.select,
-		  sImageURL1: transformedPropertySchema.url,
-		  sImageURL2: transformedPropertySchema.url,
-		  sImageURL3: transformedPropertySchema.url,
-		  sPublished: transformedPropertySchema.date,
-		  sReview: transformedPropertySchema.rich_text,
-		}),
-	  }),
+			schema: notionPageSchema({
+			properties: z.object({
+			  sTitle: transformedPropertySchema.title,
+			  sCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  sLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  sCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  sSlug: transformedPropertySchema.rich_text,
+			  sImageURL: transformedPropertySchema.url,
+			  sPublished: transformedPropertySchema.date,
+			  sPrice: transformedPropertySchema.rich_text,
+			  sDescription: transformedPropertySchema.rich_text,
+			}),
+		  }),
   });
 
-// MDX Stays collection
+// MDX Stays collection - Updated to handle empty directories gracefully
 const staysMdx = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/stays' }),
+  loader: glob({ 
+    pattern: '**/*.{md,mdx}', 
+    base: './content/stays',
+    // Add this option to handle empty directories
+    ignore: ['**/.gitkeep']
+  }),
   schema: stayMdxSchema,
 });
 
@@ -278,25 +247,15 @@ const staysMdx = defineCollection({
 	}),
 			schema: notionPageSchema({
 			properties: z.object({
-			  pTitle: transformedPropertySchema.title,
-			  pPrice: transformedPropertySchema.rich_text,
-			  pCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pFeatures: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pName: transformedPropertySchema.rich_text,
-			  pType: transformedPropertySchema.multi_select,
-			  pSlug: transformedPropertySchema.rich_text,
-			  pURL: transformedPropertySchema.url,
-			  pOtherURL: transformedPropertySchema.url,
-			  pTokopediaURL: transformedPropertySchema.url,
-			  pShopeeURL: transformedPropertySchema.url,
-			  pBlibliURL: transformedPropertySchema.url,
-			  pBukalapakURL: transformedPropertySchema.url,
-			  pLazadaURL: transformedPropertySchema.url,
-			  pMapsURL: transformedPropertySchema.url,
-			  pVerify: transformedPropertySchema.select,
-			  pImageURL1: transformedPropertySchema.url,
+			  prTitle: transformedPropertySchema.title,
+			  prCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  prLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  prCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+			  prSlug: transformedPropertySchema.rich_text,
+			  prImageURL: transformedPropertySchema.url,
+			  prPublished: transformedPropertySchema.date,
+			  prPrice: transformedPropertySchema.rich_text,
+			  prDescription: transformedPropertySchema.rich_text,
 			  pImageURL2: transformedPropertySchema.url,
 			  pImageURL3: transformedPropertySchema.url,
 			  pPublished: transformedPropertySchema.date,
@@ -305,9 +264,14 @@ const staysMdx = defineCollection({
 		  }),
   });
 
-// MDX Products collection
+// MDX Products collection - Updated to handle empty directories gracefully
 const productsMdx = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/products' }),
+  loader: glob({ 
+    pattern: '**/*.{md,mdx}', 
+    base: './content/products',
+    // Add this option to handle empty directories
+    ignore: ['**/.gitkeep']
+  }),
   schema: productMdxSchema,
 });
 
@@ -346,6 +310,9 @@ const servicesMdx = defineCollection({
   schema: serviceMdxSchema,
 });
 
+// Create an alias for 'blog' collection to maintain backward compatibility
+const blog = posts;
+
 export const collections = { 
   posts, 
   postsMdx,
@@ -356,5 +323,7 @@ export const collections = {
   products, 
   productsMdx,
   services,
-  servicesMdx
+  servicesMdx,
+  // Add blog alias for RSS compatibility
+  blog
 };
