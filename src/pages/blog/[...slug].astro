@@ -42,6 +42,15 @@ const layoutData = source === 'notion'
 		published: post.data.properties.bPublished,
 		lastUpdated: post.data.properties.bLastUpdated,
 		description: post.data.properties.bDescription,
+		properties: {
+			bTitle: post.data.properties.bTitle,
+			bTags: post.data.properties.bTags,
+			bSlug: post.data.properties.bSlug,
+			bCoverImage: post.data.properties.bCoverImage,
+			bPublished: post.data.properties.bPublished,
+			bLastUpdated: post.data.properties.bLastUpdated,
+			bDescription: post.data.properties.bDescription,
+		}
 	}
 	: {
 		...post.data,
@@ -51,7 +60,7 @@ const layoutData = source === 'notion'
 			bSlug: post.data.slug,
 			bCoverImage: post.data.coverImage,
 			bPublished: post.data.published,
-			bLastUpdated: post.data.lastUpdated,
+			bLastUpdated: post.data.lastUpdated || post.data.published,
 			bDescription: post.data.description,
 		}
 	};
