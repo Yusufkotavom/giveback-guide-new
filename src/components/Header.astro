@@ -12,7 +12,8 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
       class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
     >
       <a href="/" class="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer">
-  <Image src={Avatar} class="w-12 h-12 fill-gbgblue" alt="Giveback Guide" />
+  <Image src={Avatar} class="w-12 h-12 fill-gbgblue" alt="kotacom.id" />
+  <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">kotacom.id</span>
 </a>
       <div class="flex items-center lg:order-2">
   <!-- Search Modal Trigger -->
@@ -43,10 +44,10 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
     </span>
   </button>
 
-  <!-- Join Community Link (styled as button) -->
+  <!-- Contact WhatsApp Link (styled as button) -->
   <a
-    href="/join"
-    class="cursor-pointer text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    href="https://wa.me/085799520350"
+    class="cursor-pointer text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
   >
     <svg
       class="w-6 h-6 me-2"
@@ -54,18 +55,15 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      fill="none"
+      fill="currentColor"
       viewBox="0 0 24 24"
     >
       <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-width="2"
-        d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
+        d="M7.978 4a2.553 2.553 0 0 0-1.926.877C4.233 6.7 3.699 8.751 4.153 10.814c.44 1.995 1.778 3.893 3.456 5.572 1.68 1.679 3.577 3.018 5.57 3.459 2.062.456 4.115-.073 5.94-1.885a2.556 2.556 0 0 0 .001-3.861l-1.21-1.21a2.689 2.689 0 0 0-3.802 0l-.617.618a.806.806 0 0 1-1.14 0l-1.854-1.855a.807.807 0 0 1 0-1.14l.618-.62a2.692 2.692 0 0 0 0-3.803l-1.21-1.211A2.555 2.555 0 0 0 7.978 4Z"
       ></path>
     </svg>
-    <span class="block lg:hidden">Join Us</span>
-    <span class="hidden lg:block">Join our community</span>
+    <span class="block lg:hidden">WA</span>
+    <span class="hidden lg:block">WhatsApp</span>
   </a>
 
   <!-- Mobile Menu Toggle -->
@@ -114,37 +112,44 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
         >
         <li>
           <a
-            href="/projects"
+            href="/services"
             class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
-            >Projects</a
+            >Layanan</a
           >
         </li>
         <li>
           <a
-            href="/stays"
+            href="/projects"
             class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
-            >Stays</a
+            >Portfolio</a
+          >
+        </li>
+        <li>
+          <a
+            href="/products"
+            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
+            >Produk</a
           >
         </li>
           <li>
             <a
               href="/blog"
               class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
-              >Blog</a
+              >Artikel</a
             >
           </li>
           <li>
             <a
-              href="/concierge"
+              href="/about"
               class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
-              >Concierge</a
+              >Tentang</a
             >
           </li>
           <li>
             <a
-              href="/submit"
+              href="/contact"
               class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-gray-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded cursor-pointer"
-              >Submit</a
+              >Kontak</a
             >
           </li>
         </ul>
@@ -182,7 +187,7 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
               type="search"
               name="q"
               id="modal-search-input"
-              placeholder="Search our database"
+              placeholder="Cari layanan, portfolio, atau artikel..."
               class="w-full text-lg bg-transparent border-0 outline-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-0"
               autocomplete="off"
               autofocus
@@ -206,30 +211,30 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
         <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Suggested searches</h4>
+              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Layanan Populer</h4>
               <div class="space-y-2">
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="beach cleans">
-                  Beach cleans
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="website development">
+                  Website Development
                 </button>
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="community cafes">
-                  Community cafes
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="software development">
+                  Software Development
                 </button>
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="animal sanctuaries">
-                  Animal sanctuaries
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="social media management">
+                  Social Media Management
                 </button>
               </div>
             </div>
             <div>
-              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Search by location</h4>
+              <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Kategori IT</h4>
               <div class="space-y-2">
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="USA">
-                  USA
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="IT service">
+                  IT Service & Support
                 </button>
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="UK">
-                  UK
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="hardware">
+                  Hardware & Software
                 </button>
-                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="Thailand">
-                  Thailand
+                <button type="button" class="search-suggestion block w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer" data-query="publications">
+                  Publications & Content
                 </button>
               </div>
             </div>
@@ -250,11 +255,11 @@ import Avatar from "../assets/giveback-guide-avatar.svg";
           </div>
         </div>
         <div class="flex space-x-2">
-          <a href="/submit" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors cursor-pointer">
+          <a href="/contact" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors cursor-pointer">
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
-            Submit Project
+            Konsultasi Gratis
           </a>
         </div>
       </div>
