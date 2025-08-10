@@ -3,7 +3,7 @@
 
 import { getCollection } from "astro:content";
 import ProjectCard from "../ProjectCard.astro";
-import PCountryDropdown from "../PCountryDropdown.astro";
+import PCategoryDropdown from "../PCategoryDropdown.astro";
 
 // Props: limit specifies the number of projects to display
 interface Props {
@@ -63,20 +63,24 @@ const normalizedMdxProjects = mdxProjects.map((entry) => ({
 }));
 
 // Combine both collections
-const allProjects = [...normalizedNotionProjects, ...normalizedMdxProjects];
+const entries = [...normalizedNotionProjects, ...normalizedMdxProjects];
 
 // Sort projects by pPublished date (descending order)
-const sortedEntries = allProjects.sort((a, b) => {
-  const dateA = a.data.properties.pPublished
-    ? a.data.properties.pPublished.start
-    : new Date(0); // Fallback to epoch if date is missing
-  const dateB = b.data.properties.pPublished
-    ? b.data.properties.pPublished.start
-    : new Date(0); // Fallback to epoch if date is missing
+const sortedEntries = entries.sort((a, b) => {
+  const dateA = a.data.properties.pPublished?.start
+    ? typeof a.data.properties.pPublished.start === "string"
+      ? parseDate(a.data.properties.pPublished.start)
+      : a.data.properties.pPublished.start
+    : new Date(0);
+  const dateB = b.data.properties.pPublished?.start
+    ? typeof b.data.properties.pPublished.start === "string"
+      ? parseDate(b.data.properties.pPublished.start)
+      : b.data.properties.pPublished.start
+    : new Date(0);
   return dateB.getTime() - dateA.getTime(); // Most recent first
 });
 
-// Limit the number of projects based on the limit prop
+// Limit the number of entries
 const limitedEntries = sortedEntries.slice(0, limit);
 ---
 
@@ -97,7 +101,7 @@ const limitedEntries = sortedEntries.slice(0, limit);
         id="3"
         class="w-full md:w-1/4 p-2 order-2 md:order-3"
       >
-        <PCountryDropdown />
+        <PCategoryDropdown />
       </div>
     </div>
     <div
