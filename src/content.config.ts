@@ -221,13 +221,13 @@ const projectsMdx = defineCollection({
 		  }),
   });
 
-// MDX Stays collection - Updated to handle empty directories gracefully
+// MDX Stays collection - Handle empty directories gracefully
 const staysMdx = defineCollection({
   loader: glob({ 
     pattern: '**/*.{md,mdx}', 
     base: './content/stays',
-    // Add this option to handle empty directories
-    ignore: ['**/.gitkeep']
+    // Ignore .gitkeep and other non-content files
+    ignore: ['**/.gitkeep', '**/.*']
   }),
   schema: stayMdxSchema,
 });
@@ -264,13 +264,13 @@ const staysMdx = defineCollection({
 		  }),
   });
 
-// MDX Products collection - Updated to handle empty directories gracefully
+// MDX Products collection - Handle empty directories gracefully  
 const productsMdx = defineCollection({
   loader: glob({ 
     pattern: '**/*.{md,mdx}', 
     base: './content/products',
-    // Add this option to handle empty directories
-    ignore: ['**/.gitkeep']
+    // Ignore .gitkeep and other non-content files
+    ignore: ['**/.gitkeep', '**/.*']
   }),
   schema: productMdxSchema,
 });
