@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ServiceCard from "../../components/ServiceCard.astro";
+import SCategoryDropdown from "../../components/SCategoryDropdown.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
@@ -85,16 +86,6 @@ const { page } = Astro.props;
 const url = new URL(Astro.request.url);
 const activeCategory = url.searchParams.get('category');
 
-// Get all categories for filtering
-const allCategories = Array.from(
-  new Set(
-    page.data.flatMap((service) => {
-      const c = service.data.properties.svCategory as any;
-      return Array.isArray(c) ? c : (c ? [c] : []);
-    })
-  )
-).sort();
-
 // Filter services by category if specified
 const filteredServices = activeCategory
   ? page.data.filter((service) => {
@@ -136,34 +127,9 @@ const filteredServices = activeCategory
           </span>
         </div>
         
-        <!-- Category Filter -->
-        <div class="flex flex-wrap gap-2 items-center">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Filter:</span>
-          <a 
-            href={page.currentPage === 1 ? "/services/" : `/services/${page.currentPage}/`}
-            class={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-              !activeCategory 
-                ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700' 
-                : 'border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-            }`}
-          >
-            Semua
-          </a>
-          {allCategories.map((category) => (
-            <a 
-              href={page.currentPage === 1 
-                ? `/services/?category=${encodeURIComponent(category)}`
-                : `/services/${page.currentPage}/?category=${encodeURIComponent(category)}`
-              }
-              class={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-                activeCategory === category
-                  ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
-                  : 'border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-              }`}
-            >
-              {category}
-            </a>
-          ))}
+        <!-- Category Dropdown -->
+        <div class="w-full md:w-1/4">
+          <SCategoryDropdown />
         </div>
       </div>
 

@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+
+// Get the current category from the URL query parameter
+const url = new URL(Astro.request.url);
+const currentCategory = url.searchParams.get('category');
+
+// Fetch services from both Notion and MDX collections
+const notionServices = await getCollection('services');
+const mdxServices = await getCollection('servicesMdx');
+
+// Normalize Notion services (existing format)
+const normalizedNotionServices = notionServices.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+      svImageURL1: entry.data.properties.svImageURL1 || "",
+      svVerify: entry.data.properties.svVerify || "",
+    },
+  },
+}));
+
+// Normalize MDX services to match Notion structure
+const normalizedMdxServices = mdxServices.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      svTitle: entry.data.title,
+      svCategory: entry.data.category,
+      svSlug: entry.data.slug,
+      svImageURL1: entry.data.imageUrl1 || "",
+      svPublished: { start: entry.data.published },
+      svWilayah: entry.data.wilayah,
+      svProvider: entry.data.provider,
+      svType: entry.data.type,
+      svPrice: entry.data.price,
+      svURL: entry.data.url,
+      svWhatsAppURL: entry.data.whatsappUrl,
+      svMapsURL: entry.data.mapsUrl,
+      svVerify: entry.data.verify || "",
+      svImageURL2: entry.data.imageUrl2,
+      svImageURL3: entry.data.imageUrl3,
+      svReview: entry.data.review,
+    },
+  },
+}));
+
+// Combine both collections
+const allServices = [...normalizedNotionServices, ...normalizedMdxServices];
+
+// Count the number of services for each category
+const categoryCounts = allServices.reduce((acc: Record<string, number>, service) => {
+  const categories = Array.isArray(service.data.properties.svCategory)
+    ? service.data.properties.svCategory
+    : [service.data.properties.svCategory];
+
+  categories.forEach((category) => {
+    if (category) {
+      acc[category] = (acc[category] || 0) + 1;
+    }
+  });
+
+  return acc;
+}, {});
+
+// Extract unique categories and sort alphabetically
+const uniqueCategories = Object.keys(categoryCounts).sort();
+
+// Get current page path for proper URL construction
+const currentPath = Astro.url.pathname;
+---
+<form class="w-100%">
+  <select
+    id="categories"
+    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    onchange="if (this.value) window.location.href = this.value"
+  >
+    <option 
+      value={currentPath}
+      selected={!currentCategory}
+    >
+      Semua Kategori
+    </option>
+    {uniqueCategories.map((category) => {
+      return (
+        <option
+          value={`${currentPath}?category=${encodeURIComponent(category)}`}
+          selected={currentCategory === category}
+        >
+          {category} ({categoryCounts[category]})
+        </option>
+      );
+    })}
+  </select>
+</form>
