@@ -13,7 +13,7 @@ type Props = CollectionEntry<"stays">["data"];
 const { properties } = Astro.props;
 const title =
   (properties.sTitle || "Default Title") + " - Stays on Giveback Guide";
-const image = properties.sImageURL1 || "/giveback-guide-placeholder.jpg"; // Fallback image
+const image = properties.sImageURL1 || "/https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png"; // Fallback image
 
 // Format pLocale as a comma-separated string
 const localeString = Array.isArray(properties.sLocale)
@@ -69,7 +69,7 @@ if (
   facilitiesRight = properties.sFacilities.slice(mid);
 }
 
-const fallbackImage = "/giveback-guide-placeholder.jpg";
+const fallbackImage = "/https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png";
 const images = [
   properties.sImageURL1,
   properties.sImageURL2,

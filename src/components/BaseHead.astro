@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, COMPANY_NAME, COMPANY_LOCATION, COMPANY_WHATSAPP } from '../consts';
 import Analytics from './Analytics.astro';
 
 interface Props {
@@ -11,14 +11,43 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.props;
+const { title, description, image = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png' } = Astro.props;
+
+// Schema markup for LocalBusiness
+const localBusinessSchema = {
+	"@context": "https://schema.org",
+	"@type": "LocalBusiness",
+	"name": COMPANY_NAME,
+	"description": SITE_DESCRIPTION,
+	"url": Astro.site,
+	"telephone": `+62${COMPANY_WHATSAPP}`,
+	"address": {
+		"@type": "PostalAddress",
+		"addressLocality": "Surabaya",
+		"addressRegion": "Jawa Timur", 
+		"addressCountry": "ID"
+	},
+	"geo": {
+		"@type": "GeoCoordinates",
+		"latitude": -7.2575,
+		"longitude": 112.7521
+	},
+	"openingHours": "Mo-Fr 09:00-17:00",
+	"priceRange": "$$",
+	"servedCuisine": "IT Services",
+	"areaServed": ["Surabaya", "Sidoarjo", "Jawa Timur"],
+	"serviceType": ["IT Support", "Website Development", "Software Development", "Digital Marketing"],
+	"sameAs": [
+		`https://wa.me/62${COMPANY_WHATSAPP}`
+	]
+};
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="icon" type="image/png" href="/kotacom-favicon.png" />
+<link rel="apple-touch-icon" href="/kotacom-favicon.png">
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
 	rel="alternate"
@@ -37,12 +66,20 @@ const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
+<!-- Local SEO Meta Tags -->
+<meta name="geo.region" content="ID-JI" />
+<meta name="geo.placename" content="Surabaya" />
+<meta name="geo.position" content="-7.2575;112.7521" />
+<meta name="ICBM" content="-7.2575, 112.7521" />
+
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content={COMPANY_NAME} />
+<meta property="og:locale" content="id_ID" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -50,3 +87,15 @@ const { title, description, image = '/giveback-guide-placeholder.jpg' } = Astro.
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- LocalBusiness Schema Markup -->
+<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow" />
+<meta name="author" content={COMPANY_NAME} />
+<meta name="copyright" content={COMPANY_NAME} />
+<meta name="language" content="id" />
+<meta name="revisit-after" content="7 days" />
+<meta name="rating" content="general" />
+<meta name="distribution" content="global" />

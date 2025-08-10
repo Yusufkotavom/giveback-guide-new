@@ -779,7 +779,7 @@ import { SITE_TITLE } from "../consts";
       }
 
       // Get image - try meta first, then look for first image in content
-      const image = data.meta?.image || data.meta?.thumbnail || '/giveback-guide-placeholder.jpg';
+      const image = data.meta?.image || data.meta?.thumbnail || '/https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png';
       
       // Get title - now using Pagefind meta
       const title = data.meta?.title || data.title || 'Untitled';
@@ -843,7 +843,7 @@ import { SITE_TITLE } from "../consts";
                 src="${image}" 
                 alt="${title}"
                 loading="lazy"
-                onerror="this.src='/giveback-guide-placeholder.jpg'"
+                onerror="this.src='/https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png'"
               />
             </a>
             <span class="absolute top-2 left-2 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-blue-300 bg-blue-50 text-blue-800 dark:bg-blue-900 dark:text-blue-300">

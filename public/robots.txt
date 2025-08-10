@@ -32,4 +32,4 @@ User-agent: Omgili
 Disallow: /
 User-agent: YouBot
 Disallow: /
-Sitemap: https://giveback.guide/sitemap-index.xml
+Sitemap: https://kotacom.id/sitemap-index.xml

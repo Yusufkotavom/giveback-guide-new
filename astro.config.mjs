@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://giveback.guide',
+  site: 'https://kotacom.id',
   integrations: [mdx(), sitemap(), pagefind()],
 
   vite: {
