@@ -1,0 +1,40 @@
+---
+interface Props {
+  href: string;
+  text: string;
+  type?: 'service' | 'article' | 'pillar' | 'external';
+  priority?: 'high' | 'medium' | 'low';
+  className?: string;
+}
+
+const { href, text, type = 'article', priority = 'medium', className = '' } = Astro.props;
+
+// Define styling based on link type and priority
+const getClasses = (type: string, priority: string) => {
+  const baseClasses = 'transition-all duration-200 font-medium';
+  
+  switch (type) {
+    case 'service':
+      return `${baseClasses} text-blue-700 hover:text-blue-900 underline decoration-blue-300 hover:decoration-blue-500 decoration-2`;
+    case 'pillar':
+      return `${baseClasses} text-purple-700 hover:text-purple-900 underline decoration-purple-300 hover:decoration-purple-500 decoration-2`;
+    case 'article':
+      return `${baseClasses} text-green-700 hover:text-green-900 underline decoration-green-300 hover:decoration-green-500`;
+    case 'external':
+      return `${baseClasses} text-gray-700 hover:text-gray-900 underline decoration-gray-300 hover:decoration-gray-500`;
+    default:
+      return `${baseClasses} text-blue-600 hover:text-blue-800 underline`;
+  }
+};
+
+const linkClasses = `${getClasses(type, priority)} ${className}`;
+---
+
+<a href={href} class={linkClasses} rel={type === 'external' ? 'noopener noreferrer' : undefined}>
+  {text}
+  {type === 'external' && (
+    <svg class="inline w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+    </svg>
+  )}
+</a>

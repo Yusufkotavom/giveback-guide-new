@@ -1,0 +1,211 @@
+---
+interface Props {
+  currentSlug: string;
+  currentTags?: string[];
+  contentType: 'post' | 'service' | 'pillar';
+  currentTitle?: string;
+}
+
+const { currentSlug, currentTags = [], contentType, currentTitle } = Astro.props;
+
+// Define pillar pages with their main keywords and URLs
+const pillarPages = [
+  {
+    title: "Jasa Pembuatan Website Profesional",
+    slug: "/layanan/pembuatan-website",
+    keywords: ["website", "web development", "toko online"],
+    category: "website-development",
+    cta: "Konsultasi Website Gratis"
+  },
+  {
+    title: "Template Website Siap Pakai",
+    slug: "/layanan/template-website", 
+    keywords: ["template", "website siap pakai", "online 24 jam"],
+    category: "website-development",
+    cta: "Pilih Template Premium"
+  },
+  {
+    title: "Layanan IT Support 24/7",
+    slug: "/services/it-support",
+    keywords: ["it support", "maintenance", "troubleshooting"],
+    category: "it-support", 
+    cta: "Hubungi IT Support"
+  },
+  {
+    title: "Sistem POS untuk UMKM",
+    slug: "/layanan/sistem-pos",
+    keywords: ["pos", "point of sale", "umkm", "kasir"],
+    category: "umkm-digital",
+    cta: "Demo Sistem POS"
+  }
+];
+
+// Define related content mapping
+const contentClusters = {
+  "website-development": [
+    { title: "Web Design Responsive Surabaya", slug: "/blog/web-design-responsive-surabaya" },
+    { title: "Jasa Pembuatan Website Terbaik", slug: "/blog/jasa-pembuatan-website-surabaya-terbaik" },
+    { title: "Toko Online Surabaya", slug: "/blog/toko-online-surabaya" },
+    { title: "Software Development Surabaya", slug: "/blog/software-development-surabaya" }
+  ],
+  "it-support": [
+    { title: "IT Infrastructure Planning", slug: "/blog/it-infrastructure-planning-surabaya" },
+    { title: "Server Maintenance Surabaya", slug: "/blog/server-maintenance-surabaya" },
+    { title: "Backup Recovery Sistem", slug: "/blog/backup-recovery-sistem-surabaya" },
+    { title: "Troubleshooting Komputer", slug: "/blog/troubleshooting-komputer-surabaya" }
+  ],
+  "umkm-digital": [
+    { title: "Digital Transformation UMKM", slug: "/blog/digital-transformation-umkm-surabaya" },
+    { title: "Digitalisasi UMKM Terbaik", slug: "/blog/digitalisasi-umkm-surabaya-terbaik" },
+    { title: "Sistem POS UMKM Terbaik", slug: "/blog/sistem-pos-surabaya-terbaik-untuk-umkm" },
+    { title: "Smart City Surabaya", slug: "/blog/smart-city-surabaya-teknologi" }
+  ],
+  "tech-ecosystem": [
+    { title: "Startup Tech Surabaya", slug: "/blog/startup-tech-surabaya-sidoarjo" },
+    { title: "Coworking Space Tech", slug: "/blog/coworking-space-tech-surabaya" },
+    { title: "Konsultan IT Sidoarjo", slug: "/blog/konsultan-it-sidoarjo-terpercaya" }
+  ]
+};
+
+// Function to determine content category based on current content
+function determineCategory(slug: string, tags: string[], title: string = ""): string {
+  const content = slug.toLowerCase() + " " + tags.join(" ").toLowerCase() + " " + title.toLowerCase();
+  
+  if (content.includes("website") || content.includes("web") || content.includes("template") || content.includes("toko online")) {
+    return "website-development";
+  } else if (content.includes("it support") || content.includes("server") || content.includes("infrastructure") || content.includes("maintenance")) {
+    return "it-support";
+  } else if (content.includes("umkm") || content.includes("pos") || content.includes("digital transformation") || content.includes("digitalisasi")) {
+    return "umkm-digital";
+  } else if (content.includes("startup") || content.includes("tech") || content.includes("coworking") || content.includes("smart city")) {
+    return "tech-ecosystem";
+  }
+  
+  return "website-development"; // default
+}
+
+// Get current content category
+const currentCategory = determineCategory(currentSlug, currentTags, currentTitle || "");
+
+// Get related content from same cluster
+const relatedContent = contentClusters[currentCategory]?.filter(item => 
+  !currentSlug.includes(item.slug.replace("/blog/", "").replace("/", ""))
+).slice(0, 3) || [];
+
+// Get cross-pillar suggestions (from other categories)
+const otherCategories = Object.keys(contentClusters).filter(cat => cat !== currentCategory);
+const crossPillarContent = otherCategories.flatMap(cat => 
+  contentClusters[cat]?.slice(0, 1) || []
+).slice(0, 2);
+
+// Get relevant pillar pages
+const relevantPillars = pillarPages.filter(pillar => 
+  pillar.category === currentCategory || 
+  pillar.keywords.some(keyword => 
+    currentTags.some(tag => tag.toLowerCase().includes(keyword.toLowerCase())) ||
+    (currentTitle || "").toLowerCase().includes(keyword.toLowerCase())
+  )
+).slice(0, 2);
+
+// Get service CTAs
+const serviceCTAs = pillarPages.filter(pillar => pillar.slug.includes("/services/") || pillar.slug.includes("/layanan/")).slice(0, 3);
+---
+
+<div class="internal-links-widget bg-gray-50 p-6 rounded-lg border-l-4 border-blue-500 my-8">
+  <!-- Pillar Links (High Priority) -->
+  {relevantPillars.length > 0 && (
+    <div class="pillar-links mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        🎯 Layanan Utama
+      </h3>
+      <div class="grid gap-2">
+        {relevantPillars.map(pillar => (
+          <a href={pillar.slug} 
+             class="block p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors duration-200 border border-blue-200">
+            <div class="font-semibold text-blue-900">{pillar.title}</div>
+            <div class="text-sm text-blue-700 mt-1">{pillar.cta}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+  
+  <!-- Related Content (Medium Priority) -->
+  {relatedContent.length > 0 && (
+    <div class="related-content mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+        📖 Artikel Terkait
+      </h3>
+      <div class="space-y-2">
+        {relatedContent.map(content => (
+          <a href={content.slug} 
+             class="block p-2 hover:bg-gray-100 rounded-md transition-colors duration-200">
+            <div class="text-gray-800 font-medium">{content.title}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Cross-Pillar Content -->
+  {crossPillarContent.length > 0 && (
+    <div class="cross-pillar mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+        </svg>
+        🔗 Topik Lainnya
+      </h3>
+      <div class="space-y-2">
+        {crossPillarContent.map(content => (
+          <a href={content.slug} 
+             class="block p-2 hover:bg-gray-100 rounded-md transition-colors duration-200">
+            <div class="text-gray-800">{content.title}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+  
+  <!-- Service CTAs (Conversion Priority) -->
+  <div class="service-ctas">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+      <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+      </svg>
+      💼 Butuh Bantuan?
+    </h3>
+    <div class="grid gap-2">
+      {serviceCTAs.map(service => (
+        <a href={service.slug} 
+           class="block p-3 bg-gradient-to-r from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 rounded-md transition-all duration-200 border border-orange-200">
+          <div class="font-semibold text-orange-900">{service.title}</div>
+          <div class="text-sm text-orange-700 mt-1">{service.cta}</div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- WhatsApp CTA -->
+  <div class="whatsapp-cta mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="font-semibold text-green-900">Konsultasi Gratis</div>
+        <div class="text-sm text-green-700">Diskusikan kebutuhan Anda dengan expert kami</div>
+      </div>
+      <a href="https://wa.me/6285799520350?text=Halo,%20saya%20tertarik%20untuk%20konsultasi%20mengenai%20layanan%20IT" 
+         class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center transition-colors duration-200">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
