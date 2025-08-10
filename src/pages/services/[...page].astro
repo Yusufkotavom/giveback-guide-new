@@ -81,6 +81,10 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
 const { page } = Astro.props;
 
+// Get active category from URL
+const url = new URL(Astro.request.url);
+const activeCategory = url.searchParams.get('category');
+
 // Get all categories for filtering
 const allCategories = Array.from(
   new Set(
@@ -90,10 +94,6 @@ const allCategories = Array.from(
     })
   )
 ).sort();
-
-// Get active category from URL
-const url = new URL(Astro.request.url);
-const activeCategory = url.searchParams.get('category');
 
 // Filter services by category if specified
 const filteredServices = activeCategory
@@ -111,9 +111,7 @@ const filteredServices = activeCategory
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h1
-          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-        >
+        <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
           Layanan IT Profesional
         </h1>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
@@ -142,7 +140,7 @@ const filteredServices = activeCategory
         <div class="flex flex-wrap gap-2 items-center">
           <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Filter:</span>
           <a 
-            href="/services" 
+            href={page.currentPage === 1 ? "/services/" : `/services/${page.currentPage}/`}
             class={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
               !activeCategory 
                 ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700' 
@@ -153,7 +151,10 @@ const filteredServices = activeCategory
           </a>
           {allCategories.map((category) => (
             <a 
-              href={`/services?category=${encodeURIComponent(category)}`}
+              href={page.currentPage === 1 
+                ? `/services/?category=${encodeURIComponent(category)}`
+                : `/services/${page.currentPage}/?category=${encodeURIComponent(category)}`
+              }
               class={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 activeCategory === category
                   ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
@@ -166,9 +167,7 @@ const filteredServices = activeCategory
         </div>
       </div>
 
-      <div
-        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
-      >
+      <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
         {filteredServices.map((service) => (
           <ServiceCard service={service} />
         ))}
@@ -185,7 +184,7 @@ const filteredServices = activeCategory
           </p>
           <div class="mt-6">
             <a
-              href="/services"
+              href="/services/"
               class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Lihat Semua Layanan
@@ -196,41 +195,38 @@ const filteredServices = activeCategory
     </div>
   </section>
 
-  <!-- Pagination -->
-  <section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <nav class="flex justify-center items-center space-x-1">
-        {page.url.prev && (
-          <a
-            href={page.url.prev}
-            class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
-          >
-            Previous
-          </a>
-        )}
-        
-        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => (
-          <a
-            href={pageNum === 1 ? '/services/' : `/services/${pageNum}/`}
-            class={`flex items-center justify-center px-3 h-8 leading-tight border transition-colors ${
-              pageNum === page.currentPage
-                ? 'text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-            }`}
-          >
-            {pageNum}
-          </a>
-        ))}
-        
-        {page.url.next && (
-          <a
-            href={page.url.next}
-            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
-          >
-            Next
-          </a>
-        )}
-      </nav>
-    </div>
-  </section>
+  <!-- Pagination (only show if more than 1 page) -->
+  {page.lastPage > 1 && (
+    <section class="bg-white dark:bg-gray-900">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="flex justify-center items-center">
+          <!-- Previous Button -->
+          {page.url.prev && (
+            <a 
+              href={page.url.prev + (activeCategory ? `?category=${encodeURIComponent(activeCategory)}` : '')} 
+              class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+            >
+              <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+              </svg>
+              Previous
+            </a>
+          )}
+          
+          <!-- Next Button -->
+          {page.url.next && (
+            <a 
+              href={page.url.next + (activeCategory ? `?category=${encodeURIComponent(activeCategory)}` : '')} 
+              class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+            >
+              Next
+              <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
 </MainLayout>
