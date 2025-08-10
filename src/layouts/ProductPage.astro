@@ -15,7 +15,7 @@ const isMdxProduct = !isNotionProduct;
 const productData = isNotionProduct 
   ? {
       title: properties.pTitle,
-      category: Array.isArray(properties.pCategory) ? properties.pCategory : [properties.pCategory],
+      category: Array.isArray(properties.pCategory) ? properties.pCategory.filter(Boolean) : (properties.pCategory ? [properties.pCategory] : []),
       slug: properties.pSlug,
       imageUrl: properties.pImageURL1,
       published: properties.pPublished,
@@ -23,7 +23,7 @@ const productData = isNotionProduct
       locale: properties.pLocale,
       price: properties.pPrice,
       description: properties.pDescription,
-      features: properties.pFeatures,
+      features: Array.isArray(properties.pFeatures) ? properties.pFeatures.filter(Boolean) : (properties.pFeatures ? [properties.pFeatures] : []),
       name: properties.pName,
       type: properties.pType,
       url: properties.pURL,
@@ -41,7 +41,7 @@ const productData = isNotionProduct
     }
   : {
       title: properties.title,
-      category: properties.category,
+      category: Array.isArray(properties.category) ? properties.category.filter(Boolean) : (properties.category ? [properties.category] : []),
       slug: properties.slug,
       imageUrl: properties.imageUrl,
       published: { start: properties.published },
@@ -49,7 +49,7 @@ const productData = isNotionProduct
       locale: properties.locale,
       price: properties.price,
       description: properties.description,
-      features: properties.features,
+      features: Array.isArray(properties.features) ? properties.features.filter(Boolean) : (properties.features ? [properties.features] : []),
       name: properties.name,
       type: properties.type,
       url: properties.url,

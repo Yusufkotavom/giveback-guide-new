@@ -15,7 +15,7 @@ const isMdxService = !isNotionService;
 const serviceData = isNotionService 
   ? {
       title: properties.svTitle,
-      category: Array.isArray(properties.svCategory) ? properties.svCategory : [properties.svCategory],
+      category: Array.isArray(properties.svCategory) ? properties.svCategory.filter(Boolean) : (properties.svCategory ? [properties.svCategory] : []),
       slug: properties.svSlug,
       imageUrl: properties.svImageURL1,
       published: properties.svPublished,
@@ -34,7 +34,7 @@ const serviceData = isNotionService
     }
   : {
       title: properties.title,
-      category: properties.category,
+      category: Array.isArray(properties.category) ? properties.category.filter(Boolean) : (properties.category ? [properties.category] : []),
       slug: properties.slug,
       imageUrl: properties.imageUrl1,
       published: { start: properties.published },

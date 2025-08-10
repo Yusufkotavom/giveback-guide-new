@@ -15,7 +15,7 @@ const isMdxPost = !isNotionPost;
 const postData = isNotionPost 
   ? {
       title: properties.bTitle,
-      tags: Array.isArray(properties.bTags) ? properties.bTags : [properties.bTags],
+      tags: Array.isArray(properties.bTags) ? properties.bTags.filter(Boolean) : (properties.bTags ? [properties.bTags] : []),
       slug: properties.bSlug,
       coverImage: properties.bCoverImage,
       published: properties.bPublished,
@@ -24,7 +24,7 @@ const postData = isNotionPost
     }
   : {
       title: properties.title,
-      tags: properties.tags,
+      tags: Array.isArray(properties.tags) ? properties.tags.filter(Boolean) : (properties.tags ? [properties.tags] : []),
       slug: properties.slug,
       coverImage: properties.coverImage,
       published: { start: properties.published },

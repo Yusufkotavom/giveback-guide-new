@@ -15,7 +15,7 @@ const isMdxProject = !isNotionProject;
 const projectData = isNotionProject 
   ? {
       title: properties.pTitle,
-      category: Array.isArray(properties.pCategory) ? properties.pCategory : [properties.pCategory],
+      category: Array.isArray(properties.pCategory) ? properties.pCategory.filter(Boolean) : (properties.pCategory ? [properties.pCategory] : []),
       slug: properties.pSlug,
       imageUrl: properties.pImageURL,
       published: properties.pPublished,
@@ -34,7 +34,7 @@ const projectData = isNotionProject
       clientIndustry: properties.clientIndustry,
       projectDuration: properties.projectDuration,
       teamSize: properties.teamSize,
-      technologies: properties.technologies || [],
+      technologies: Array.isArray(properties.technologies) ? properties.technologies.filter(Boolean) : (properties.technologies ? [properties.technologies] : []),
       challenges: properties.challenges,
       solutions: properties.solutions,
       results: properties.results,
@@ -47,7 +47,7 @@ const projectData = isNotionProject
     }
   : {
       title: properties.title,
-      category: properties.category,
+      category: Array.isArray(properties.category) ? properties.category.filter(Boolean) : (properties.category ? [properties.category] : []),
       slug: properties.slug,
       imageUrl: properties.imageUrl,
       published: { start: properties.published },
@@ -66,7 +66,7 @@ const projectData = isNotionProject
       clientIndustry: properties.clientIndustry,
       projectDuration: properties.projectDuration,
       teamSize: properties.teamSize,
-      technologies: properties.technologies || [],
+      technologies: Array.isArray(properties.technologies) ? properties.technologies.filter(Boolean) : (properties.technologies ? [properties.technologies] : []),
       challenges: properties.challenges,
       solutions: properties.solutions,
       results: properties.results,

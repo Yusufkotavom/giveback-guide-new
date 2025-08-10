@@ -40,6 +40,10 @@ const {
   reviews = []
 } = Astro.props;
 
+// Ensure tags and category are always arrays
+const safeTags = Array.isArray(tags) ? tags : (tags ? [tags] : []);
+const safeCategory = Array.isArray(category) ? category : (category ? [category] : []);
+
 // Base Organization Schema
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -137,11 +141,11 @@ const articleSchema = {
     "@type": "WebPage",
     "@id": url
   },
-  "keywords": tags.join(", "),
-  "articleSection": category.length > 0 ? category[0] : "Technology",
+  "keywords": safeTags.length > 0 ? safeTags.join(", ") : "",
+  "articleSection": safeCategory.length > 0 ? safeCategory[0] : "Technology",
   "inLanguage": "id-ID",
   "wordCount": data.wordCount || undefined,
-  "about": category.map(cat => ({
+  "about": safeCategory.map(cat => ({
     "@type": "Thing",
     "name": cat
   }))
@@ -167,8 +171,8 @@ const serviceSchema = {
     }
   },
   "areaServed": data.wilayah || ["Surabaya", "Sidoarjo", "Jawa Timur"],
-  "serviceType": category.length > 0 ? category : ["IT Services"],
-  "category": category.join(", "),
+  "serviceType": safeCategory.length > 0 ? safeCategory : ["IT Services"],
+  "category": safeCategory.join(", "),
   ...(price && {
     "offers": {
       "@type": "Offer",
@@ -221,7 +225,7 @@ const productSchema = {
     "@type": "Organization",
     "name": COMPANY_NAME
   },
-  "category": category.join(", "),
+  "category": safeCategory.join(", "),
   "sku": data.sku || data.slug || title.replace(/\s+/g, '-').toLowerCase(),
   ...(price && {
     "offers": {
@@ -275,10 +279,10 @@ const projectSchema = {
   },
   "dateCreated": datePublished || new Date().toISOString(),
   "dateModified": dateModified || datePublished || new Date().toISOString(),
-  "genre": category.length > 0 ? category : ["Software Development"],
-  "keywords": tags.join(", "),
+  "genre": safeCategory.length > 0 ? safeCategory : ["Software Development"],
+  "keywords": safeTags.length > 0 ? safeTags.join(", ") : "",
   "inLanguage": "id-ID",
-  "about": category.map(cat => ({
+  "about": safeCategory.map(cat => ({
     "@type": "Thing",
     "name": cat
   })),
@@ -290,7 +294,7 @@ const projectSchema = {
     }
   }),
   // Add technologies used
-  ...(data.technologies && data.technologies.length > 0 && {
+  ...(data.technologies && Array.isArray(data.technologies) && data.technologies.length > 0 && {
     "material": data.technologies.map((tech: string) => ({
       "@type": "Thing",
       "name": tech
@@ -396,7 +400,7 @@ if (breadcrumbSchema) {
 ))}
 
 <!-- FAQ Schema (if FAQ data provided) -->
-{data.faq && data.faq.length > 0 && (
+{data.faq && Array.isArray(data.faq) && data.faq.length > 0 && (
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -412,7 +416,7 @@ if (breadcrumbSchema) {
 )}
 
 <!-- HowTo Schema (if steps provided) -->
-{data.steps && data.steps.length > 0 && (
+{data.steps && Array.isArray(data.steps) && data.steps.length > 0 && (
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "HowTo",
