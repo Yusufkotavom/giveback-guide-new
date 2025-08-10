@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import Avatar from "../assets/giveback-guide-avatar.svg";
+import KotacomLogo from "../assets/kotacom-logo.svg";
 import { SITE_TITLE, COMPANY_NAME, COMPANY_WHATSAPP } from "../consts";
 const today = new Date();
 ---
@@ -105,12 +105,7 @@ const today = new Date();
     <div class="md:flex md:justify-between">
       <div class="mb-6 md:mb-0">
         <a href="https://kotacom.id" class="flex items-center">
-          <Image src={Avatar} class="w-22 h-22" alt="kotacom.id" />
-          <div class="ml-3">
-            <div class="text-xl font-bold text-gray-900 dark:text-white">kotacom.id</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">IT Service & Publications</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Surabaya - Sidoarjo</div>
-          </div>
+          <Image src={KotacomLogo} class="h-16 w-auto" alt="kotacom.id" />
         </a>
       </div>
       <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
