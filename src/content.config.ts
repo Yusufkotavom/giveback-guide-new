@@ -213,10 +213,10 @@ const projectsMdx = defineCollection({
 			  sLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 			  sCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 			  sSlug: transformedPropertySchema.rich_text,
-			  sImageURL: transformedPropertySchema.url,
+			  sImageURL: transformedPropertySchema.url.optional(),
 			  sPublished: transformedPropertySchema.date,
-			  sPrice: transformedPropertySchema.rich_text,
-			  sDescription: transformedPropertySchema.rich_text,
+			  sPrice: transformedPropertySchema.rich_text.optional(),
+			  sDescription: transformedPropertySchema.rich_text.optional(),
 			}),
 		  }),
   });
@@ -252,14 +252,14 @@ const staysMdx = defineCollection({
 			  prLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 			  prCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
 			  prSlug: transformedPropertySchema.rich_text,
-			  prImageURL: transformedPropertySchema.url,
+			  prImageURL: transformedPropertySchema.url.optional(),
 			  prPublished: transformedPropertySchema.date,
-			  prPrice: transformedPropertySchema.rich_text,
-			  prDescription: transformedPropertySchema.rich_text,
-			  pImageURL2: transformedPropertySchema.url,
-			  pImageURL3: transformedPropertySchema.url,
+			  prPrice: transformedPropertySchema.rich_text.optional(),
+			  prDescription: transformedPropertySchema.rich_text.optional(),
+			  pImageURL2: transformedPropertySchema.url.optional(),
+			  pImageURL3: transformedPropertySchema.url.optional(),
 			  pPublished: transformedPropertySchema.date,
-			  pReview: transformedPropertySchema.rich_text,
+			  pReview: transformedPropertySchema.rich_text.optional(),
 			}),
 		  }),
   });
@@ -286,7 +286,7 @@ const productsMdx = defineCollection({
         svTitle: transformedPropertySchema.title,
         svCategory: transformedPropertySchema.multi_select.transform((v) => Array.isArray(v) ? v : [v]),
         svSlug: transformedPropertySchema.rich_text,
-        svImageURL1: transformedPropertySchema.url,
+        svImageURL1: transformedPropertySchema.url.optional(),
         svPublished: transformedPropertySchema.date,
 
         svWilayah: transformedPropertySchema.multi_select.transform((v) => Array.isArray(v) ? v : [v]).optional(),
@@ -311,18 +311,19 @@ const servicesMdx = defineCollection({
 });
 
 // Create an alias for 'blog' collection to maintain backward compatibility
-const blog = posts;
+const blog = postsMdx; // Use MDX posts as blog for now
 
 export const collections = { 
-  posts, 
+  // Temporarily disable Notion collections for testing
+  // posts, 
   postsMdx,
-  projects, 
+  // projects, 
   projectsMdx,
-  stays, 
+  // stays, 
   staysMdx,
-  products, 
+  // products, 
   productsMdx,
-  services,
+  // services,
   servicesMdx,
   // Add blog alias for RSS compatibility
   blog
