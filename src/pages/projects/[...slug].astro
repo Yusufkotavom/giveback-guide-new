@@ -4,18 +4,75 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
+	// Get projects from both Notion and MDX collections
+	const notionProjects = await getCollection('projects');
+	const mdxProjects = await getCollection('projectsMdx');
+	
+	// Map Notion projects (existing format)
+	const notionPaths = notionProjects.map((project) => ({
 		params: { slug: project.data.properties.pSlug },
-		props: project,
+		props: { project, source: 'notion' },
 	}));
+	
+	// Map MDX projects (new format)
+	const mdxPaths = mdxProjects.map((project) => ({
+		params: { slug: project.data.slug },
+		props: { project, source: 'mdx' },
+	}));
+	
+	return [...notionPaths, ...mdxPaths];
 }
-type Props = CollectionEntry<'projects'>;
 
-const project = Astro.props;
+type Props = {
+	project: CollectionEntry<'projects'> | CollectionEntry<'projectsMdx'>;
+	source: 'notion' | 'mdx';
+};
+
+const { project, source } = Astro.props;
 const { Content } = await render(project);
+
+// Normalize data structure for the layout
+const layoutData = source === 'notion' 
+	? {
+		...project.data,
+		title: project.data.properties.pTitle,
+		country: project.data.properties.pCountry,
+		locale: project.data.properties.pLocale,
+		category: project.data.properties.pCategory,
+		organiser: project.data.properties.pOrganiser,
+		slug: project.data.properties.pSlug,
+		cost: project.data.properties.pCost,
+		url: project.data.properties.pURL,
+		gygUrl: project.data.properties.pGYGURL,
+		mapsUrl: project.data.properties.pMapsURL,
+		verify: project.data.properties.pVerify,
+		imageUrl: project.data.properties.pImageURL,
+		published: project.data.properties.pPublished,
+		review: project.data.properties.pReview,
+		getInvolved: project.data.properties.pGetInvolved,
+	}
+	: {
+		...project.data,
+		properties: {
+			pTitle: project.data.title,
+			pCountry: project.data.country,
+			pLocale: project.data.locale,
+			pCategory: project.data.category,
+			pOrganiser: project.data.organiser,
+			pSlug: project.data.slug,
+			pCost: project.data.cost,
+			pURL: project.data.url,
+			pGYGURL: project.data.gygUrl,
+			pMapsURL: project.data.mapsUrl,
+			pVerify: project.data.verify,
+			pImageURL: project.data.imageUrl,
+			pPublished: project.data.published,
+			pReview: project.data.review,
+			pGetInvolved: project.data.getInvolved,
+		}
+	};
 ---
 
-<ProjectPage {...project.data}>
+<ProjectPage {...layoutData}>
 	<Content />
 </ProjectPage>

@@ -4,18 +4,68 @@ import PostLayout from '../../layouts/PostLayout.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
-	return posts.map((post) => ({
+	// Get posts from both Notion and MDX collections
+	const notionPosts = await getCollection('posts');
+	const mdxPosts = await getCollection('postsMdx');
+	
+	// Map Notion posts (existing format)
+	const notionPaths = notionPosts.map((post) => ({
 		params: { slug: post.data.properties.bSlug },
-		props: post,
+		props: { post, source: 'notion' },
 	}));
+	
+	// Map MDX posts (new format)
+	const mdxPaths = mdxPosts.map((post) => ({
+		params: { slug: post.data.slug },
+		props: { post, source: 'mdx' },
+	}));
+	
+	return [...notionPaths, ...mdxPaths];
 }
-type Props = CollectionEntry<'posts'>;
 
-const post = Astro.props;
+type Props = {
+	post: CollectionEntry<'posts'> | CollectionEntry<'postsMdx'>;
+	source: 'notion' | 'mdx';
+};
+
+const { post, source } = Astro.props;
 const { Content } = await render(post);
+
+// Normalize data structure for the layout
+const layoutData = source === 'notion' 
+	? {
+		...post.data,
+		title: post.data.properties.bTitle,
+		tags: post.data.properties.bTags,
+		slug: post.data.properties.bSlug,
+		coverImage: post.data.properties.bCoverImage,
+		published: post.data.properties.bPublished,
+		lastUpdated: post.data.properties.bLastUpdated,
+		description: post.data.properties.bDescription,
+		properties: {
+			bTitle: post.data.properties.bTitle,
+			bTags: post.data.properties.bTags,
+			bSlug: post.data.properties.bSlug,
+			bCoverImage: post.data.properties.bCoverImage,
+			bPublished: post.data.properties.bPublished,
+			bLastUpdated: post.data.properties.bLastUpdated,
+			bDescription: post.data.properties.bDescription,
+		}
+	}
+	: {
+		...post.data,
+		properties: {
+			bTitle: post.data.title,
+			bTags: post.data.tags,
+			bSlug: post.data.slug,
+			bCoverImage: post.data.coverImage,
+			bPublished: post.data.published,
+			bLastUpdated: post.data.lastUpdated || post.data.published,
+			bDescription: post.data.description,
+		}
+	};
 ---
 
-<PostLayout {...post.data}>
+<PostLayout {...layoutData}>
 	<Content />
 </PostLayout>

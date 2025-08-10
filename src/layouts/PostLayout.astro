@@ -13,17 +13,37 @@ const title = properties.bTitle || "Default Title";
 const description = properties.bDescription || "";
 const image = properties.bCoverImage || "//giveback-guide-placeholder.jpg";
 
-// Format the date
+// Format the date - handle both Notion and MDX date formats
 const formattedDate = (() => {
   if (!properties.bLastUpdated) {
     return "Unknown Date"; // Fallback value if bLastUpdated is null
   }
-  const [year, month, day] = properties.bLastUpdated.start
-    .toISOString()
-    .split("T")[0]
-    .split("-"); // Convert to ISO string and split the date
-  const date = new Date(`${year}-${month}-${day}`); // Create a Date object
-  return date.toLocaleDateString("en-GB", {
+  
+  let dateObject;
+  
+  // Check if it's a Notion date object (has .start property)
+  if (properties.bLastUpdated && typeof properties.bLastUpdated === 'object' && properties.bLastUpdated.start) {
+    dateObject = new Date(properties.bLastUpdated.start);
+  } 
+  // Check if it's already a Date object (MDX format)
+  else if (properties.bLastUpdated instanceof Date) {
+    dateObject = properties.bLastUpdated;
+  }
+  // Check if it's a string that can be parsed as a date
+  else if (typeof properties.bLastUpdated === 'string') {
+    dateObject = new Date(properties.bLastUpdated);
+  }
+  // Fallback
+  else {
+    return "Unknown Date";
+  }
+  
+  // Validate the date
+  if (isNaN(dateObject.getTime())) {
+    return "Unknown Date";
+  }
+  
+  return dateObject.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "long", // Full month name
     year: "numeric",
@@ -31,7 +51,7 @@ const formattedDate = (() => {
 })();
 ---
 <MainLayout title={title} description={description} image={image}>
-  <div class="bg-white dark:bg-gray-900">
+  
     <div
       class="mx-auto max-w-screen-xl grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 px-0 lg:px-6"
     >
@@ -78,7 +98,7 @@ const formattedDate = (() => {
                       d="m1 9 4-4-4-4"></path>
                   </svg>
                   <a
-                    href="/blog/"
+                    href="/blog"
                     class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
                     >Blog</a
                   >
@@ -102,11 +122,12 @@ const formattedDate = (() => {
                   </svg>
                   <span
                     class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400"
-                    >{properties.bTitle.length > 30 ? `${properties.bTitle.slice(0, 30)}...` : properties.bTitle}</span
+                    >{properties.bTitle}</span
                   >
                 </div>
               </li>
             </ol>
+          </nav>
         </section>
 
         <!-- Featured Image -->

@@ -4,18 +4,91 @@ import ProductPage from '../../layouts/ProductPage.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const products = await getCollection('products');
-	return products.map((product) => ({
+	// Get products from both Notion and MDX collections
+	const notionProducts = await getCollection('products');
+	const mdxProducts = await getCollection('productsMdx');
+	
+	// Map Notion products (existing format)
+	const notionPaths = notionProducts.map((product) => ({
 		params: { slug: product.data.properties.pSlug },
-		props: product,
+		props: { product, source: 'notion' },
 	}));
+	
+	// Map MDX products (new format)
+	const mdxPaths = mdxProducts.map((product) => ({
+		params: { slug: product.data.slug },
+		props: { product, source: 'mdx' },
+	}));
+	
+	return [...notionPaths, ...mdxPaths];
 }
-type Props = CollectionEntry<'products'>;
 
-const product = Astro.props;
+type Props = {
+	product: CollectionEntry<'products'> | CollectionEntry<'productsMdx'>;
+	source: 'notion' | 'mdx';
+};
+
+const { product, source } = Astro.props;
 const { Content } = await render(product);
+
+// Normalize data structure for the layout
+const layoutData = source === 'notion' 
+	? {
+		...product.data,
+		title: product.data.properties.pTitle,
+		price: product.data.properties.pPrice,
+		country: product.data.properties.pCountry,
+		locale: product.data.properties.pLocale,
+		category: product.data.properties.pCategory,
+		features: product.data.properties.pFeatures,
+		name: product.data.properties.pName,
+		type: product.data.properties.pType,
+		slug: product.data.properties.pSlug,
+		url: product.data.properties.pURL,
+		otherUrl: product.data.properties.pOtherURL,
+		tokopediaUrl: product.data.properties.pTokopediaURL,
+		shopeeUrl: product.data.properties.pShopeeURL,
+		blibliUrl: product.data.properties.pBlibliURL,
+		bukalapakUrl: product.data.properties.pBukalapakURL,
+		lazadaUrl: product.data.properties.pLazadaURL,
+		mapsUrl: product.data.properties.pMapsURL,
+		verify: product.data.properties.pVerify,
+		imageUrl1: product.data.properties.pImageURL1,
+		imageUrl2: product.data.properties.pImageURL2,
+		imageUrl3: product.data.properties.pImageURL3,
+		published: product.data.properties.pPublished,
+		review: product.data.properties.pReview,
+	}
+	: {
+		...product.data,
+		properties: {
+			pTitle: product.data.title,
+			pPrice: product.data.price,
+			pCountry: product.data.country,
+			pLocale: product.data.locale,
+			pCategory: product.data.category,
+			pFeatures: product.data.features,
+			pName: product.data.name,
+			pType: product.data.type,
+			pSlug: product.data.slug,
+			pURL: product.data.url,
+			pOtherURL: product.data.otherUrl,
+			pTokopediaURL: product.data.tokopediaUrl,
+			pShopeeURL: product.data.shopeeUrl,
+			pBlibliURL: product.data.blibliUrl,
+			pBukalapakURL: product.data.bukalapakUrl,
+			pLazadaURL: product.data.lazadaUrl,
+			pMapsURL: product.data.mapsUrl,
+			pVerify: product.data.verify,
+			pImageURL1: product.data.imageUrl1,
+			pImageURL2: product.data.imageUrl2,
+			pImageURL3: product.data.imageUrl3,
+			pPublished: product.data.published,
+			pReview: product.data.review,
+		}
+	};
 ---
 
-<ProductPage {...product.data}>
+<ProductPage {...layoutData}>
 	<Content />
 </ProductPage>

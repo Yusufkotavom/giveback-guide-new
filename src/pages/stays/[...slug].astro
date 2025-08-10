@@ -4,18 +4,85 @@ import StayPage from '../../layouts/StayPage.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const stays = await getCollection('stays');
-	return stays.map((stay) => ({
+	// Get stays from both Notion and MDX collections
+	const notionStays = await getCollection('stays');
+	const mdxStays = await getCollection('staysMdx');
+	
+	// Map Notion stays (existing format)
+	const notionPaths = notionStays.map((stay) => ({
 		params: { slug: stay.data.properties.sSlug },
-		props: stay,
+		props: { stay, source: 'notion' },
 	}));
+	
+	// Map MDX stays (new format)
+	const mdxPaths = mdxStays.map((stay) => ({
+		params: { slug: stay.data.slug },
+		props: { stay, source: 'mdx' },
+	}));
+	
+	return [...notionPaths, ...mdxPaths];
 }
-type Props = CollectionEntry<'stays'>;
 
-const stay = Astro.props;
+type Props = {
+	stay: CollectionEntry<'stays'> | CollectionEntry<'staysMdx'>;
+	source: 'notion' | 'mdx';
+};
+
+const { stay, source } = Astro.props;
 const { Content } = await render(stay);
+
+// Normalize data structure for the layout
+const layoutData = source === 'notion' 
+	? {
+		...stay.data,
+		title: stay.data.properties.sTitle,
+		country: stay.data.properties.sCountry,
+		locale: stay.data.properties.sLocale,
+		category: stay.data.properties.sCategory,
+		facilities: stay.data.properties.sFacilities,
+		name: stay.data.properties.sName,
+		type: stay.data.properties.sType,
+		slug: stay.data.properties.sSlug,
+		url: stay.data.properties.sURL,
+		otherUrl: stay.data.properties.sOtherURL,
+		bookingUrl: stay.data.properties.sBookingURL,
+		hotelsUrl: stay.data.properties.sHotelsURL,
+		agodaUrl: stay.data.properties.sAgodaURL,
+		mapsUrl: stay.data.properties.sMapsURL,
+		verify: stay.data.properties.sVerify,
+		imageUrl1: stay.data.properties.sImageURL1,
+		imageUrl2: stay.data.properties.sImageURL2,
+		imageUrl3: stay.data.properties.sImageURL3,
+		published: stay.data.properties.sPublished,
+		review: stay.data.properties.sReview,
+	}
+	: {
+		...stay.data,
+		properties: {
+			sTitle: stay.data.title,
+			sCountry: stay.data.country,
+			sLocale: stay.data.locale,
+			sCategory: stay.data.category,
+			sFacilities: stay.data.facilities,
+			sName: stay.data.name,
+			sType: stay.data.type,
+			sSlug: stay.data.slug,
+			sURL: stay.data.url,
+			sOtherURL: stay.data.otherUrl,
+			sBookingURL: stay.data.bookingUrl,
+			sHotelsURL: stay.data.hotelsUrl,
+			sAgodaURL: stay.data.agodaUrl,
+			sMapsURL: stay.data.mapsUrl,
+			sVerify: stay.data.verify,
+			sImageURL1: stay.data.imageUrl1,
+			sImageURL2: stay.data.imageUrl2,
+			sImageURL3: stay.data.imageUrl3,
+			sPublished: stay.data.published,
+			sReview: stay.data.review,
+		}
+	};
 ---
 
-<StayPage {...stay.data}>
+<StayPage {...layoutData}>
 	<Content />
 </StayPage>
