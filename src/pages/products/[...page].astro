@@ -12,9 +12,21 @@ function parseDate(dateStr: string): Date {
 }
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  // Fetch products from both Notion and MDX collections
-  const notionProducts = await getCollection("products");
-  const mdxProducts = await getCollection("productsMdx");
+  // Safely fetch products from both Notion and MDX collections
+  let notionProducts = [];
+  let mdxProducts = [];
+  
+  try {
+    notionProducts = await getCollection("products");
+  } catch (e) {
+    console.warn("Products collection not available:", e.message);
+  }
+  
+  try {
+    mdxProducts = await getCollection("productsMdx");
+  } catch (e) {
+    console.warn("ProductsMdx collection not available:", e.message);
+  }
 
   // Normalize Notion products to match expected structure
   const normalizedNotionProducts = notionProducts.map((entry) => ({
@@ -57,6 +69,13 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
   // Combine both collections
   const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
+
+  // If no products available, return empty pagination
+  if (allProducts.length === 0) {
+    return paginate([], {
+      pageSize: 9,
+    });
+  }
 
   // Sort products by pPublished date (descending order)
   const sortedEntries = allProducts.sort((a, b) => {

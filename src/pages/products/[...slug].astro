@@ -4,9 +4,21 @@ import ProductPage from '../../layouts/ProductPage.astro';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
-	// Get products from both Notion and MDX collections
-	const notionProducts = await getCollection('products');
-	const mdxProducts = await getCollection('productsMdx');
+	// Safely get products from both Notion and MDX collections
+	let notionProducts = [];
+	let mdxProducts = [];
+	
+	try {
+		notionProducts = await getCollection('products');
+	} catch (e) {
+		console.warn("Products collection not available:", e.message);
+	}
+	
+	try {
+		mdxProducts = await getCollection('productsMdx');
+	} catch (e) {
+		console.warn("ProductsMdx collection not available:", e.message);
+	}
 	
 	// Map Notion products (existing format)
 	const notionPaths = notionProducts.map((product) => ({

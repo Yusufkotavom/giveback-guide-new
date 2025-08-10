@@ -18,9 +18,21 @@ function parseDate(dateStr: string): Date {
   return new Date(`${year}-${month}-${day}`);
 }
 
-// Fetch products from both Notion and MDX collections
-const notionProducts = await getCollection("products");
-const mdxProducts = await getCollection("productsMdx");
+// Safely fetch products from both Notion and MDX collections
+let notionProducts = [];
+let mdxProducts = [];
+
+try {
+  notionProducts = await getCollection("products");
+} catch (e) {
+  console.warn("Products collection not available:", e.message);
+}
+
+try {
+  mdxProducts = await getCollection("productsMdx");
+} catch (e) {
+  console.warn("ProductsMdx collection not available:", e.message);
+}
 
 // Normalize Notion products to match expected structure
 const normalizedNotionProducts = notionProducts.map((entry) => ({
@@ -81,6 +93,9 @@ const sortedEntries = allProducts.sort((a, b) => {
 
 // Limit the number of products based on the limit prop
 const limitedEntries = sortedEntries.slice(0, limit);
+
+// Debug info
+console.log(`LatestProducts: Found ${notionProducts.length} Notion products, ${mdxProducts.length} MDX products, showing ${limitedEntries.length} total`);
 ---
 
 <section class="bg-white dark:bg-gray-900">
@@ -103,14 +118,23 @@ const limitedEntries = sortedEntries.slice(0, limit);
         <PCountryDropdown />
       </div>
     </div>
-    <div
-      class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
-    >
-      {limitedEntries.map((product) => (
-        <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
-          <ProductCard product={product} />
-        </div>
-      ))}
-    </div>
+    
+    {limitedEntries.length > 0 ? (
+      <div
+        class="flex flex-row overflow-x-auto hide-scrollbar space-x-4 md:space-x-0 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12"
+      >
+        {limitedEntries.map((product) => (
+          <div class="w-[70%] sm:w-[50%] md:w-auto flex-shrink-0 md:flex-shrink">
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-gray-500 dark:text-gray-400 text-lg">
+          Tidak ada produk yang tersedia saat ini.
+        </p>
+      </div>
+    )}
   </div>
 </section>
