@@ -3,7 +3,54 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 
-const entries = await getCollection('services');
+// Fetch services from both Notion and MDX collections
+const notionServices = await getCollection('services');
+const mdxServices = await getCollection('servicesMdx');
+
+// Normalize Notion services (existing format)
+const normalizedNotionServices = notionServices.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+      svImageURL1: entry.data.properties.svImageURL1 || "",
+      svVerify: entry.data.properties.svVerify || "",
+    },
+  },
+}));
+
+// Normalize MDX services to match Notion structure
+const normalizedMdxServices = mdxServices.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      svTitle: entry.data.title,
+      svCategory: entry.data.category,
+      svSlug: entry.data.slug,
+      svImageURL1: entry.data.imageUrl1 || "",
+      svPublished: { start: entry.data.published },
+      svWilayah: entry.data.wilayah,
+      svProvider: entry.data.provider,
+      svType: entry.data.type,
+      svPrice: entry.data.price,
+      svURL: entry.data.url,
+      svWhatsAppURL: entry.data.whatsappUrl,
+      svMapsURL: entry.data.mapsUrl,
+      svVerify: entry.data.verify || "",
+      svImageURL2: entry.data.imageUrl2,
+      svImageURL3: entry.data.imageUrl3,
+      svReview: entry.data.review,
+    },
+  },
+}));
+
+// Combine both collections
+const entries = [...normalizedNotionServices, ...normalizedMdxServices];
+
 const url = new URL(Astro.request.url);
 const activeCategory = url.searchParams.get('category');
 
