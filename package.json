@@ -28,6 +28,9 @@
   },
   "devDependencies": {
     "@chlorinec-pkgs/notion-astro-loader": "^1.1.0-0",
-    "flowbite-typography": "^1.0.5"
+    "flowbite-typography": "^1.0.5",
+    "@directus/sdk": "^16.0.1",
+    "gray-matter": "^4.0.3",
+    "fast-glob": "^3.3.2"
   }
 }
