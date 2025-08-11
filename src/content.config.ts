@@ -12,6 +12,10 @@ function getEnvVar(name: string): string {
 	}
 }
 
+function hasRealEnv(value: string): boolean {
+  return Boolean(value && value !== 'placeholder-during-type-generation');
+}
+
 // MDX Schema for posts
 const postMdxSchema = z.object({
   title: z.string(),
@@ -122,7 +126,7 @@ const serviceMdxSchema = z.object({
 });
 
   const posts = defineCollection({
-	loader: notionLoader({
+	loader: (hasRealEnv(getEnvVar('BLOG_NOTION_TOKEN')) && hasRealEnv(getEnvVar('BLOG_NOTION_DATABASE_ID'))) ? notionLoader({
 		auth: getEnvVar('BLOG_NOTION_TOKEN'),
     database_id: getEnvVar('BLOG_NOTION_DATABASE_ID'),
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
@@ -133,7 +137,7 @@ const serviceMdxSchema = z.object({
 		property: 'Status',
 		select: { "equals": "Published" },
 	  },
-	}),
+	}) : glob({ pattern: '**/*.__skip__', base: './content/__skip__' }),
 	schema: notionPageSchema({
 		properties: z.object({
 		  bTitle: transformedPropertySchema.title,
@@ -154,7 +158,7 @@ const postsMdx = defineCollection({
 });
 
   const projects = defineCollection({
-	loader: notionLoader({
+	loader: (hasRealEnv(getEnvVar('PROJECTS_NOTION_TOKEN')) && hasRealEnv(getEnvVar('PROJECTS_NOTION_DATABASE_ID'))) ? notionLoader({
 		auth: getEnvVar('PROJECTS_NOTION_TOKEN'),
     database_id: getEnvVar('PROJECTS_NOTION_DATABASE_ID'),
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
@@ -165,7 +169,7 @@ const postsMdx = defineCollection({
 		property: 'Status',
 		select: { "equals": "Published" },
 	  },
-	}),
+	}) : glob({ pattern: '**/*.__skip__', base: './content/__skip__' }),
 	schema: notionPageSchema({
 		properties: z.object({
 		  pTitle: transformedPropertySchema.title,
@@ -194,7 +198,7 @@ const projectsMdx = defineCollection({
 });
 
   const stays = defineCollection({
-	loader: notionLoader({
+	loader: (hasRealEnv(getEnvVar('STAYS_NOTION_TOKEN')) && hasRealEnv(getEnvVar('STAYS_NOTION_DATABASE_ID'))) ? notionLoader({
 		auth: getEnvVar('STAYS_NOTION_TOKEN'),
     database_id: getEnvVar('STAYS_NOTION_DATABASE_ID'),
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
@@ -205,7 +209,7 @@ const projectsMdx = defineCollection({
 		property: 'Status',
 		select: { "equals": "Published" },
 	  },
-	}),
+	}) : glob({ pattern: '**/*.__skip__', base: './content/__skip__' }),
 			schema: notionPageSchema({
 			properties: z.object({
 			  sTitle: transformedPropertySchema.title,
@@ -233,7 +237,7 @@ const staysMdx = defineCollection({
 });
 
   const products = defineCollection({
-	loader: notionLoader({
+	loader: (hasRealEnv(getEnvVar('PRODUCTS_NOTION_TOKEN')) && hasRealEnv(getEnvVar('PRODUCTS_NOTION_DATABASE_ID'))) ? notionLoader({
 		auth: getEnvVar('PRODUCTS_NOTION_TOKEN'),
     database_id: getEnvVar('PRODUCTS_NOTION_DATABASE_ID'),
 	  // Optional: tell loader where to store downloaded aws images, relative to 'src' directory
@@ -244,7 +248,7 @@ const staysMdx = defineCollection({
 		property: 'Status',
 		select: { "equals": "Published" },
 	  },
-	}),
+	}) : glob({ pattern: '**/*.__skip__', base: './content/__skip__' }),
 		schema: notionPageSchema({
 		properties: z.object({
 		  // Core Product Information
@@ -308,11 +312,11 @@ const productsMdx = defineCollection({
 });
 
   const services = defineCollection({
-    loader: notionLoader({
+    loader: (hasRealEnv(getEnvVar('SERVICES_NOTION_TOKEN')) && hasRealEnv(getEnvVar('SERVICES_NOTION_DATABASE_ID'))) ? notionLoader({
       auth: getEnvVar('SERVICES_NOTION_TOKEN'),
       database_id: getEnvVar('SERVICES_NOTION_DATABASE_ID'),
       filter: { property: 'Status', select: { "equals": "Published" } },
-    }),
+    }) : glob({ pattern: '**/*.__skip__', base: './content/__skip__' }),
     schema: notionPageSchema({
       properties: z.object({
         svTitle: transformedPropertySchema.title,

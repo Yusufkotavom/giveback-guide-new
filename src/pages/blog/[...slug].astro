@@ -30,6 +30,20 @@ type Props = {
 const { post, source } = Astro.props;
 const { Content } = await render(post);
 
+// Best-effort description and word count for MDX
+let mdxDescription: string | undefined = undefined;
+let wordCount: number | undefined = undefined;
+if (source === 'mdx') {
+  const body: string | undefined = (post as any).body;
+  if (body && typeof body === 'string') {
+    const plain = body.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`]*`/g, ' ').replace(/[#>*_\-]|\[(.*?)\]\((.*?)\)/g, ' ').replace(/\s+/g, ' ').trim();
+    mdxDescription = post.data.description || plain.slice(0, 155);
+    wordCount = plain.split(/\s+/).filter(Boolean).length;
+  } else {
+    mdxDescription = (post as any).data?.description;
+  }
+}
+
 // Normalize data structure for the layout
 const layoutData = source === 'notion' 
 	? {
@@ -53,6 +67,7 @@ const layoutData = source === 'notion'
 	}
 	: {
 		...post.data,
+		description: mdxDescription || post.data.description,
 		properties: {
 			bTitle: post.data.title,
 			bTags: post.data.tags,
@@ -60,11 +75,11 @@ const layoutData = source === 'notion'
 			bCoverImage: post.data.coverImage,
 			bPublished: { start: post.data.published },
 			bLastUpdated: { start: post.data.lastUpdated || post.data.published },
-			bDescription: post.data.description,
-		}
+			bDescription: mdxDescription || post.data.description,
+		},
 	};
 ---
 
-<PostLayout {...layoutData}>
+<PostLayout {...layoutData} wordCount={wordCount}>
 	<Content />
 </PostLayout>
