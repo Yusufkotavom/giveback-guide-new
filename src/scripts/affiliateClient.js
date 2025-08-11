@@ -1,6 +1,108 @@
 // Client-side affiliate tracking utilities
 // This script makes affiliate utilities available globally for tracking
 
+// Product Embed Manager for dynamic embedding
+class ProductEmbedManager {
+  constructor() {
+    this.embedCache = new Map();
+    this.observer = null;
+    this.initializeObserver();
+  }
+
+  // Initialize intersection observer for lazy loading embeds
+  initializeObserver() {
+    if (typeof window === 'undefined' || !window.IntersectionObserver) return;
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.loadEmbed(entry.target);
+          this.observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '100px 0px',
+      threshold: 0.1
+    });
+  }
+
+  // Register embed placeholder for lazy loading
+  registerEmbed(element) {
+    if (!this.observer) return;
+    
+    const slug = element.dataset.productSlug;
+    if (!slug) return;
+
+    element.classList.add('loading');
+    element.innerHTML = `
+      <div class="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <span class="ml-3 text-gray-600">Loading product...</span>
+      </div>
+    `;
+
+    this.observer.observe(element);
+  }
+
+  // Load embed content
+  async loadEmbed(element) {
+    const slug = element.dataset.productSlug;
+    const style = element.dataset.embedStyle || 'card';
+
+    try {
+      element.innerHTML = this.createEmbedHTML(slug, style);
+      element.classList.remove('loading');
+      element.classList.add('loaded');
+
+      if (window.affiliateUtils) {
+        window.affiliateUtils.trackView(slug, 'blog-embed');
+      }
+    } catch (error) {
+      console.error('Failed to load embed:', error);
+      element.innerHTML = this.createErrorHTML();
+      element.classList.remove('loading');
+      element.classList.add('error');
+    }
+  }
+
+  createEmbedHTML(slug, style) {
+    return `
+      <div class="product-embed-placeholder bg-blue-50 border-2 border-dashed border-blue-200 rounded-lg p-6 text-center">
+        <div class="text-blue-600 mb-2">
+          <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">Product: ${slug}</h4>
+        <p class="text-sm text-gray-600 mb-3">Style: ${style}</p>
+        <p class="text-xs text-gray-500">Product embed placeholder</p>
+      </div>
+    `;
+  }
+
+  createErrorHTML() {
+    return `
+      <div class="product-embed-error bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+        <div class="text-red-500 mb-2">
+          <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+        </div>
+        <p class="text-sm text-red-700">Failed to load product</p>
+      </div>
+    `;
+  }
+
+  initializeEmbeds() {
+    const embeds = document.querySelectorAll('[data-product-slug]');
+    embeds.forEach(embed => {
+      if (!embed.classList.contains('loaded') && !embed.classList.contains('loading')) {
+        this.registerEmbed(embed);
+      }
+    });
+  }
+}
+
 // Initialize affiliate utilities on the client-side
 window.affiliateUtils = {
   // Track affiliate click events
@@ -262,13 +364,35 @@ window.affiliateUtils = {
   }
 };
 
+// Initialize product embed manager
+function initializeProductEmbeds() {
+  const embedManager = new ProductEmbedManager();
+  embedManager.initializeEmbeds();
+  
+  // Make embed manager globally available
+  window.productEmbedManager = embedManager;
+  
+  // Add shortcode support for copy functionality
+  window.copyEmbedCode = function(slug, style = 'card') {
+    const embedCode = `<ProductEmbed slug="${slug}" style="${style}" />`;
+    
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(embedCode).then(() => {
+        console.log('Embed code copied to clipboard!');
+      });
+    }
+  };
+}
+
 // Initialize when DOM is loaded
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     window.affiliateUtils.init();
+    initializeProductEmbeds();
   });
 } else {
   window.affiliateUtils.init();
+  initializeProductEmbeds();
 }
 
 // Export for module usage
