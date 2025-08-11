@@ -12,21 +12,20 @@ function parseDate(dateStr: string): Date {
   return new Date(`${year}-${month}-${day}`);
 }
 
-// Helper function to calculate priority score for sorting
-function getPriorityScore(priority: string, isSponsored: boolean): number {
-  if (isSponsored) return 100;
-  
-  const priorityScores = {
-    'featured': 90,
-    'bestseller': 80,
-    'sale': 70,
-    'new': 60,
-  };
-  
-  return priorityScores[priority?.toLowerCase()] || 0;
-}
-
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  // Helper function to calculate priority score for sorting
+  function getPriorityScore(priority: string, isSponsored: boolean): number {
+    if (isSponsored) return 100;
+    
+    const priorityScores = {
+      'featured': 90,
+      'bestseller': 80,
+      'sale': 70,
+      'new': 60,
+    };
+    
+    return priorityScores[priority?.toLowerCase()] || 0;
+  }
   // Fetch products from both Notion and MDX collections
   const notionProducts = await getCollection('products');
   const mdxProducts = await getCollection('productsMdx');
