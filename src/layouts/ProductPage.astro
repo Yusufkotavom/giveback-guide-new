@@ -4,6 +4,15 @@ import MainLayout from "./MainLayout.astro";
 import ResponsiveImage from "../components/ResponsiveImage.astro";
 import SchemaMarkup from "../components/SchemaMarkup.astro";
 import { COMPANY_NAME } from "../consts";
+import { 
+  getAffiliateMarketplaces, 
+  formatAffiliatePrice, 
+  calculateDiscountPercentage, 
+  getPriorityBadge,
+  isSponsored,
+  getCTAText,
+  type AffiliateProduct 
+} from "../utils/affiliateUtils";
 
 type Props = CollectionEntry<"products">["data"] | CollectionEntry<"productsMdx">["data"];
 
@@ -11,7 +20,7 @@ const { properties } = Astro.props as any;
 const isNotionProduct = !!properties.pTitle;
 const isMdxProduct = !isNotionProduct;
 
-// Normalize data for consistent access
+// Normalize data for consistent access with all affiliate fields
 const productData = isNotionProduct 
   ? {
       title: properties.pTitle,
@@ -38,6 +47,19 @@ const productData = isNotionProduct
       imageUrl2: properties.pImageURL2,
       imageUrl3: properties.pImageURL3,
       review: properties.pReview,
+      // New affiliate fields
+      affiliateCode: properties.pAffiliateCode,
+      commissionRate: properties.pCommissionRate,
+      affiliateProvider: properties.pAffiliateProvider,
+      discountCode: properties.pDiscountCode,
+      specialOffer: properties.pSpecialOffer,
+      ctaText: properties.pCTAText,
+      priority: properties.pPriority,
+      externalRating: properties.pExternalRating,
+      soldCount: properties.pSoldCount,
+      originalPrice: properties.pOriginalPrice,
+      isSponsored: properties.pIsSponsored,
+      targetAudience: Array.isArray(properties.pTargetAudience) ? properties.pTargetAudience.filter(Boolean) : (properties.pTargetAudience ? [properties.pTargetAudience] : []),
     }
   : {
       title: properties.title,
@@ -64,12 +86,59 @@ const productData = isNotionProduct
       imageUrl2: properties.imageUrl2,
       imageUrl3: properties.imageUrl3,
       review: properties.review,
+      // New affiliate fields (empty for MDX)
+      affiliateCode: "",
+      commissionRate: "",
+      affiliateProvider: "",
+      discountCode: "",
+      specialOffer: "",
+      ctaText: "",
+      priority: "",
+      externalRating: "",
+      soldCount: "",
+      originalPrice: "",
+      isSponsored: false,
+      targetAudience: [],
     };
 
 const title = productData.title + " - Products";
 const description = productData.description || productData.review || `${productData.title} - Produk berkualitas dari ${COMPANY_NAME}`;
 const DEFAULT_IMAGE = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png';
 const image = productData.imageUrl || DEFAULT_IMAGE;
+
+// Create AffiliateProduct for affiliate utilities
+const affiliateProduct: AffiliateProduct = {
+  title: productData.title,
+  slug: productData.slug,
+  price: productData.price,
+  originalPrice: productData.originalPrice,
+  imageUrl: productData.imageUrl,
+  affiliateCode: productData.affiliateCode,
+  commissionRate: productData.commissionRate,
+  discountCode: productData.discountCode,
+  specialOffer: productData.specialOffer,
+  ctaText: productData.ctaText,
+  priority: productData.priority,
+  externalRating: productData.externalRating,
+  soldCount: productData.soldCount,
+  isSponsored: productData.isSponsored,
+  targetAudience: productData.targetAudience,
+  tokopediaUrl: productData.tokopediaUrl,
+  shopeeUrl: productData.shopeeUrl,
+  blibliUrl: productData.blibliUrl,
+  bukalapakUrl: productData.bukalapakUrl,
+  lazadaUrl: productData.lazadaUrl,
+};
+
+// Get affiliate marketplaces with tracking
+const affiliateMarketplaces = getAffiliateMarketplaces(affiliateProduct, 'single-page');
+
+// Calculate pricing and badges
+const formattedPrice = formatAffiliatePrice(productData.price);
+const formattedOriginalPrice = formatAffiliatePrice(productData.originalPrice);
+const discountPercentage = calculateDiscountPercentage(productData.originalPrice || '', productData.price || '');
+const priorityBadge = getPriorityBadge(productData.priority);
+const sponsored = isSponsored(affiliateProduct);
 
 // Parse date safely for schema
 const publishedDate = productData.published?.start 
@@ -119,7 +188,16 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
       features: productData.features,
       name: productData.name,
       type: productData.type,
-      verify: productData.verify
+      verify: productData.verify,
+      // Enhanced schema with affiliate data
+      affiliateProvider: productData.affiliateProvider,
+      commissionRate: productData.commissionRate,
+      specialOffer: productData.specialOffer,
+      isSponsored: sponsored,
+      externalRating: productData.externalRating,
+      soldCount: productData.soldCount,
+      originalPrice: productData.originalPrice,
+      discountPercentage: discountPercentage > 0 ? discountPercentage : undefined
     }}
   />
 
@@ -158,12 +236,33 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
   </section>
 
   <!-- Product Header -->
-  <section class="bg-white dark:bg-gray-900">
+  <section class="bg-white dark:bg-gray-900 relative">
+    <!-- Sponsored Banner -->
+    {sponsored && (
+      <div class="absolute top-0 right-0 z-10 bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-bl-lg">
+        SPONSORED
+      </div>
+    )}
+    
+    <!-- Priority Badge -->
+    {priorityBadge && !sponsored && (
+      <div class={`absolute top-0 right-0 z-10 text-sm font-bold px-4 py-2 rounded-bl-lg ${priorityBadge.class}`}>
+        {priorityBadge.text}
+      </div>
+    )}
+
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid lg:grid-cols-2 gap-8 items-start">
         <div>
           <!-- Product Images -->
-          <div class="space-y-4">
+          <div class="space-y-4 relative">
+            <!-- Discount Badge -->
+            {discountPercentage > 0 && (
+              <div class="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">
+                -{discountPercentage}%
+              </div>
+            )}
+            
             <ResponsiveImage
               src={images[0]}
               alt={productData.title}
@@ -177,7 +276,7 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
                   <ResponsiveImage
                     src={img}
                     alt={productData.title}
-                    class="rounded-lg shadow w-full h-20 object-cover"
+                    class="rounded-lg shadow w-full h-20 object-cover cursor-pointer hover:opacity-75 transition-opacity"
                   />
                 ))}
               </div>
@@ -191,16 +290,53 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
               {productData.title}
             </h1>
             
-            {productData.price && (
-              <div class="mb-4">
-                <span class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                  {productData.price}
-                </span>
+            <!-- Rating & Sold Count -->
+            <div class="flex items-center space-x-4 mb-4">
+              {productData.externalRating && (
+                <div class="flex items-center">
+                  <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <span class="text-lg text-gray-700 dark:text-gray-300 ml-1 font-medium">{productData.externalRating}</span>
+                </div>
+              )}
+              {productData.soldCount && (
+                <span class="text-sm text-gray-500">({productData.soldCount} terjual)</span>
+              )}
+            </div>
+            
+            <!-- Price Section -->
+            <div class="mb-6">
+              <div class="flex items-center space-x-3">
+                {formattedPrice && (
+                  <span class="text-3xl font-bold text-green-600 dark:text-green-400">
+                    {formattedPrice}
+                  </span>
+                )}
+                {formattedOriginalPrice && discountPercentage > 0 && (
+                  <span class="text-lg text-gray-500 line-through">
+                    {formattedOriginalPrice}
+                  </span>
+                )}
               </div>
-            )}
+              
+              <!-- Special Offer -->
+              {productData.specialOffer && (
+                <div class="mt-2 text-sm text-red-600 font-medium bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
+                  🔥 {productData.specialOffer}
+                </div>
+              )}
+              
+              <!-- Discount Code -->
+              {productData.discountCode && (
+                <div class="mt-2 text-sm text-blue-600 font-medium bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg">
+                  💳 Gunakan kode: <span class="font-bold">{productData.discountCode}</span>
+                </div>
+              )}
+            </div>
             
             {productData.description && (
-              <p class="text-gray-700 dark:text-gray-300 mb-6">
+              <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">
                 {productData.description}
               </p>
             )}
@@ -239,62 +375,55 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
             </div>
           )}
           
-          <!-- Purchase Options -->
-          <div class="space-y-3">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Purchase Options</h3>
-            <div class="grid grid-cols-2 gap-3">
-              {productData.tokopediaUrl && (
-                <a 
-                  href={productData.tokopediaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Tokopedia
-                </a>
-              )}
-              {productData.shopeeUrl && (
-                <a 
-                  href={productData.shopeeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                >
-                  Shopee
-                </a>
-              )}
-              {productData.blibliUrl && (
-                <a 
-                  href={productData.blibliUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Blibli
-                </a>
-              )}
-              {productData.lazadaUrl && (
-                <a 
-                  href={productData.lazadaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  Lazada
-                </a>
-              )}
-            </div>
+          <!-- Enhanced Purchase Options -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Beli Produk Ini</h3>
+            
+            {affiliateMarketplaces.length > 0 && (
+              <div class="space-y-3">
+                {affiliateMarketplaces.map((marketplace) => (
+                  <a 
+                    href={marketplace.affiliateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    class={`flex items-center justify-between px-6 py-4 rounded-lg font-semibold transition-all duration-200 hover:scale-105 ${
+                      marketplace.marketplace === 'tokopedia' ? 'bg-green-500 hover:bg-green-600 text-white' :
+                      marketplace.marketplace === 'shopee' ? 'bg-orange-500 hover:bg-orange-600 text-white' :
+                      marketplace.marketplace === 'blibli' ? 'bg-blue-500 hover:bg-blue-600 text-white' :
+                      marketplace.marketplace === 'bukalapak' ? 'bg-red-500 hover:bg-red-600 text-white' :
+                      'bg-purple-500 hover:bg-purple-600 text-white'
+                    }`}
+                    onclick={`window.affiliateUtils?.trackClick('${productData.slug}', '${marketplace.marketplace}', 'single-page')`}
+                  >
+                    <span>{getCTAText(affiliateProduct, marketplace.marketplace)}</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            )}
             
             <!-- WhatsApp Contact -->
             <a 
               href={`https://wa.me/62085799520350?text=Halo,%20saya%20tertarik%20dengan%20produk%20${encodeURIComponent(productData.title)}`}
-              class="w-full flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              class="w-full flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
             >
               <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
               </svg>
-              Hubungi Kami via WhatsApp
+              Konsultasi Gratis via WhatsApp
             </a>
+
+            <!-- Store Info -->
+            {productData.name && (
+              <div class="text-center text-sm text-gray-500 dark:text-gray-400 border-t pt-4">
+                <p>Produk dari: <span class="font-medium text-gray-700 dark:text-gray-300">{productData.name}</span></p>
+                {productData.locale && (
+                  <p>Lokasi: {Array.isArray(productData.locale) ? productData.locale.join(', ') : productData.locale}</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -330,4 +459,18 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
       </div>
     </section>
   )}
+
+  <!-- Affiliate Tracking Script -->
+  <script define:vars={{ productSlug: productData.slug, affiliateProduct }}>
+    // Import affiliate utilities for client-side tracking
+    if (typeof window !== 'undefined') {
+      // Track page view
+      if (window.affiliateUtils) {
+        window.affiliateUtils.trackView(productSlug, 'single-page');
+      }
+      
+      // Make affiliate utilities available globally
+      window.affiliateProduct = affiliateProduct;
+    }
+  </script>
 </MainLayout>

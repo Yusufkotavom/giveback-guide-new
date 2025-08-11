@@ -43,7 +43,7 @@ type Props = {
 const { product, source } = Astro.props;
 const { Content } = await render(product);
 
-// Normalize data structure for the layout
+// Normalize data structure for the layout with all affiliate fields
 const layoutData = source === 'notion' 
 	? {
 		...product.data,
@@ -70,6 +70,19 @@ const layoutData = source === 'notion'
 		imageUrl3: product.data.properties.pImageURL3,
 		published: product.data.properties.pPublished,
 		review: product.data.properties.pReview,
+		// New affiliate fields
+		affiliateCode: product.data.properties.pAffiliateCode,
+		commissionRate: product.data.properties.pCommissionRate,
+		affiliateProvider: product.data.properties.pAffiliateProvider,
+		discountCode: product.data.properties.pDiscountCode,
+		specialOffer: product.data.properties.pSpecialOffer,
+		ctaText: product.data.properties.pCTAText,
+		priority: product.data.properties.pPriority,
+		externalRating: product.data.properties.pExternalRating,
+		soldCount: product.data.properties.pSoldCount,
+		originalPrice: product.data.properties.pOriginalPrice,
+		isSponsored: product.data.properties.pIsSponsored,
+		targetAudience: product.data.properties.pTargetAudience,
 	}
 	: {
 		...product.data,
@@ -99,6 +112,19 @@ const layoutData = source === 'notion'
 			pBukalapakURL: "",
 			pLazadaURL: "",
 			pMapsURL: "",
+			// New affiliate fields (empty for MDX)
+			pAffiliateCode: "",
+			pCommissionRate: "",
+			pAffiliateProvider: "",
+			pDiscountCode: "",
+			pSpecialOffer: "",
+			pCTAText: "",
+			pPriority: "",
+			pExternalRating: "",
+			pSoldCount: "",
+			pOriginalPrice: "",
+			pIsSponsored: false,
+			pTargetAudience: [],
 		}
 	};
 ---
