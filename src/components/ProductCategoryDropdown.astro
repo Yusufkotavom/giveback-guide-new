@@ -1,0 +1,142 @@
+---
+import { getCollection } from "astro:content";
+
+// Get the current category from the URL path
+const currentCategoryPromise = (async () => {
+  const pathSegments = Astro.url.pathname.split("/");
+  const potentialCategory = pathSegments[2]; // Extract the category slug from the URL
+
+  // Validate if the extracted segment matches a known category slug
+  const notionProducts = await getCollection('products');
+  const mdxProducts = await getCollection('productsMdx');
+
+  // Normalize products
+  const normalizedNotionProducts = notionProducts.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+      },
+    },
+  }));
+
+  const normalizedMdxProducts = mdxProducts.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        pTitle: entry.data.title,
+        pCategory: entry.data.category,
+        pSlug: entry.data.slug,
+        pImageURL1: entry.data.imageUrl || "",
+        pPublished: { start: entry.data.published },
+        pCountry: entry.data.country,
+        pLocale: entry.data.locale,
+        pPrice: entry.data.price,
+        pDescription: entry.data.description,
+      },
+    },
+  }));
+
+  const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
+  
+  const validCategories = allProducts.reduce((acc: Set<string>, product) => {
+    const categories = Array.isArray(product.data.properties.pCategory)
+      ? product.data.properties.pCategory.map((c) =>
+          c.toLowerCase().replace(/\s+/g, "-")
+        )
+      : [String(product.data.properties.pCategory || "").toLowerCase().replace(/\s+/g, "-")];
+    categories.forEach((category) => {
+      if (category && category !== "") acc.add(category);
+    });
+    return acc;
+  }, new Set<string>());
+
+  return validCategories.has(potentialCategory) ? potentialCategory : null;
+})();
+const currentCategory = await currentCategoryPromise;
+
+// Fetch products from both Notion and MDX collections
+const notionProducts = await getCollection('products');
+const mdxProducts = await getCollection('productsMdx');
+
+// Normalize products (reuse the same logic)
+const normalizedNotionProducts = notionProducts.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+    },
+  },
+}));
+
+const normalizedMdxProducts = mdxProducts.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      pTitle: entry.data.title,
+      pCategory: entry.data.category,
+      pSlug: entry.data.slug,
+      pImageURL1: entry.data.imageUrl || "",
+      pPublished: { start: entry.data.published },
+      pCountry: entry.data.country,
+      pLocale: entry.data.locale,
+      pPrice: entry.data.price,
+      pDescription: entry.data.description,
+    },
+  },
+}));
+
+// Combine both collections
+const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
+
+// Count the number of products for each category
+const categoryCounts = allProducts.reduce((acc: Record<string, number>, product) => {
+  const categories = Array.isArray(product.data.properties.pCategory)
+    ? product.data.properties.pCategory
+    : [product.data.properties.pCategory];
+
+  categories.forEach((category) => {
+    if (category && category.trim() !== "") {
+      acc[category] = (acc[category] || 0) + 1;
+    }
+  });
+
+  return acc;
+}, {});
+
+// Extract unique categories and sort alphabetically
+const uniqueCategories = Object.keys(categoryCounts).sort();
+---
+<form class="w-100%">
+  <select
+    id="categories"
+    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    onchange="if (this.value) window.location.href = this.value"
+  >
+    <option 
+      value="/products/"
+      selected={!currentCategory}
+    >
+      Semua Kategori
+    </option>
+    {uniqueCategories.map((category) => {
+      const categorySlug = category.toLowerCase().replace(/\s+/g, "-");
+      return (
+        <option
+          value={`/products/${categorySlug}/`}
+          selected={currentCategory === categorySlug}
+        >
+          {category} ({categoryCounts[category]})
+        </option>
+      );
+    })}
+  </select>
+</form>

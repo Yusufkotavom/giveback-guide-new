@@ -24,13 +24,13 @@ const postData = isNotionPost
       description: properties.bDescription,
     }
   : {
-      title: properties.title,
-      tags: Array.isArray(properties.tags) ? properties.tags.filter(Boolean) : (properties.tags ? [properties.tags] : []),
-      slug: properties.slug,
-      coverImage: properties.coverImage,
-      published: { start: properties.published },
-      lastUpdated: { start: properties.lastUpdated },
-      description: properties.description,
+      title: properties.bTitle,
+      tags: Array.isArray(properties.bTags) ? properties.bTags.filter(Boolean) : (properties.bTags ? [properties.bTags] : []),
+      slug: properties.bSlug,
+      coverImage: properties.bCoverImage,
+      published: properties.bPublished,
+      lastUpdated: properties.bLastUpdated,
+      description: properties.bDescription,
     };
 
 const title = postData.title + " - Blog";

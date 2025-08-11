@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import MainLayout from "../../layouts/MainLayout.astro";
+import MainLayout from "../../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
-import ProductCard from "../../components/ProductCard.astro";
-import ProductCategoryDropdown from "../../components/ProductCategoryDropdown.astro";
-import PCountryDropdown from "../../components/PCountryDropdown.astro";
+import ProductCard from "../../../components/ProductCard.astro";
+import ProductCategoryDropdown from "../../../components/ProductCategoryDropdown.astro";
+import PCountryDropdown from "../../../components/PCountryDropdown.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
 function parseDate(dateStr: string): Date {
@@ -13,121 +13,6 @@ function parseDate(dateStr: string): Date {
 }
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  // Safely fetch products from both Notion and MDX collections
-  let notionProducts = [];
-  let mdxProducts = [];
-  
-  try {
-    notionProducts = await getCollection("products");
-  } catch (e) {
-    console.warn("Products collection not available:", e.message);
-    // Return empty pagination if Notion is not available
-    return paginate([], { pageSize: 12 });
-  }
-  
-  try {
-    mdxProducts = await getCollection("productsMdx");
-  } catch (e) {
-    console.warn("ProductsMdx collection not available:", e.message);
-  }
-
-  // Normalize Notion products to match expected structure
-  const normalizedNotionProducts = notionProducts.map((entry) => ({
-    ...entry,
-    source: 'notion',
-    data: {
-      ...entry.data,
-      properties: {
-        ...entry.data.properties,
-        pImageURL1: entry.data.properties.pImageURL1 || "",
-        pVerify: entry.data.properties.pVerify || "",
-        pPrice: entry.data.properties.pPrice || "",
-        pOriginalPrice: entry.data.properties.pOriginalPrice || "",
-        pDescription: entry.data.properties.pDescription || "",
-        pCategory: entry.data.properties.pCategory || [],
-        pFeatures: entry.data.properties.pFeatures || [],
-        pName: entry.data.properties.pName || "",
-        pType: entry.data.properties.pType || [],
-        
-        // Affiliate fields with defaults
-        pAffiliateCode: entry.data.properties.pAffiliateCode || "",
-        pCommissionRate: entry.data.properties.pCommissionRate || "",
-        pDiscountCode: entry.data.properties.pDiscountCode || "",
-        pSpecialOffer: entry.data.properties.pSpecialOffer || "",
-        pCTAText: entry.data.properties.pCTAText || "",
-        pPriority: entry.data.properties.pPriority || "",
-        pExternalRating: entry.data.properties.pExternalRating || "",
-        pSoldCount: entry.data.properties.pSoldCount || "",
-        pIsSponsored: entry.data.properties.pIsSponsored || false,
-        pTargetAudience: entry.data.properties.pTargetAudience || [],
-        
-        // Marketplace URLs
-        pTokopediaURL: entry.data.properties.pTokopediaURL || "",
-        pShopeeURL: entry.data.properties.pShopeeURL || "",
-        pBlibliURL: entry.data.properties.pBlibliURL || "",
-        pBukalapakURL: entry.data.properties.pBukalapakURL || "",
-        pLazadaURL: entry.data.properties.pLazadaURL || "",
-      },
-    },
-  }));
-
-  // Normalize MDX products to match Notion structure
-  const normalizedMdxProducts = mdxProducts.map((entry) => ({
-    ...entry,
-    source: 'mdx',
-    data: {
-      ...entry.data,
-      properties: {
-        pTitle: entry.data.title,
-        pPrice: entry.data.price,
-        pCountry: entry.data.country,
-        pLocale: entry.data.locale,
-        pCategory: entry.data.category,
-        pSlug: entry.data.slug,
-        pImageURL1: entry.data.imageUrl || "",
-        pPublished: { start: entry.data.published },
-        pDescription: entry.data.description,
-        pVerify: "",
-        pImageURL2: "",
-        pImageURL3: "",
-        pReview: "",
-        pOriginalPrice: "",
-        pFeatures: [],
-        pName: "",
-        pType: [],
-        
-        // Affiliate fields - empty for MDX (would need to be added to MDX schema)
-        pAffiliateCode: "",
-        pCommissionRate: "",
-        pDiscountCode: "",
-        pSpecialOffer: "",
-        pCTAText: "",
-        pPriority: "",
-        pExternalRating: "",
-        pSoldCount: "",
-        pIsSponsored: false,
-        pTargetAudience: [],
-        
-        // Marketplace URLs - empty for MDX
-        pTokopediaURL: "",
-        pShopeeURL: "",
-        pBlibliURL: "",
-        pBukalapakURL: "",
-        pLazadaURL: "",
-      },
-    },
-  }));
-
-  // Combine both collections
-  const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
-
-  // If no products available, return empty pagination
-  if (allProducts.length === 0) {
-    return paginate([], {
-      pageSize: 12,
-    });
-  }
-
   // Helper function to calculate priority score for sorting
   function getPriorityScore(priority: string, isSponsored: boolean): number {
     if (isSponsored) return 100;
@@ -141,48 +26,113 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     
     return priorityScores[priority?.toLowerCase()] || 0;
   }
+  // Fetch products from both Notion and MDX collections
+  const notionProducts = await getCollection('products');
+  const mdxProducts = await getCollection('productsMdx');
 
-  // Sort products by priority and date for better affiliate conversion
-  const sortedEntries = allProducts.sort((a, b) => {
-    // First, prioritize sponsored/featured products
-    const aPriority = getPriorityScore(a.data.properties.pPriority, a.data.properties.pIsSponsored);
-    const bPriority = getPriorityScore(b.data.properties.pPriority, b.data.properties.pIsSponsored);
-    
-    if (aPriority !== bPriority) {
-      return bPriority - aPriority; // Higher priority first
-    }
-    
-    // Then sort by date (most recent first)
-    const dateA = a.data.properties.pPublished?.start 
-      ? (typeof a.data.properties.pPublished.start === 'string' 
-          ? parseDate(a.data.properties.pPublished.start) 
-          : a.data.properties.pPublished.start) 
-      : new Date(0);
-    const dateB = b.data.properties.pPublished?.start 
-      ? (typeof b.data.properties.pPublished.start === 'string' 
-          ? parseDate(b.data.properties.pPublished.start) 
-          : b.data.properties.pPublished.start) 
-      : new Date(0);
-    return dateB.getTime() - dateA.getTime(); // Most recent first
+  // Normalize Notion products (existing format)
+  const normalizedNotionProducts = notionProducts.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+      },
+    },
+  }));
+
+  // Normalize MDX products to match Notion structure
+  const normalizedMdxProducts = mdxProducts.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        pTitle: entry.data.title,
+        pCategory: entry.data.category,
+        pSlug: entry.data.slug,
+        pImageURL1: entry.data.imageUrl || "",
+        pPublished: { start: entry.data.published },
+        pCountry: entry.data.country,
+        pLocale: entry.data.locale,
+        pPrice: entry.data.price,
+        pDescription: entry.data.description,
+      },
+    },
+  }));
+
+  // Combine both collections
+  const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
+
+  // Extract unique categories
+  const categories = Array.from(
+    new Set(
+      allProducts.flatMap((product) =>
+        Array.isArray(product.data.properties.pCategory)
+          ? product.data.properties.pCategory
+          : [product.data.properties.pCategory]
+      ).filter(cat => cat && cat.trim() !== "")
+    )
+  ).map((category) => category.toLowerCase().replace(/\s+/g, "-"));
+
+  // Generate paginated paths for each category
+  const paths = categories.flatMap((category) => {
+    const categoryProducts = allProducts.filter((product) => {
+      const productCategories = Array.isArray(product.data.properties.pCategory)
+        ? product.data.properties.pCategory.map((c) =>
+            c.toLowerCase().replace(/\s+/g, "-")
+          )
+        : [product.data.properties.pCategory.toLowerCase().replace(/\s+/g, "-")];
+
+      return productCategories.includes(category);
+    });
+
+    // Sort products by priority and date for better affiliate conversion
+    const sortedProducts = categoryProducts.sort((a, b) => {
+      // First, prioritize sponsored/featured products
+      const aPriority = getPriorityScore(a.data.properties.pPriority, a.data.properties.pIsSponsored);
+      const bPriority = getPriorityScore(b.data.properties.pPriority, b.data.properties.pIsSponsored);
+      
+      if (aPriority !== bPriority) {
+        return bPriority - aPriority; // Higher priority first
+      }
+      
+      // Then sort by date (most recent first)
+      const dateA = a.data.properties.pPublished?.start 
+        ? (typeof a.data.properties.pPublished.start === 'string' 
+            ? parseDate(a.data.properties.pPublished.start) 
+            : a.data.properties.pPublished.start) 
+        : new Date(0);
+      const dateB = b.data.properties.pPublished?.start 
+        ? (typeof b.data.properties.pPublished.start === 'string' 
+            ? parseDate(b.data.properties.pPublished.start) 
+            : b.data.properties.pPublished.start) 
+        : new Date(0);
+      return dateB.getTime() - dateA.getTime(); // Most recent first
+    });
+
+    return paginate(sortedProducts, {
+      pageSize: 12, // Number of products per page
+      params: { category },
+      props: { category }, // Pass category as a prop
+    });
   });
 
-  return paginate(sortedEntries, {
-    pageSize: 12, // Increased from 9 for better conversion
-  });
+  return paths;
 }
 
 const { page } = Astro.props;
+const { category } = Astro.params;
 
-// Get unique categories for filtering
-const allCategories = new Set();
-page.data.forEach(product => {
-  const categories = product.data.properties.pCategory;
-  if (Array.isArray(categories)) {
-    categories.forEach(cat => allCategories.add(cat));
-  } else if (categories) {
-    allCategories.add(categories);
-  }
-});
+// Convert URL-friendly category back to display name
+const displayCategory = category
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
+// Get readable category name for title
+const readableCategory = displayCategory;
 
 // Calculate affiliate metrics for display
 const sponsoredCount = page.data.filter(p => p.data.properties.pIsSponsored).length;
@@ -190,19 +140,16 @@ const featuredCount = page.data.filter(p => p.data.properties.pPriority === 'fea
 const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPrice && p.data.properties.pPrice).length;
 ---
 
-<MainLayout
-  title={`Produk Affiliate Terbaik - Halaman ${page.currentPage} dari ${page.lastPage} | kotacom.id`}
-  description={`Temukan ${page.total} produk terbaik dengan harga terjangkau dan kualitas terpercaya. ${sponsoredCount} produk unggulan dan ${featuredCount} produk featured tersedia.`}
->
+<MainLayout title={`Produk ${readableCategory} - Halaman ${page.currentPage} dari ${page.lastPage} | kotacom.id`}>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <!-- Header Section -->
       <div class="max-w-screen-md mb-8 lg:mb-16">
         <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-          🛍️ Produk Affiliate Terbaik
+          🛍️ Produk {readableCategory}
         </h1>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          Temukan produk-produk berkualitas dengan harga terbaik. Dapatkan cashback dan diskon eksklusif melalui link affiliate kami.
+          Temukan produk-produk {readableCategory.toLowerCase()} berkualitas dengan harga terbaik. Dapatkan cashback dan diskon eksklusif melalui link affiliate kami.
         </p>
         
         <!-- Stats Bar -->
@@ -241,7 +188,7 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
               {page.start + 1}-{page.end + 1}
             </span> dari <span class="font-semibold text-gray-900 dark:text-white">
               {page.total}
-            </span> produk
+            </span> produk {readableCategory}
           </span>
         </div>
         
@@ -276,7 +223,7 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
         <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-6 mb-8">
           <div class="flex items-center justify-between">
             <div>
-              <h3 class="text-xl font-bold mb-2">🔥 Penawaran Spesial Hari Ini!</h3>
+              <h3 class="text-xl font-bold mb-2">🔥 Penawaran Spesial {readableCategory}!</h3>
               <p class="text-purple-100">
                 {productsWithDiscount > 0 && `${productsWithDiscount} produk dengan diskon khusus`}
                 {sponsoredCount > 0 && productsWithDiscount > 0 && " • "}
@@ -303,7 +250,7 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
       {page.data.length === 0 && (
         <div class="text-center py-12">
           <div class="text-6xl mb-4">🔍</div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada produk ditemukan</h3>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada produk {readableCategory} ditemukan</h3>
           <p class="text-gray-600 mb-6">Coba ubah filter pencarian atau kembali ke halaman utama</p>
           <a 
             href="/products" 
@@ -363,9 +310,9 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
   <!-- Newsletter/CTA Section -->
   <section class="bg-blue-600 text-white">
     <div class="py-12 px-4 mx-auto max-w-screen-xl text-center">
-      <h2 class="text-3xl font-bold mb-4">Dapatkan Penawaran Terbaik!</h2>
+      <h2 class="text-3xl font-bold mb-4">Dapatkan Penawaran {readableCategory} Terbaik!</h2>
       <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
-        Berlangganan newsletter kami untuk mendapatkan notifikasi produk baru, diskon eksklusif, dan penawaran affiliate terbaik.
+        Berlangganan newsletter kami untuk mendapatkan notifikasi produk {readableCategory.toLowerCase()} baru, diskon eksklusif, dan penawaran affiliate terbaik.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
         <input 
@@ -393,7 +340,7 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
         console.log('Sort changed to:', this.value);
         
         // You could implement client-side sorting here or redirect with query params
-        // window.location.href = `/products?sort=${this.value}`;
+        // window.location.href = `/products/${category}?sort=${this.value}`;
       });
     }
     

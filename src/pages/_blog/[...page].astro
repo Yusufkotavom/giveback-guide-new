@@ -5,16 +5,45 @@ import type { GetStaticPathsOptions } from "astro";
 import BCategoryDropdown from "../../components/BCategoryDropdown.astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const entries = await getCollection("blog") as Array<{ data: { date: string | Date } }>;
+  // Get posts from both Notion and MDX collections
+  const notionPosts = await getCollection("posts");
+  const mdxPosts = await getCollection("postsMdx");
+
+  // Normalize Notion posts
+  const normalizedNotionPosts = notionPosts.map((post) => ({
+    ...post,
+    source: 'notion',
+    slug: post.data.properties.bSlug,
+    data: {
+      ...post.data,
+      title: post.data.properties.bTitle,
+      coverImage: post.data.properties.bCoverImage,
+      published: post.data.properties.bPublished?.start || new Date(),
+      description: post.data.properties.bDescription,
+    },
+  }));
+
+  // Normalize MDX posts
+  const normalizedMdxPosts = mdxPosts.map((post) => ({
+    ...post,
+    source: 'mdx',
+    slug: post.data.slug,
+    data: {
+      ...post.data,
+      title: post.data.title,
+      coverImage: post.data.coverImage,
+      published: post.data.published,
+      description: post.data.description,
+    },
+  }));
+
+  // Combine both collections
+  const allPosts = [...normalizedNotionPosts, ...normalizedMdxPosts];
 
   // Sort entries by date in descending order
-  const sortedEntries = entries.sort((a, b) => {
-    const dateA = new Date(
-      typeof a.data.date === "string" 
-        ? a.data.date.split("-").reverse().join("-") 
-        : a.data.date
-    ); // Convert DD-MM-YYYY to YYYY-MM-DD if it's a string
-    const dateB = new Date(typeof b.data.date === "string" ? b.data.date.split("-").reverse().join("-") : b.data.date);
+  const sortedEntries = allPosts.sort((a, b) => {
+    const dateA = a.data.published instanceof Date ? a.data.published : new Date(a.data.published);
+    const dateB = b.data.published instanceof Date ? b.data.published : new Date(b.data.published);
     return dateB.getTime() - dateA.getTime(); // Newest first
   });
 
@@ -56,18 +85,18 @@ const { page } = Astro.props;
         {
           page.data.map((post) => (
             <article>
-              <a href={`/blog/${post.id}/`}>
+              <a href={`/blog/${post.slug}/`}>
                 <img
                   src={post.data.coverImage}
                   class="mb-5 rounded-lg"
-                  alt="Image 1"
+                  alt={post.data.title}
                 />
               </a>
               <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
               </h2>
               <p class="mb-4 text-gray-500 dark:text-gray-400">
-                Description goes here
+                {post.data.description}
               </p>
             </article>
           ))

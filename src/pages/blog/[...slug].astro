@@ -58,8 +58,8 @@ const layoutData = source === 'notion'
 			bTags: post.data.tags,
 			bSlug: post.data.slug,
 			bCoverImage: post.data.coverImage,
-			bPublished: post.data.published,
-			bLastUpdated: post.data.lastUpdated || post.data.published,
+			bPublished: { start: post.data.published },
+			bLastUpdated: { start: post.data.lastUpdated || post.data.published },
 			bDescription: post.data.description,
 		}
 	};
