@@ -1,0 +1,138 @@
+---
+import { getCollection } from "astro:content";
+
+// Get the current category from the URL path
+const currentCategoryPromise = (async () => {
+  const pathSegments = Astro.url.pathname.split("/");
+  const potentialCategory = pathSegments[2]; // Extract the category slug from the URL
+
+  // Validate if the extracted segment matches a known category slug
+  const notionPosts = await getCollection('posts');
+  const mdxPosts = await getCollection('postsMdx');
+
+  // Normalize posts
+  const normalizedNotionPosts = notionPosts.map((entry) => ({
+    ...entry,
+    source: 'notion',
+    data: {
+      ...entry.data,
+      properties: {
+        ...entry.data.properties,
+      },
+    },
+  }));
+
+  const normalizedMdxPosts = mdxPosts.map((entry) => ({
+    ...entry,
+    source: 'mdx',
+    data: {
+      ...entry.data,
+      properties: {
+        bTitle: entry.data.title,
+        bTags: entry.data.tags,
+        bSlug: entry.data.slug,
+        bCoverImage: entry.data.coverImage,
+        bPublished: { start: entry.data.published },
+        bLastUpdated: { start: entry.data.lastUpdated || entry.data.published },
+        bDescription: entry.data.description,
+      },
+    },
+  }));
+
+  const allPosts = [...normalizedNotionPosts, ...normalizedMdxPosts];
+  
+  const validCategories = allPosts.reduce((acc: Set<string>, post) => {
+    const tags = Array.isArray(post.data.properties.bTags)
+      ? post.data.properties.bTags.map((t) =>
+          t.toLowerCase().replace(/\s+/g, "-")
+        )
+      : [String(post.data.properties.bTags || "").toLowerCase().replace(/\s+/g, "-")];
+    tags.forEach((tag) => {
+      if (tag && tag !== "") acc.add(tag);
+    });
+    return acc;
+  }, new Set<string>());
+
+  return validCategories.has(potentialCategory) ? potentialCategory : null;
+})();
+const currentCategory = await currentCategoryPromise;
+
+// Fetch posts from both Notion and MDX collections
+const notionPosts = await getCollection('posts');
+const mdxPosts = await getCollection('postsMdx');
+
+// Normalize posts (reuse the same logic)
+const normalizedNotionPosts = notionPosts.map((entry) => ({
+  ...entry,
+  source: 'notion',
+  data: {
+    ...entry.data,
+    properties: {
+      ...entry.data.properties,
+    },
+  },
+}));
+
+const normalizedMdxPosts = mdxPosts.map((entry) => ({
+  ...entry,
+  source: 'mdx',
+  data: {
+    ...entry.data,
+    properties: {
+      bTitle: entry.data.title,
+      bTags: entry.data.tags,
+      bSlug: entry.data.slug,
+      bCoverImage: entry.data.coverImage,
+      bPublished: { start: entry.data.published },
+      bLastUpdated: { start: entry.data.lastUpdated || entry.data.published },
+      bDescription: entry.data.description,
+    },
+  },
+}));
+
+// Combine both collections
+const allPosts = [...normalizedNotionPosts, ...normalizedMdxPosts];
+
+// Count the number of posts for each tag
+const tagCounts = allPosts.reduce((acc: Record<string, number>, post) => {
+  const tags = Array.isArray(post.data.properties.bTags)
+    ? post.data.properties.bTags
+    : [post.data.properties.bTags];
+
+  tags.forEach((tag) => {
+    if (tag && tag.trim() !== "") {
+      acc[tag] = (acc[tag] || 0) + 1;
+    }
+  });
+
+  return acc;
+}, {});
+
+// Extract unique tags and sort alphabetically
+const uniqueTags = Object.keys(tagCounts).sort();
+---
+<form class="w-100%">
+  <select
+    id="categories"
+    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    onchange="if (this.value) window.location.href = this.value"
+  >
+    <option 
+      value="/blog/"
+      selected={!currentCategory}
+    >
+      Semua Tag
+    </option>
+    {uniqueTags.map((tag) => {
+      const tagSlug = tag.toLowerCase().replace(/\s+/g, "-");
+      return (
+        <option
+          value={`/blog/${tagSlug}/`}
+          selected={currentCategory === tagSlug}
+        >
+          {tag} ({tagCounts[tag]})
+        </option>
+      );
+    })}
+  </select>
+</form>

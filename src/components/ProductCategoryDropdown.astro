@@ -7,11 +7,11 @@ const currentCategoryPromise = (async () => {
   const potentialCategory = pathSegments[2]; // Extract the category slug from the URL
 
   // Validate if the extracted segment matches a known category slug
-  const notionProjects = await getCollection('projects');
-  const mdxProjects = await getCollection('projectsMdx');
+  const notionProducts = await getCollection('products');
+  const mdxProducts = await getCollection('productsMdx');
 
-  // Normalize projects
-  const normalizedNotionProjects = notionProjects.map((entry) => ({
+  // Normalize products
+  const normalizedNotionProducts = notionProducts.map((entry) => ({
     ...entry,
     source: 'notion',
     data: {
@@ -22,7 +22,7 @@ const currentCategoryPromise = (async () => {
     },
   }));
 
-  const normalizedMdxProjects = mdxProjects.map((entry) => ({
+  const normalizedMdxProducts = mdxProducts.map((entry) => ({
     ...entry,
     source: 'mdx',
     data: {
@@ -31,30 +31,24 @@ const currentCategoryPromise = (async () => {
         pTitle: entry.data.title,
         pCategory: entry.data.category,
         pSlug: entry.data.slug,
-        pImageURL: entry.data.imageUrl || "",
+        pImageURL1: entry.data.imageUrl || "",
         pPublished: { start: entry.data.published },
         pCountry: entry.data.country,
         pLocale: entry.data.locale,
-        pOrganiser: entry.data.organiser,
-        pCost: entry.data.cost,
-        pURL: entry.data.url,
-        pGYGURL: entry.data.gygUrl,
-        pMapsURL: entry.data.mapsUrl,
-        pVerify: entry.data.verify || "",
-        pReview: entry.data.review,
-        pGetInvolved: entry.data.getInvolved,
+        pPrice: entry.data.price,
+        pDescription: entry.data.description,
       },
     },
   }));
 
-  const allProjects = [...normalizedNotionProjects, ...normalizedMdxProjects];
+  const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
   
-  const validCategories = allProjects.reduce((acc: Set<string>, project) => {
-    const categories = Array.isArray(project.data.properties.pCategory)
-      ? project.data.properties.pCategory.map((c) =>
+  const validCategories = allProducts.reduce((acc: Set<string>, product) => {
+    const categories = Array.isArray(product.data.properties.pCategory)
+      ? product.data.properties.pCategory.map((c) =>
           c.toLowerCase().replace(/\s+/g, "-")
         )
-      : [String(project.data.properties.pCategory || "").toLowerCase().replace(/\s+/g, "-")];
+      : [String(product.data.properties.pCategory || "").toLowerCase().replace(/\s+/g, "-")];
     categories.forEach((category) => {
       if (category && category !== "") acc.add(category);
     });
@@ -65,12 +59,12 @@ const currentCategoryPromise = (async () => {
 })();
 const currentCategory = await currentCategoryPromise;
 
-// Fetch projects from both Notion and MDX collections
-const notionProjects = await getCollection('projects');
-const mdxProjects = await getCollection('projectsMdx');
+// Fetch products from both Notion and MDX collections
+const notionProducts = await getCollection('products');
+const mdxProducts = await getCollection('productsMdx');
 
-// Normalize projects (reuse the same logic)
-const normalizedNotionProjects = notionProjects.map((entry) => ({
+// Normalize products (reuse the same logic)
+const normalizedNotionProducts = notionProducts.map((entry) => ({
   ...entry,
   source: 'notion',
   data: {
@@ -81,7 +75,7 @@ const normalizedNotionProjects = notionProjects.map((entry) => ({
   },
 }));
 
-const normalizedMdxProjects = mdxProjects.map((entry) => ({
+const normalizedMdxProducts = mdxProducts.map((entry) => ({
   ...entry,
   source: 'mdx',
   data: {
@@ -90,30 +84,24 @@ const normalizedMdxProjects = mdxProjects.map((entry) => ({
       pTitle: entry.data.title,
       pCategory: entry.data.category,
       pSlug: entry.data.slug,
-      pImageURL: entry.data.imageUrl || "",
+      pImageURL1: entry.data.imageUrl || "",
       pPublished: { start: entry.data.published },
       pCountry: entry.data.country,
       pLocale: entry.data.locale,
-      pOrganiser: entry.data.organiser,
-      pCost: entry.data.cost,
-      pURL: entry.data.url,
-      pGYGURL: entry.data.gygUrl,
-      pMapsURL: entry.data.mapsUrl,
-      pVerify: entry.data.verify || "",
-      pReview: entry.data.review,
-      pGetInvolved: entry.data.getInvolved,
+      pPrice: entry.data.price,
+      pDescription: entry.data.description,
     },
   },
 }));
 
 // Combine both collections
-const allProjects = [...normalizedNotionProjects, ...normalizedMdxProjects];
+const allProducts = [...normalizedNotionProducts, ...normalizedMdxProducts];
 
-// Count the number of projects for each category
-const categoryCounts = allProjects.reduce((acc: Record<string, number>, project) => {
-  const categories = Array.isArray(project.data.properties.pCategory)
-    ? project.data.properties.pCategory
-    : [project.data.properties.pCategory];
+// Count the number of products for each category
+const categoryCounts = allProducts.reduce((acc: Record<string, number>, product) => {
+  const categories = Array.isArray(product.data.properties.pCategory)
+    ? product.data.properties.pCategory
+    : [product.data.properties.pCategory];
 
   categories.forEach((category) => {
     if (category && category.trim() !== "") {
@@ -134,7 +122,7 @@ const uniqueCategories = Object.keys(categoryCounts).sort();
     onchange="if (this.value) window.location.href = this.value"
   >
     <option 
-      value="/projects/"
+      value="/products/"
       selected={!currentCategory}
     >
       Semua Kategori
@@ -143,7 +131,7 @@ const uniqueCategories = Object.keys(categoryCounts).sort();
       const categorySlug = category.toLowerCase().replace(/\s+/g, "-");
       return (
         <option
-          value={`/projects/${categorySlug}/`}
+          value={`/products/${categorySlug}/`}
           selected={currentCategory === categorySlug}
         >
           {category} ({categoryCounts[category]})

@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProductCard from "../../components/ProductCard.astro";
-import PCategoryDropdown from "../../components/PCategoryDropdown.astro";
+import ProductCategoryDropdown from "../../components/ProductCategoryDropdown.astro";
 import PCountryDropdown from "../../components/PCountryDropdown.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
@@ -249,7 +249,7 @@ const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPr
         <div class="flex flex-col sm:flex-row gap-2">
           <!-- Category Filter -->
           <div class="min-w-[200px]">
-            <PCategoryDropdown />
+            <ProductCategoryDropdown />
           </div>
           
           <!-- Country Filter -->
