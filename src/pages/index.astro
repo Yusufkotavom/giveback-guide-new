@@ -35,12 +35,17 @@ const reviews = [
 const breadcrumbs = [
   { name: "Home", url: "/" }
 ];
+
+const LCP_IMAGE = "https://res.cloudinary.com/dnxl7wsnx/image/upload/v1747744963/group-people-dog-picnic_yqfq4l.jpg";
 ---
 
 <MainLayout
   title={`${SITE_TITLE} - IT Service & Publications Terpercaya`}
   description={SITE_DESCRIPTION}
 >
+  <fragment slot="head">
+    <link rel="preload" as="image" href={LCP_IMAGE} imagesrcset={`${LCP_IMAGE} 1x`} fetchpriority="high" />
+  </fragment>
   <SchemaMarkup
     type="homepage"
     title={SITE_TITLE}
