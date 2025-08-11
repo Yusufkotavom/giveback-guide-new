@@ -5,18 +5,24 @@ import Footer from "../components/Footer.astro";
 import SubscribeDrawer from "../components/Popups/SubscribeDrawer.astro";
 
 interface Props {
-  title?: string; // Accept the title prop
-  description?: string; // Accept the description prop
-  image?: string; // Accept the image prop
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product' | 'service' | 'project' | 'page';
+  published?: string;
+  modified?: string;
+  section?: string;
+  tags?: string[];
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, type = 'website', published, modified, section, tags } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead title={title} description={description} image={image} type={type} published={published} modified={modified} section={section} tags={tags} />
+    <slot name="head" />
   </head>
   <body>
     <Header />

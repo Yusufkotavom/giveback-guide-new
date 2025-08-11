@@ -2,16 +2,33 @@
 import '../styles/global.css';
 import { SITE_TITLE, SITE_DESCRIPTION, COMPANY_NAME, COMPANY_LOCATION, COMPANY_WHATSAPP } from '../consts';
 import Analytics from './Analytics.astro';
+import { generateOgImageFromTitle } from '../utils/og';
 
 interface Props {
-	title?: string; // Make title optional
-	description?: string; // Make title optional
+	title?: string;
+	description?: string;
 	image?: string;
+  type?: 'website' | 'article' | 'product' | 'service' | 'project' | 'page';
+  published?: string;
+  modified?: string;
+  section?: string;
+  tags?: string[];
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png' } = Astro.props;
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  image,
+  type = 'website',
+  published,
+  modified,
+  section,
+  tags = [],
+} = Astro.props;
+
+const ogImage = image || generateOgImageFromTitle(title);
 ---
 
 <!-- Global Metadata -->
@@ -28,36 +45,41 @@ const { title, description, image = 'https://res.cloudinary.com/dxyjku3eh/image/
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Canonical URL -->
+<!-- Canonical & Hreflang -->
 <link rel="canonical" href={canonicalURL} />
+<link rel="alternate" hreflang="id" href={canonicalURL} />
+<link rel="alternate" hreflang="x-default" href={canonicalURL} />
+
+<!-- Preconnects -->
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <Analytics />
 <meta name="title" content={title} />
 <meta name="description" content={description} />
-
-<!-- Local SEO Meta Tags -->
-<meta name="geo.region" content="ID-JI" />
-<meta name="geo.placename" content="Surabaya" />
-<meta name="geo.position" content="-7.2575;112.7521" />
-<meta name="ICBM" content="-7.2575, 112.7521" />
+<meta name="theme-color" content="#3b82f6" />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={new URL(ogImage, Astro.url)} />
 <meta property="og:site_name" content={COMPANY_NAME} />
 <meta property="og:locale" content="id_ID" />
+{type === 'article' && published && (<meta property="article:published_time" content={published} />)}
+{type === 'article' && (modified || published) && (<meta property="article:modified_time" content={modified || published} />)}
+{type === 'article' && section && (<meta property="article:section" content={section} />)}
+{type === 'article' && Array.isArray(tags) && tags.map((t) => (<meta property="article:tag" content={t} />))}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={new URL(ogImage, Astro.url)} />
 
 <!-- Additional SEO Meta Tags -->
 <meta name="robots" content="index, follow" />

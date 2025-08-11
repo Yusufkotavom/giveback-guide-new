@@ -76,6 +76,11 @@ const { page } = Astro.props;
 <MainLayout
   title={`All Posts - Page ${page.currentPage} of ${page.lastPage}`}
 >
+  <fragment slot="head">
+    {page.url.prev && (<link rel="prev" href={page.url.prev} />)}
+    {page.url.next && (<link rel="next" href={page.url.next} />)}
+    {page.currentPage > 1 && (<meta name="robots" content="noindex,follow" />)}
+  </fragment>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">

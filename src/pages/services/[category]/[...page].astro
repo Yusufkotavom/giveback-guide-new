@@ -79,12 +79,11 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
             c.toLowerCase().replace(/\s+/g, "-")
           )
         : [service.data.properties.svCategory.toLowerCase().replace(/\s+/g, "-")];
-
       return serviceCategories.includes(category);
     });
 
-    // Sort services by published date (descending order)
-    const sortedServices = categoryServices.sort((a, b) => {
+    // Sort services by date
+    const sortedCategoryServices = categoryServices.sort((a, b) => {
       const dateA = a.data.properties.svPublished?.start 
         ? (typeof a.data.properties.svPublished.start === 'string' 
             ? parseDate(a.data.properties.svPublished.start) 
@@ -95,97 +94,39 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
             ? parseDate(b.data.properties.svPublished.start) 
             : b.data.properties.svPublished.start) 
         : new Date(0);
-      return dateB.getTime() - dateA.getTime(); // Most recent first
+      return dateB.getTime() - dateA.getTime();
     });
 
-    return paginate(sortedServices, {
-      pageSize: 9, // Number of services per page
+    return paginate(sortedCategoryServices, {
+      pageSize: 9,
       params: { category },
-      props: { category }, // Pass category as a prop
     });
   });
 
   return paths;
 }
 
-const { page } = Astro.props;
 const { category } = Astro.params;
-
-// Convert URL-friendly category back to display name
-const displayCategory = category
-  .split('-')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(' ');
-
-// Get readable country name for title
-const readableCategory = displayCategory;
+const { page } = Astro.props;
 ---
 
-<MainLayout title={`${readableCategory} Services - Page ${page.currentPage} of ${page.lastPage}`}>
+<MainLayout title={`Services in ${category} - Page ${page.currentPage} of ${page.lastPage}`}>
+  <fragment slot="head">
+    {page.url.prev && (<link rel="prev" href={page.url.prev} />)}
+    {page.url.next && (<link rel="next" href={page.url.next} />)}
+    {page.currentPage > 1 && (<meta name="robots" content="noindex,follow" />)}
+  </fragment>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h1  
-          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-        >
-          Layanan {readableCategory}
+        <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+          {category}
         </h1>
-        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          Solusi {readableCategory.toLowerCase()} profesional untuk UMKM dan bisnis di Indonesia.
-        </p>
       </div>
-
-      <div class="flex flex-col md:flex-row mb-5">
-        <!-- Div 1 (Showing services) -->
-        <div id="1" class="w-full md:w-3/4 p-2 order-3 md:order-1">
-          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-            Menampilkan <span class="font-semibold text-gray-900 dark:text-white">
-              {page.start + 1}-{page.end + 1}
-            </span> dari <span class="font-semibold text-gray-900 dark:text-white">
-              {page.total}
-            </span> layanan {readableCategory}
-          </span>
-        </div>
-      
-        <!-- Div 3 (Category Dropdown) -->
-        <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
-          <SCategoryDropdown />
-        </div>
-      </div>
-
-      <div
-        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
-      >
+      <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
         {page.data.map((service) => (
           <ServiceCard service={service} />
         ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Pagination -->
-  <section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <div class="flex justify-center items-center">
-        <!-- Previous Button -->
-        {page.url.prev && (
-          <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
-            </svg>
-            Previous
-          </a>
-        )}
-        
-        <!-- Next Button -->
-        {page.url.next && (
-          <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            Next
-            <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-          </a>
-        )}
       </div>
     </div>
   </section>
