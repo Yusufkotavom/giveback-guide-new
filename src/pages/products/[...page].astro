@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { GetStaticPathsOptions } from "astro";
 import ProductCard from "../../components/ProductCard.astro";
+import PCategoryDropdown from "../../components/PCategoryDropdown.astro";
 import PCountryDropdown from "../../components/PCountryDropdown.astro";
 
 // Helper function to parse dates in dd/mm/yyyy format
@@ -38,7 +39,32 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
         ...entry.data.properties,
         pImageURL1: entry.data.properties.pImageURL1 || "",
         pVerify: entry.data.properties.pVerify || "",
-        pPrice: (entry.data.properties as any).pPrice || "",
+        pPrice: entry.data.properties.pPrice || "",
+        pOriginalPrice: entry.data.properties.pOriginalPrice || "",
+        pDescription: entry.data.properties.pDescription || "",
+        pCategory: entry.data.properties.pCategory || [],
+        pFeatures: entry.data.properties.pFeatures || [],
+        pName: entry.data.properties.pName || "",
+        pType: entry.data.properties.pType || [],
+        
+        // Affiliate fields with defaults
+        pAffiliateCode: entry.data.properties.pAffiliateCode || "",
+        pCommissionRate: entry.data.properties.pCommissionRate || "",
+        pDiscountCode: entry.data.properties.pDiscountCode || "",
+        pSpecialOffer: entry.data.properties.pSpecialOffer || "",
+        pCTAText: entry.data.properties.pCTAText || "",
+        pPriority: entry.data.properties.pPriority || "",
+        pExternalRating: entry.data.properties.pExternalRating || "",
+        pSoldCount: entry.data.properties.pSoldCount || "",
+        pIsSponsored: entry.data.properties.pIsSponsored || false,
+        pTargetAudience: entry.data.properties.pTargetAudience || [],
+        
+        // Marketplace URLs
+        pTokopediaURL: entry.data.properties.pTokopediaURL || "",
+        pShopeeURL: entry.data.properties.pShopeeURL || "",
+        pBlibliURL: entry.data.properties.pBlibliURL || "",
+        pBukalapakURL: entry.data.properties.pBukalapakURL || "",
+        pLazadaURL: entry.data.properties.pLazadaURL || "",
       },
     },
   }));
@@ -63,6 +89,29 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
         pImageURL2: "",
         pImageURL3: "",
         pReview: "",
+        pOriginalPrice: "",
+        pFeatures: [],
+        pName: "",
+        pType: [],
+        
+        // Affiliate fields - empty for MDX (would need to be added to MDX schema)
+        pAffiliateCode: "",
+        pCommissionRate: "",
+        pDiscountCode: "",
+        pSpecialOffer: "",
+        pCTAText: "",
+        pPriority: "",
+        pExternalRating: "",
+        pSoldCount: "",
+        pIsSponsored: false,
+        pTargetAudience: [],
+        
+        // Marketplace URLs - empty for MDX
+        pTokopediaURL: "",
+        pShopeeURL: "",
+        pBlibliURL: "",
+        pBukalapakURL: "",
+        pLazadaURL: "",
       },
     },
   }));
@@ -73,12 +122,21 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   // If no products available, return empty pagination
   if (allProducts.length === 0) {
     return paginate([], {
-      pageSize: 9,
+      pageSize: 12,
     });
   }
 
-  // Sort products by pPublished date (descending order)
+  // Sort products by priority and date for better affiliate conversion
   const sortedEntries = allProducts.sort((a, b) => {
+    // First, prioritize sponsored/featured products
+    const aPriority = getPriorityScore(a.data.properties.pPriority, a.data.properties.pIsSponsored);
+    const bPriority = getPriorityScore(b.data.properties.pPriority, b.data.properties.pIsSponsored);
+    
+    if (aPriority !== bPriority) {
+      return bPriority - aPriority; // Higher priority first
+    }
+    
+    // Then sort by date (most recent first)
     const dateA = a.data.properties.pPublished?.start 
       ? (typeof a.data.properties.pPublished.start === 'string' 
           ? parseDate(a.data.properties.pPublished.start) 
@@ -93,78 +151,253 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   });
 
   return paginate(sortedEntries, {
-    pageSize: 9, // Number of entries per page
+    pageSize: 12, // Increased from 9 for better conversion
   });
 }
 
+// Helper function to calculate priority score for sorting
+function getPriorityScore(priority: string, isSponsored: boolean): number {
+  if (isSponsored) return 100;
+  
+  const priorityScores = {
+    'featured': 90,
+    'bestseller': 80,
+    'sale': 70,
+    'new': 60,
+  };
+  
+  return priorityScores[priority?.toLowerCase()] || 0;
+}
+
 const { page } = Astro.props;
+
+// Get unique categories for filtering
+const allCategories = new Set();
+page.data.forEach(product => {
+  const categories = product.data.properties.pCategory;
+  if (Array.isArray(categories)) {
+    categories.forEach(cat => allCategories.add(cat));
+  } else if (categories) {
+    allCategories.add(categories);
+  }
+});
+
+// Calculate affiliate metrics for display
+const sponsoredCount = page.data.filter(p => p.data.properties.pIsSponsored).length;
+const featuredCount = page.data.filter(p => p.data.properties.pPriority === 'featured').length;
+const productsWithDiscount = page.data.filter(p => p.data.properties.pOriginalPrice && p.data.properties.pPrice).length;
 ---
 
 <MainLayout
-  title={`Semua Produk - Halaman ${page.currentPage} dari ${page.lastPage}`}
+  title={`Produk Affiliate Terbaik - Halaman ${page.currentPage} dari ${page.lastPage} | kotacom.id`}
+  description={`Temukan ${page.total} produk terbaik dengan harga terjangkau dan kualitas terpercaya. ${sponsoredCount} produk unggulan dan ${featuredCount} produk featured tersedia.`}
 >
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <!-- Header Section -->
       <div class="max-w-screen-md mb-8 lg:mb-16">
-        <h1
-          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-        >
-          Produk
+        <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+          🛍️ Produk Affiliate Terbaik
         </h1>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          Temukan produk-produk menakjubkan yang memberikan manfaat bagi komunitas yang Anda kunjungi.
+          Temukan produk-produk berkualitas dengan harga terbaik. Dapatkan cashback dan diskon eksklusif melalui link affiliate kami.
         </p>
+        
+        <!-- Stats Bar -->
+        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-blue-50 rounded-lg p-3 text-center">
+            <div class="text-2xl font-bold text-blue-600">{page.total}</div>
+            <div class="text-sm text-blue-800">Total Produk</div>
+          </div>
+          {sponsoredCount > 0 && (
+            <div class="bg-green-50 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-green-600">{sponsoredCount}</div>
+              <div class="text-sm text-green-800">Sponsored</div>
+            </div>
+          )}
+          {featuredCount > 0 && (
+            <div class="bg-yellow-50 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-yellow-600">{featuredCount}</div>
+              <div class="text-sm text-yellow-800">Featured</div>
+            </div>
+          )}
+          {productsWithDiscount > 0 && (
+            <div class="bg-red-50 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-red-600">{productsWithDiscount}</div>
+              <div class="text-sm text-red-800">Diskon</div>
+            </div>
+          )}
+        </div>
       </div>
       
-      <div class="flex flex-col md:flex-row mb-5">
-        <!-- Div 1 (Showing products) -->
-        <div id="1" class="w-full md:w-3/4 p-2 order-3 md:order-1">
+      <!-- Filter and Sort Section -->
+      <div class="flex flex-col md:flex-row mb-8 gap-4">
+        <!-- Product Count Display -->
+        <div class="flex-1 flex items-center">
           <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
             Menampilkan <span class="font-semibold text-gray-900 dark:text-white">
               {page.start + 1}-{page.end + 1}
             </span> dari <span class="font-semibold text-gray-900 dark:text-white">
               {page.total}
-            </span> produk          </span>
+            </span> produk
+          </span>
         </div>
-      
-        <!-- Div 3 (Country Dropdown) -->
-        <div id="3" class="w-full md:w-1/4 p-2 order-2 md:order-3">
-          <PCountryDropdown />
+        
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row gap-2">
+          <!-- Category Filter -->
+          <div class="min-w-[200px]">
+            <PCategoryDropdown />
+          </div>
+          
+          <!-- Country Filter -->
+          <div class="min-w-[200px]">
+            <PCountryDropdown />
+          </div>
+          
+          <!-- Sort Options -->
+          <select 
+            id="sortSelect" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          >
+            <option value="priority">Terpopuler</option>
+            <option value="newest">Terbaru</option>
+            <option value="price-low">Harga Terendah</option>
+            <option value="price-high">Harga Tertinggi</option>
+            <option value="rating">Rating Tertinggi</option>
+          </select>
         </div>
       </div>
 
-      <div
-        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
-      >
-        {page.data.map((product) => <ProductCard product={product} />)}
+      <!-- Special Offers Banner -->
+      {(sponsoredCount > 0 || productsWithDiscount > 0) && (
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-6 mb-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold mb-2">🔥 Penawaran Spesial Hari Ini!</h3>
+              <p class="text-purple-100">
+                {productsWithDiscount > 0 && `${productsWithDiscount} produk dengan diskon khusus`}
+                {sponsoredCount > 0 && productsWithDiscount > 0 && " • "}
+                {sponsoredCount > 0 && `${sponsoredCount} produk unggulan pilihan`}
+              </p>
+            </div>
+            <div class="text-4xl">🎉</div>
+          </div>
+        </div>
+      )}
+
+      <!-- Products Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+        {page.data.map((product) => (
+          <ProductCard 
+            product={product} 
+            placement="category-listing"
+            showFullDescription={false}
+          />
+        ))}
       </div>
+
+      <!-- No Products Message -->
+      {page.data.length === 0 && (
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">🔍</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada produk ditemukan</h3>
+          <p class="text-gray-600 mb-6">Coba ubah filter pencarian atau kembali ke halaman utama</p>
+          <a 
+            href="/products" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Lihat Semua Produk
+          </a>
+        </div>
+      )}
     </div>
   </section>
-  <section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <div class="flex justify-center items-center">
-        <!-- Previous Button -->
-        {
-            page.url.prev ? (
-        <a href={page.url.prev} class="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
-          </svg>
-          Sebelumnya
-        </a>
-        ) : null
-      }
-        {
-            page.url.next ? (
-        <a href={page.url.next} class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          Selanjutnya
-          <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-          </svg>
-        </a>
-        ) : null
-      }
+
+  <!-- Pagination Section -->
+  {page.data.length > 0 && (
+    <section class="bg-gray-50 dark:bg-gray-800">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <!-- Previous Button -->
+          {page.url.prev ? (
+            <a 
+              href={page.url.prev} 
+              class="flex items-center justify-center px-6 py-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              Sebelumnya
+            </a>
+          ) : (
+            <div></div>
+          )}
+
+          <!-- Page Info -->
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Halaman {page.currentPage} dari {page.lastPage}
+          </div>
+
+          <!-- Next Button -->
+          {page.url.next ? (
+            <a 
+              href={page.url.next} 
+              class="flex items-center justify-center px-6 py-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+            >
+              Selanjutnya
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Newsletter/CTA Section -->
+  <section class="bg-blue-600 text-white">
+    <div class="py-12 px-4 mx-auto max-w-screen-xl text-center">
+      <h2 class="text-3xl font-bold mb-4">Dapatkan Penawaran Terbaik!</h2>
+      <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
+        Berlangganan newsletter kami untuk mendapatkan notifikasi produk baru, diskon eksklusif, dan penawaran affiliate terbaik.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+        <input 
+          type="email" 
+          placeholder="Email Anda"
+          class="flex-1 px-4 py-3 rounded-lg text-gray-900 border-0 focus:ring-2 focus:ring-blue-300"
+        />
+        <button class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-lg font-semibold transition-colors">
+          Berlangganan
+        </button>
       </div>
     </div>
   </section>
 </MainLayout>
+
+<!-- Client-side sorting and filtering -->
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sortSelect = document.getElementById('sortSelect');
+    
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        // In a real implementation, you would reload the page with new sort parameters
+        // For now, we'll just log the selection
+        console.log('Sort changed to:', this.value);
+        
+        // You could implement client-side sorting here or redirect with query params
+        // window.location.href = `/products?sort=${this.value}`;
+      });
+    }
+    
+    // Track page view for analytics
+    if (window.affiliateUtils?.trackView) {
+      window.affiliateUtils.trackView('product-listing', 'category-page');
+    }
+  });
+</script>

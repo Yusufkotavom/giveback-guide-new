@@ -1,20 +1,46 @@
 ---
 import ResponsiveImage from './ResponsiveImage.astro';
-import { getAvailableMarketplaces, getRandomPrimaryMarketplace, getSecondaryMarketplaces, getMarketplaceIcon, formatPrice } from '../utils/marketplaceUtils';
+import { 
+  getAffiliateMarketplaces, 
+  formatAffiliatePrice, 
+  getPriorityBadge, 
+  calculateDiscountPercentage,
+  isSponsored,
+  getCTAText,
+  type AffiliateProduct 
+} from '../utils/affiliateUtils';
 
 interface Props {
   product: {
     data: {
       properties: {
+        // Core fields
         pSlug: string;
-        pImageURL1: string;
-        pVerify?: string;
-        pCountry: string | string[];
-        pLocale: string | string[];
         pTitle: string;
-        pName: string;
-        pType: string;
-        pPrice?: string | number;
+        pImageURL1?: string;
+        pPrice?: string;
+        pOriginalPrice?: string;
+        pDescription?: string;
+        pVerify?: string;
+        pCountry?: string | string[];
+        pLocale?: string | string[];
+        pCategory?: string | string[];
+        pName?: string;
+        pType?: string | string[];
+        
+        // Affiliate fields
+        pAffiliateCode?: string;
+        pCommissionRate?: string;
+        pDiscountCode?: string;
+        pSpecialOffer?: string;
+        pCTAText?: string;
+        pPriority?: string;
+        pExternalRating?: string;
+        pSoldCount?: string;
+        pIsSponsored?: boolean;
+        pTargetAudience?: string | string[];
+        
+        // Marketplace URLs
         pTokopediaURL?: string;
         pShopeeURL?: string;
         pBlibliURL?: string;
@@ -23,112 +49,288 @@ interface Props {
       };
     };
   };
+  placement?: string; // 'homepage', 'category', 'related', etc.
+  showFullDescription?: boolean;
 }
 
-const { product } = Astro.props;
-const properties = product.data.properties as any;
-const formattedPrice = formatPrice(properties.pPrice);
-const availableMarketplaces = getAvailableMarketplaces(properties);
-const primaryMarketplace = getRandomPrimaryMarketplace(availableMarketplaces);
-const secondaryMarketplaces = getSecondaryMarketplaces(availableMarketplaces, primaryMarketplace);
+const { product, placement = 'card', showFullDescription = false } = Astro.props;
+const properties = product.data.properties;
+
+// Convert to AffiliateProduct format
+const affiliateProduct: AffiliateProduct = {
+  title: properties.pTitle,
+  slug: properties.pSlug,
+  price: properties.pPrice,
+  originalPrice: properties.pOriginalPrice,
+  imageUrl: properties.pImageURL1,
+  affiliateCode: properties.pAffiliateCode,
+  commissionRate: properties.pCommissionRate,
+  discountCode: properties.pDiscountCode,
+  specialOffer: properties.pSpecialOffer,
+  ctaText: properties.pCTAText,
+  priority: properties.pPriority,
+  externalRating: properties.pExternalRating,
+  soldCount: properties.pSoldCount,
+  isSponsored: properties.pIsSponsored,
+  targetAudience: Array.isArray(properties.pTargetAudience) ? properties.pTargetAudience : (properties.pTargetAudience ? [properties.pTargetAudience] : []),
+  tokopediaUrl: properties.pTokopediaURL,
+  shopeeUrl: properties.pShopeeURL,
+  blibliUrl: properties.pBlibliURL,
+  bukalapakUrl: properties.pBukalapakURL,
+  lazadaUrl: properties.pLazadaURL,
+};
+
+// Get affiliate marketplaces with tracking
+const affiliateMarketplaces = getAffiliateMarketplaces(affiliateProduct, placement);
+const primaryMarketplace = affiliateMarketplaces[0];
+const secondaryMarketplaces = affiliateMarketplaces.slice(1, 3); // Show max 2 secondary
+
+// Format prices
+const formattedPrice = formatAffiliatePrice(properties.pPrice);
+const formattedOriginalPrice = formatAffiliatePrice(properties.pOriginalPrice);
+const discountPercentage = properties.pOriginalPrice ? calculateDiscountPercentage(properties.pOriginalPrice, properties.pPrice || '0') : 0;
+
+// Get priority badge
+const priorityBadge = getPriorityBadge(properties.pPriority);
+
+// Check if sponsored
+const sponsored = isSponsored(affiliateProduct);
+
+// Default image
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dxyjku3eh/image/upload/v1754820661/Tanpa_judul_Presentasi__20250810_170926_0000_vdiibn.png';
+const imageUrl = properties.pImageURL1 || DEFAULT_IMAGE;
 ---
 
-<article class="rounded-lg">
-    <div class="relative">
-        <a href={`/products/${product.data.properties.pSlug}/`}>
-          <ResponsiveImage
-            class="w-full rounded-lg h-64 object-cover"
-            src={product.data.properties.pImageURL1}
-            alt=""
-            preset="card"
-            fallbackWidth={600}
-          />
-          {product.data.properties.pVerify && (
-            <div class="absolute top-2 left-2 bg-gbgyellow bg-opacity-80 rounded-md px-2 py-1 flex items-center gap-1">
-              <svg
-                class="h-5 w-5 text-black"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <p class="text-xs font-medium text-black dark:text-white">
-                {product.data.properties.pVerify}
-              </p>
-            </div>
-          )}
-        </a>
-      </div>
-  <p>
-    {Array.isArray(product.data.properties.pCountry)
-      ? product.data.properties.pCountry.map((country: string) => (
-          <span
-            class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border border-solid border-gray-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-300 ml-2 mt-4 mb-2"
-          >
-            <a
-              href={`/products/${country.toLowerCase().replace(/\s+/g, "-")}`}
-            >
-              {country}
-            </a>
-          </span>
-        ))
-      : product.data.properties.pCountry}
-  </p>
-  <h2 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white px-4">
-    <a href={`/products/${product.data.properties.pSlug}/`}>
-      {product.data.properties.pTitle}
-    </a>
-  </h2>
-  {formattedPrice && (
-    <p class="px-4 mb-2 text-lg font-semibold text-green-600">{formattedPrice}</p>
+<article class="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 overflow-hidden">
+  <!-- Sponsored Badge -->
+  {sponsored && (
+    <div class="absolute top-2 right-2 z-10 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+      SPONSORED
+    </div>
   )}
-     {availableMarketplaces.length > 0 && (
-     <div class="flex items-center gap-1.5 px-4 mb-3">
-       {primaryMarketplace && (
-         <a
-           href={primaryMarketplace.url}
-           target="_blank"
-           rel="noopener noreferrer"
-           class={`inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium ${primaryMarketplace.bgColor} ${primaryMarketplace.hoverColor} ${primaryMarketplace.color}`}
-           title={primaryMarketplace.name}
-         >
-           <span class="inline-flex items-center justify-center w-4 h-4" set:html={getMarketplaceIcon(primaryMarketplace.icon)} />
-           <span class="uppercase tracking-wide">{primaryMarketplace.abbr}</span>
-         </a>
-       )}
-       {secondaryMarketplaces.map((m) => (
-         <a
-           href={m.url}
-           target="_blank"
-           rel="noopener noreferrer"
-           class="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
-           aria-label={m.name}
-           title={m.name}
-         >
-           <span class="inline-flex items-center justify-center w-4 h-4" set:html={getMarketplaceIcon(m.icon)} />
-           <span class="uppercase tracking-wide">{m.abbr}</span>
-         </a>
-       ))}
-     </div>
-   )}
-  <p class="mt-2 text-sm font-normal text-gray-400 dark:text-gray-400 px-4">
-           <span class="text-gray-800">{product.data.properties.pName}</span> adalah <span class="text-gray-900">{product.data.properties.pType}</span> dari <span class="text-gray-900">{
-            Array.isArray(product.data.properties.pLocale)
-              ? product.data.properties.pLocale.map((locale, index) => (
-                  <>
-                      {locale}
-                    {index < product.data.properties.pLocale.length - 1 ? ", " : ""}
-                  </>
-                ))
-              : product.data.properties.pLocale
-          }</span>
-  </p>
+  
+  <!-- Priority Badge -->
+  {priorityBadge && !sponsored && (
+    <div class={`absolute top-2 right-2 z-10 text-xs font-bold px-2 py-1 rounded-full ${priorityBadge.class}`}>
+      {priorityBadge.text}
+    </div>
+  )}
+  
+  <!-- Discount Badge -->
+  {discountPercentage > 0 && (
+    <div class="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+      -{discountPercentage}%
+    </div>
+  )}
+
+  <!-- Product Image -->
+  <div class="relative aspect-square">
+    <a href={`/products/${properties.pSlug}/`} class="block">
+      <ResponsiveImage
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        src={imageUrl}
+        alt={properties.pTitle}
+        preset="card"
+        fallbackWidth={400}
+        loading="lazy"
+      />
+      
+      <!-- Verify Badge -->
+      {properties.pVerify && (
+        <div class="absolute bottom-2 left-2 bg-green-500 bg-opacity-90 rounded-md px-2 py-1 flex items-center gap-1">
+          <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <p class="text-xs font-medium text-white">{properties.pVerify}</p>
+        </div>
+      )}
+    </a>
+  </div>
+
+  <!-- Product Info -->
+  <div class="p-4">
+    <!-- Categories -->
+    {Array.isArray(properties.pCategory) && properties.pCategory.length > 0 && (
+      <div class="flex flex-wrap gap-1 mb-2">
+        {properties.pCategory.slice(0, 2).map((category: string) => (
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            {category}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Product Title -->
+    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+      <a href={`/products/${properties.pSlug}/`}>
+        {properties.pTitle}
+      </a>
+    </h3>
+
+    <!-- Rating & Sold Count -->
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center space-x-2">
+        {properties.pExternalRating && (
+          <div class="flex items-center">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span class="text-sm text-gray-600 ml-1">{properties.pExternalRating}</span>
+          </div>
+        )}
+        {properties.pSoldCount && (
+          <span class="text-xs text-gray-500">({properties.pSoldCount} terjual)</span>
+        )}
+      </div>
+    </div>
+
+    <!-- Price Section -->
+    <div class="mb-4">
+      <div class="flex items-center space-x-2">
+        {formattedPrice && (
+          <span class="text-lg font-bold text-green-600">{formattedPrice}</span>
+        )}
+        {formattedOriginalPrice && discountPercentage > 0 && (
+          <span class="text-sm text-gray-500 line-through">{formattedOriginalPrice}</span>
+        )}
+      </div>
+      
+      <!-- Special Offer -->
+      {properties.pSpecialOffer && (
+        <div class="mt-1 text-xs text-red-600 font-medium">
+          🔥 {properties.pSpecialOffer}
+        </div>
+      )}
+      
+      <!-- Discount Code -->
+      {properties.pDiscountCode && (
+        <div class="mt-1 text-xs text-blue-600 font-medium">
+          💳 Kode: {properties.pDiscountCode}
+        </div>
+      )}
+    </div>
+
+    <!-- Description -->
+    {properties.pDescription && showFullDescription && (
+      <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+        {properties.pDescription}
+      </p>
+    )}
+
+    <!-- Store Info -->
+    <div class="text-xs text-gray-500 mb-3">
+      {properties.pName && (
+        <span class="font-medium text-gray-700">{properties.pName}</span>
+      )}
+      {properties.pLocale && (
+        <span class="ml-1">
+          dari {Array.isArray(properties.pLocale) ? properties.pLocale.join(', ') : properties.pLocale}
+        </span>
+      )}
+    </div>
+
+    <!-- Marketplace Buttons -->
+    {affiliateMarketplaces.length > 0 && (
+      <div class="space-y-2">
+        <!-- Primary Marketplace (Large Button) -->
+        {primaryMarketplace && (
+          <a
+            href={primaryMarketplace.affiliateUrl}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            class={`w-full flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${primaryMarketplace.marketplace === 'tokopedia' ? 'bg-green-500 hover:bg-green-600 text-white' : primaryMarketplace.marketplace === 'shopee' ? 'bg-orange-500 hover:bg-orange-600 text-white' : primaryMarketplace.marketplace === 'blibli' ? 'bg-blue-500 hover:bg-blue-600 text-white' : primaryMarketplace.marketplace === 'bukalapak' ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-purple-500 hover:bg-purple-600 text-white'}`}
+            onclick={`window.affiliateUtils?.trackClick('${properties.pSlug}', '${primaryMarketplace.marketplace}', '${placement}')`}
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 18a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM1 2v2h2l3.6 7.59-1.35 2.45a2 2 0 0 0-.25.96 2 2 0 0 0 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21L4.27 2H1Zm16 16a2 2 0 1 1 .001-4.001A2 2 0 0 1 17 18Z"/>
+            </svg>
+            {getCTAText(affiliateProduct, primaryMarketplace.marketplace)}
+          </a>
+        )}
+
+        <!-- Secondary Marketplaces (Small Buttons) -->
+        {secondaryMarketplaces.length > 0 && (
+          <div class="flex gap-2">
+            {secondaryMarketplaces.map((marketplace) => (
+              <a
+                href={marketplace.affiliateUrl}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                class="flex-1 flex items-center justify-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+                title={`Beli di ${marketplace.marketplace}`}
+                onclick={`window.affiliateUtils?.trackClick('${properties.pSlug}', '${marketplace.marketplace}', '${placement}')`}
+              >
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M7 18a2 2 0 1 1 0-4 2 2 0 0 1 0 4ZM1 2v2h2l3.6 7.59-1.35 2.45a2 2 0 0 0-.25.96 2 2 0 0 0 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21L4.27 2H1Zm16 16a2 2 0 1 1 .001-4.001A2 2 0 0 1 17 18Z"/>
+                </svg>
+                {marketplace.marketplace.charAt(0).toUpperCase() + marketplace.marketplace.slice(1)}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- View Details Button -->
+    <a
+      href={`/products/${properties.pSlug}/`}
+      class="mt-3 w-full flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      Lihat Detail
+    </a>
+  </div>
 </article>
+
+<!-- Client-side tracking script -->
+<script is:inline>
+  // Make affiliate utils available globally for onclick handlers
+  window.affiliateUtils = window.affiliateUtils || {};
+  
+  window.affiliateUtils.trackClick = function(productSlug, marketplace, placement) {
+    // Track the click event
+    console.log('Affiliate click:', { productSlug, marketplace, placement });
+    
+    // Store in localStorage for development
+    const events = JSON.parse(localStorage.getItem('affiliate_events') || '[]');
+    events.push({
+      eventType: 'click',
+      productSlug,
+      marketplace,
+      placement,
+      timestamp: new Date().toISOString(),
+      url: window.location.href
+    });
+    localStorage.setItem('affiliate_events', JSON.stringify(events.slice(-100))); // Keep last 100
+    
+    // Send to Google Analytics if available
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'affiliate_click', {
+        product_slug: productSlug,
+        marketplace: marketplace,
+        placement: placement,
+        value: 1
+      });
+    }
+  };
+  
+  // Track product view
+  window.affiliateUtils.trackView = function(productSlug, placement) {
+    console.log('Affiliate view:', { productSlug, placement });
+    
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'product_view', {
+        product_slug: productSlug,
+        placement: placement,
+        value: 1
+      });
+    }
+  };
+  
+  // Track view on load
+  document.addEventListener('DOMContentLoaded', function() {
+    window.affiliateUtils.trackView('{properties.pSlug}', '{placement}');
+  });
+</script>

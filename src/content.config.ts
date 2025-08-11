@@ -245,22 +245,55 @@ const staysMdx = defineCollection({
 		select: { "equals": "Published" },
 	  },
 	}),
-			schema: notionPageSchema({
-			properties: z.object({
-			  pTitle: transformedPropertySchema.title,
-			  pCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
-			  pSlug: transformedPropertySchema.rich_text,
-			  pImageURL1: transformedPropertySchema.url.optional(),
-			  pPublished: transformedPropertySchema.date,
-			  pPrice: transformedPropertySchema.rich_text.optional(),
-			  pDescription: transformedPropertySchema.rich_text.optional(),
-			  pImageURL2: transformedPropertySchema.url.optional(),
-			  pImageURL3: transformedPropertySchema.url.optional(),
-			  pReview: transformedPropertySchema.rich_text.optional(),
-			}),
-		  }),
+		schema: notionPageSchema({
+		properties: z.object({
+		  // Core Product Information
+		  pTitle: transformedPropertySchema.title,
+		  pPrice: transformedPropertySchema.rich_text.optional(),
+		  pCountry: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pLocale: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pCategory: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]),
+		  pFeatures: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]).optional(),
+		  pName: transformedPropertySchema.rich_text.optional(), // Brand/Store name
+		  pType: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]).optional(),
+		  pSlug: transformedPropertySchema.rich_text,
+		  pPublished: transformedPropertySchema.date,
+		  pDescription: transformedPropertySchema.rich_text.optional(),
+		  pReview: transformedPropertySchema.rich_text.optional(),
+		  pVerify: transformedPropertySchema.select.optional(),
+
+		  // Image URLs
+		  pImageURL1: transformedPropertySchema.url.optional(),
+		  pImageURL2: transformedPropertySchema.url.optional(),
+		  pImageURL3: transformedPropertySchema.url.optional(),
+
+		  // Website & Contact URLs
+		  pURL: transformedPropertySchema.url.optional(), // Official website
+		  pOtherURL: transformedPropertySchema.url.optional(), // Alternative URL (social media, etc.)
+		  pMapsURL: transformedPropertySchema.url.optional(), // Google Maps location
+
+		  // Marketplace URLs for Affiliate Links
+		  pTokopediaURL: transformedPropertySchema.url.optional(),
+		  pShopeeURL: transformedPropertySchema.url.optional(),
+		  pBlibliURL: transformedPropertySchema.url.optional(),
+		  pBukalapakURL: transformedPropertySchema.url.optional(),
+		  pLazadaURL: transformedPropertySchema.url.optional(),
+
+		  // Affiliate Enhancement Fields (New)
+		  pAffiliateCode: transformedPropertySchema.rich_text.optional(), // Unique affiliate code
+		  pCommissionRate: transformedPropertySchema.rich_text.optional(), // Commission percentage
+		  pAffiliateProvider: transformedPropertySchema.select.optional(), // Primary affiliate provider
+		  pDiscountCode: transformedPropertySchema.rich_text.optional(), // Special discount code
+		  pSpecialOffer: transformedPropertySchema.rich_text.optional(), // Special offer text
+		  pCTAText: transformedPropertySchema.rich_text.optional(), // Custom CTA button text
+		  pPriority: transformedPropertySchema.select.optional(), // Featured/Priority level
+		  pExternalRating: transformedPropertySchema.rich_text.optional(), // External rating (e.g., 4.5/5)
+		  pSoldCount: transformedPropertySchema.rich_text.optional(), // Number of items sold
+		  pOriginalPrice: transformedPropertySchema.rich_text.optional(), // Original price for discount display
+		  pIsSponsored: transformedPropertySchema.checkbox.optional(), // Sponsored product flag
+		  pTargetAudience: transformedPropertySchema.multi_select.transform((value) => Array.isArray(value) ? value : [value]).optional(), // Target audience
+		}),
+	  }),
   });
 
 // MDX Products collection - Handle empty directories gracefully  
