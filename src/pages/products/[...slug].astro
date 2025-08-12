@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 	// Map Notion products (existing format)
 	const notionPaths = notionProducts.map((product) => ({
 		params: { slug: product.data.properties.pSlug },
-		props: { product, source: 'notion' },
+		props: { product, source: 'notion', pContent: product.data.properties.pContent },
 	}));
 	
 	// Map MDX products (new format)
@@ -40,7 +40,7 @@ type Props = {
 	source: 'notion' | 'mdx';
 };
 
-const { product, source } = Astro.props;
+const { product, source, pContent } = Astro.props;
 const { Content } = await render(product);
 
 // Normalize data structure for the layout with all affiliate fields

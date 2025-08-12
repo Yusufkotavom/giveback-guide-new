@@ -264,6 +264,7 @@ const staysMdx = defineCollection({
 		  pPublished: transformedPropertySchema.date,
 		  pDescription: transformedPropertySchema.rich_text.optional(),
 		  pReview: transformedPropertySchema.rich_text.optional(),
+		  pContent: transformedPropertySchema.rich_text.optional(),
 		  pVerify: transformedPropertySchema.select.optional(),
 
 		  // Image URLs

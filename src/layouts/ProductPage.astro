@@ -14,9 +14,9 @@ import {
   type AffiliateProduct 
 } from "../utils/affiliateUtils";
 
-type Props = CollectionEntry<"products">["data"] | CollectionEntry<"productsMdx">["data"];
+type Props = (CollectionEntry<"products">["data"] | CollectionEntry<"productsMdx">["data"]) & { pContent?: string } ;
 
-const { properties } = Astro.props as any;
+const { properties, pContent } = Astro.props as any;
 const isNotionProduct = !!properties.pTitle;
 const isMdxProduct = !isNotionProduct;
 
@@ -438,6 +438,16 @@ const images: string[] = oneSec.length > 0 ? oneSec : [fallbackImage];
       </div>
     </div>
   </section>
+
+  {pContent && (
+    <section class="bg-white dark:bg-gray-900">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <article class="prose prose-lg max-w-none dark:prose-invert">
+          {pContent}
+        </article>
+      </div>
+    </section>
+  )}
 
   <!-- Product Review -->
   {productData.review && (
